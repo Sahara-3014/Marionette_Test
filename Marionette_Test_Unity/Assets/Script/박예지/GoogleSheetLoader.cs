@@ -41,21 +41,24 @@ public class GoogleSheetLoader : MonoBehaviour
             var json = JSON.Parse(www.downloadHandler.text);
             var values = json["values"];
 
-            for (int i = 2; i < values.Count; i++) // i=1: 헤더 생략
+            for (int i = 2; i < values.Count; i++)
             {
                 var row = values[i];
-                string dialogueText = row.Count > 10 ? row[10] : ""; // K열 (DIALOGUE)
+                string characterName = row.Count > 0 ? row[8] : ""; // I열 (캐릭터 이름)
+                string dialogueText = row.Count > 10 ? row[10] : ""; // K열 (대사)
 
-                Debug.Log($"[{i}] 대사: {dialogueText}");
+                Debug.Log($"[{i}] {characterName}: {dialogueText}");
 
                 Dialogue d = new Dialogue
                 {
+                    characterName = characterName,
                     dialogue = dialogueText,
-                    cg = null // 나중에 이미지 열 추가하고 싶다면 여기에 넣기
+                    cg = null
                 };
 
                 dialogueList.Add(d);
             }
+
 
             dialogueSystem.SetDialogue(dialogueList.ToArray());
             dialogueSystem.ShowDialogue();
