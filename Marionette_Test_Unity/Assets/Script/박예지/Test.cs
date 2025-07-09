@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
+using TMPro;
 
 [System.Serializable]
 public class Dialogue
@@ -9,73 +8,77 @@ public class Dialogue
     [TextArea]
     public string dialogue;
     public Sprite cg;
-
 }
+
 public class Test : MonoBehaviour
 {
-
     [SerializeField] private SpriteRenderer sprite_Character;
     [SerializeField] private SpriteRenderer sprite_DialogueBox;
-    [SerializeField] private Text txt_Dialogue;
+    [SerializeField] private TextMeshProUGUI txt_Dialogue;
 
     private bool isDialogue = false;
-
+    private bool isTyping = false;
     private int count = 0;
+
     [SerializeField] private Dialogue[] dialogue;
 
-    
+    private Coroutine typingCoroutine;
+
+    public void SetDialogue(Dialogue[] newDialogue)
+    {
+        dialogue = newDialogue;
+    }
 
     public void ShowDialogue()
     {
-        //sprite_DialogueBox.gameObject.SetActive(true);
-        //sprite_Character.gameObject.SetActive(true);
-        //txt_Dialogue.gameObject.SetActive(true);
         OnOff(true);
         count = 0;
-        //isDialogue = true;
         NextDialogue();
-
     }
-
-    //private void HideDialogue()
-    //{
-    //    sprite_DialogueBox.gameObject.SetActive(false);
-    //    sprite_Character.gameObject.SetActive(false);
-    //    txt_Dialogue.gameObject.SetActive(false);
-
-    //    isDialogue = false;
-    //}
 
     private void NextDialogue()
     {
-        txt_Dialogue.text = dialogue[count].dialogue;
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+        typingCoroutine = StartCoroutine(TypeText(dialogue[count].dialogue));
         sprite_Character.sprite = dialogue[count].cg;
         count++;
     }
 
-
-    private void OnOff(bool _flag)
+    private IEnumerator TypeText(string sentence)
     {
-        sprite_DialogueBox.gameObject.SetActive(_flag);
-        sprite_Character.gameObject.SetActive(_flag);
-        txt_Dialogue.gameObject.SetActive(_flag);
-        isDialogue = _flag;
+        isTyping = true;
+        txt_Dialogue.text = "";
+        foreach (char letter in sentence.ToCharArray())
+        {
+            txt_Dialogue.text += letter;
+            yield return new WaitForSeconds(0.05f);
+        }
+        isTyping = false;
     }
 
-
-
-
-    void Start()
+    private void OnOff(bool flag)
     {
-        
+        sprite_DialogueBox.gameObject.SetActive(flag);
+        sprite_Character.gameObject.SetActive(flag);
+        txt_Dialogue.gameObject.SetActive(flag);
+        isDialogue = flag;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (isDialogue)
+        if (isDialogue && Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (isTyping)
+            {
+                StopCoroutine(typingCoroutine);
+                txt_Dialogue.text = dialogue[count - 1].dialogue;
+                isTyping = false;
+                typingCoroutine = null;
+            }
+            else
             {
                 if (count < dialogue.Length)
                 {
