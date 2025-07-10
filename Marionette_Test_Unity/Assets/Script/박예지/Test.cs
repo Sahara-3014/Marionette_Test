@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class Dialogue
 {
     public string characterName;
+    public string status;
 
     [TextArea]
     public string dialogue;
@@ -66,23 +67,27 @@ public class Test : MonoBehaviour
 
         var currentDialogue = dialogue[count];
 
-        typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
-
-        // 캐릭터 이름 출력
+        //  캐릭터 이름 표시 (선택 사항: 이름 UI가 있을 경우)
         txt_CharacterName.text = currentDialogue.characterName;
 
-        // 이름에 맞는 스프라이트 설정
-        if (characterSpriteDict.ContainsKey(currentDialogue.characterName))
+        //  이름 + 상태 조합으로 스프라이트 설정
+        string spriteKey = $"{currentDialogue.characterName}_{currentDialogue.status}";
+
+        if (!string.IsNullOrEmpty(spriteKey) && characterSpriteDict.ContainsKey(spriteKey))
         {
-            sprite_Character.sprite = characterSpriteDict[currentDialogue.characterName];
+            sprite_Character.sprite = characterSpriteDict[spriteKey];
         }
         else
         {
-            sprite_Character.sprite = null;
+            sprite_Character.sprite = null; // 또는 기본 캐릭터 스프라이트
         }
+
+        //  타자 효과 시작
+        typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
 
         count++;
     }
+
 
 
 

@@ -542,7 +542,8 @@ MonoBehaviour:
   sprite_CharacterNameBox: {fileID: 1366255726}
   txt_CharacterName: {fileID: 749734905}
   characterSprites:
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 6b0dce037b810c744aaf4903797c7803, type: 3}
+  - {fileID: 21300000, guid: 6b0dce037b810c744aaf4903797c7803, type: 3}
   dialogue: []
 --- !u!224 &819268242
 RectTransform:

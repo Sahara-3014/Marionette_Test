@@ -45,6 +45,7 @@ public class GoogleSheetLoader : MonoBehaviour
             {
                 var row = values[i];
                 string characterName = row.Count > 0 ? row[8] : ""; // I열 (캐릭터 이름)
+                string status = row.Count > 9 ? row[9] : "";
                 string dialogueText = row.Count > 10 ? row[10] : ""; // K열 (대사)
 
                 Debug.Log($"[{i}] {characterName}: {dialogueText}");
@@ -52,6 +53,7 @@ public class GoogleSheetLoader : MonoBehaviour
                 Dialogue d = new Dialogue
                 {
                     characterName = characterName,
+                    status = status,
                     dialogue = dialogueText,
                     cg = null
                 };
