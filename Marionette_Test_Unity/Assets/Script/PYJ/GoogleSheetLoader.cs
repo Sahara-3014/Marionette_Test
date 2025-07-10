@@ -40,26 +40,29 @@ public class GoogleSheetLoader : MonoBehaviour
             List<Dialogue> dialogueList = new List<Dialogue>();
             var json = JSON.Parse(www.downloadHandler.text);
             var values = json["values"];
-
             for (int i = 2; i < values.Count; i++)
             {
                 var row = values[i];
-                string characterName = row.Count > 0 ? row[8] : ""; // I열 (캐릭터 이름)
-                string status = row.Count > 9 ? row[9] : "";
-                string dialogueText = row.Count > 10 ? row[10] : ""; // K열 (대사)
 
-                Debug.Log($"[{i}] {characterName}: {dialogueText}");
+                string background = (row.Count > 3 && row[3] != null) ? row[3].Value.Trim() : "";
+                string characterName = (row.Count > 8 && row[8] != null) ? row[8].Value.Trim() : "";
+                string status = (row.Count > 9 && row[9] != null) ? row[9].Value.Trim() : "";
+                string dialogueText = (row.Count > 10 && row[10] != null) ? row[10].Value.Trim() : "";
+
+                Debug.Log($"[{i}] {characterName} / {status} / {background} : {dialogueText}");
 
                 Dialogue d = new Dialogue
                 {
                     characterName = characterName,
                     status = status,
+                    background = background,
                     dialogue = dialogueText,
                     cg = null
                 };
 
                 dialogueList.Add(d);
             }
+
 
 
             dialogueSystem.SetDialogue(dialogueList.ToArray());
