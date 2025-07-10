@@ -19,11 +19,10 @@ public class DialogDatabase : MonoBehaviour
             return;
         }
     }
-
-    string filePath = "Assets/Resources";
     public void TextSave(string key, string value)
     {
-        File.WriteAllText($"{filePath}/{key}", value);
+        string path = Application.dataPath;
+        File.WriteAllText($"{path}/Resources/{key}", value);
     }
 
     public string TextLoad(string key)
