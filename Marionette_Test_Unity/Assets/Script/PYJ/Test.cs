@@ -38,7 +38,7 @@ public class Test : MonoBehaviour
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
 {
     { "주한", "JUHAN" },
-    { "김철수", "kim" },
+    { "미래", "MIRAE" },
     { "이영희", "lee" }
     // 필요한 만큼 추가
 };

@@ -44,7 +44,7 @@ public class GoogleSheetLoader : MonoBehaviour
             {
                 var row = values[i];
 
-                string background = (row.Count > 3 && row[3] != null) ? row[3].Value.Trim() : "";
+                string background = (row.Count > 4 && row[4] != null) ? row[4].Value.Trim() : "";
                 string characterName = (row.Count > 8 && row[8] != null) ? row[8].Value.Trim() : "";
                 string status = (row.Count > 9 && row[9] != null) ? row[9].Value.Trim() : "";
                 string dialogueText = (row.Count > 10 && row[10] != null) ? row[10].Value.Trim() : "";

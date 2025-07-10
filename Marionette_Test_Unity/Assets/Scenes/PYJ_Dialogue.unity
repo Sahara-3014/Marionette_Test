@@ -635,6 +635,8 @@ MonoBehaviour:
   characterSprites:
   - {fileID: 21300000, guid: 6b0dce037b810c744aaf4903797c7803, type: 3}
   - {fileID: 21300000, guid: 6dc67265880467f4096c714559b21efd, type: 3}
+  - {fileID: 21300000, guid: e827ff65f32c8e5448a58af78264dfb3, type: 3}
+  - {fileID: 21300000, guid: 4066a66783b8a6947bf37f6f6408125b, type: 3}
   dialogue: []
 --- !u!224 &819268242
 RectTransform:
