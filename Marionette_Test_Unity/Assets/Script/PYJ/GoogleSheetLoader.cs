@@ -10,14 +10,9 @@ public class GoogleSheetLoader : MonoBehaviour
     public string spreadsheetId = "1N2Z-yXGz8rUvUBwLfkeB9GYIOWhMrfs6lWok9lcNIjk";
     public string sheetName = "INTRO";
 
-    public Test dialogueSystem; // 대화 시스템 참조
+    public DialogueManager dialogueSystem; // 대화 시스템 참조
 
-    void Start()
-    {
-        // StartCoroutine(LoadGoogleSheet()); // 삭제 또는 주석 처리
-    }
-
-    // 외부에서 호출할 수 있게 public 메서드로 만듦
+    // 구글 시트 불러오기 호출용 함수
     public void LoadDialoguesFromSheet()
     {
         StartCoroutine(LoadGoogleSheet());
@@ -25,7 +20,7 @@ public class GoogleSheetLoader : MonoBehaviour
 
     IEnumerator LoadGoogleSheet()
     {
-        string range = $"{sheetName}!A1:K100"; // K열까지 포함해서 가져오기
+        string range = $"{sheetName}!A1:L100"; // L열까지 확장 (bgm 컬럼 포함)
         string url = $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
 
         UnityWebRequest www = UnityWebRequest.Get(url);
@@ -34,39 +29,64 @@ public class GoogleSheetLoader : MonoBehaviour
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError("시트 불러오기 실패: " + www.error);
+            yield break;
         }
-        else
+
+        List<Dialogue> dialogueList = new List<Dialogue>();
+        var json = JSON.Parse(www.downloadHandler.text);
+        var values = json["values"];
+
+        for (int i = 2; i < values.Count; i++) // 0:헤더, 1:설명 등 스킵
         {
-            List<Dialogue> dialogueList = new List<Dialogue>();
-            var json = JSON.Parse(www.downloadHandler.text);
-            var values = json["values"];
-            for (int i = 2; i < values.Count; i++)
+            var row = values[i];
+
+            string background = (row.Count > 4 && row[4] != null) ? row[4].Value.Trim() : "";
+            string characterName = (row.Count > 8 && row[8] != null) ? row[8].Value.Trim() : "";
+            string status = (row.Count > 9 && row[9] != null) ? row[9].Value.Trim() : "";
+            string dialogueText = (row.Count > 10 && row[10] != null) ? row[10].Value.Trim() : "";
+
+            string bgmName = (row.Count > 11 && row[11] != null) ? row[11].Value.Trim() : "";
+
+            DialogSE bgmSE = null;
+            if (!string.IsNullOrEmpty(bgmName))
             {
-                var row = values[i];
-
-                string background = (row.Count > 4 && row[4] != null) ? row[4].Value.Trim() : "";
-                string characterName = (row.Count > 8 && row[8] != null) ? row[8].Value.Trim() : "";
-                string status = (row.Count > 9 && row[9] != null) ? row[9].Value.Trim() : "";
-                string dialogueText = (row.Count > 10 && row[10] != null) ? row[10].Value.Trim() : "";
-
-                Debug.Log($"[{i}] {characterName} / {status} / {background} : {dialogueText}");
-
-                Dialogue d = new Dialogue
+                bgmSE = new DialogSE
                 {
-                    characterName = characterName,
-                    status = status,
-                    background = background,
-                    dialogue = dialogueText,
-                    cg = null
+                    type = SEType.BGM,
+                    clip = LoadAudioClipByName(bgmName),
+                    volume = 1f,
+                    loopCount = 0
                 };
-
-                dialogueList.Add(d);
             }
 
+            Dialogue d = new Dialogue
+            {
+                characterName = characterName,
+                status = status,
+                background = background,
+                dialogue = dialogueText,
+                cg = null,
+                bgm = bgmSE
+            };
 
-
-            dialogueSystem.SetDialogue(dialogueList.ToArray());
-            dialogueSystem.ShowDialogue();
+            dialogueList.Add(d);
         }
+
+        dialogueSystem.SetDialogue(dialogueList.ToArray());
+        dialogueSystem.ShowDialogue();
+    }
+
+    // Resources/Audio 폴더 내 오디오클립 로드 함수
+    public AudioClip LoadAudioClipByName(string clipName)
+    {
+        if (string.IsNullOrEmpty(clipName))
+            return null;
+
+        AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
+        if (clip == null)
+        {
+            Debug.LogWarning($"AudioClip '{clipName}'를 Resources/Audio 폴더에서 찾을 수 없습니다.");
+        }
+        return clip;
     }
 }
