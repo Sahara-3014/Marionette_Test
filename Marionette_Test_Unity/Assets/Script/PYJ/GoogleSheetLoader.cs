@@ -46,7 +46,10 @@ public class GoogleSheetLoader : MonoBehaviour
             string dialogueText = (row.Count > 10 && row[10] != null) ? row[10].Value.Trim() : "";
 
             string bgmName = (row.Count > 11 && row[11] != null) ? row[11].Value.Trim() : "";
+            string sfx1Name = (row.Count > 12 && row[12] != null) ? row[12].Value.Trim() : "";
+            string sfx2Name = (row.Count > 13 && row[13] != null) ? row[13].Value.Trim() : "";
 
+            // BGM 贸府
             DialogSE bgmSE = null;
             if (!string.IsNullOrEmpty(bgmName))
             {
@@ -55,7 +58,33 @@ public class GoogleSheetLoader : MonoBehaviour
                     type = SEType.BGM,
                     clip = LoadAudioClipByName(bgmName),
                     volume = 1f,
-                    loopCount = 0
+                    loopCount = 1
+                };
+            }
+
+            // SFX1 贸府
+            DialogSE sfx1SE = null;
+            if (!string.IsNullOrEmpty(sfx1Name))
+            {
+                sfx1SE = new DialogSE
+                {
+                    type = SEType.SE,
+                    clip = LoadAudioClipByName(sfx1Name),
+                    volume = 1f,
+                    loopCount = 1
+                };
+            }
+
+            // SFX2 贸府
+            DialogSE sfx2SE = null;
+            if (!string.IsNullOrEmpty(sfx2Name))
+            {
+                sfx2SE = new DialogSE
+                {
+                    type = SEType.SE,
+                    clip = LoadAudioClipByName(sfx2Name),
+                    volume = 1f,
+                    loopCount = 1
                 };
             }
 
@@ -66,7 +95,11 @@ public class GoogleSheetLoader : MonoBehaviour
                 background = background,
                 dialogue = dialogueText,
                 cg = null,
-                bgm = bgmSE
+
+                // 眠啊
+                bgm = bgmSE,
+                se1 = sfx1SE,
+                se2 = sfx2SE
             };
 
             dialogueList.Add(d);

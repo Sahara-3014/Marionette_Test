@@ -56,10 +56,13 @@ public class DialogSoundManager : MonoBehaviour
 
     private IEnumerator PlaySELoop(AudioSource source, int loopCount)
     {
-        for (int i = 1; i < loopCount; i++)
+        int count = 1;
+        while (count < loopCount)
         {
             yield return new WaitForSeconds(source.clip.length);
             source.Play();
+            count++;
         }
     }
+
 }
