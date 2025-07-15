@@ -1,15 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public class EffectManager : MonoBehaviour
+public class DialogEffectManager : MonoBehaviour
 {
-    public Color otherColor = Color.red;        // OtherColorEnable¿ë
-    public Color darkenColor = new Color(0.5f, 0.5f, 0.5f, 1f); // AllColorEnable¿ë
+    public Color otherColor = Color.red;        // OtherColorEnableìš©
+    public Color darkenColor = new Color(0.5f, 0.5f, 0.5f, 1f); // AllColorEnableìš©
     public float fadeDuration = 0.5f;
 
 
     //
-    //È­¸éÈ¿°ú
+    //í™”ë©´íš¨ê³¼
     //
     public IEnumerator RunScreenEffect(Dialog_ScreenEffect effect, SpriteRenderer bg)
     {
@@ -52,7 +52,7 @@ public class EffectManager : MonoBehaviour
 
 
     //
-    //Ä³¸¯ÅÍÈ¿°ú
+    //ìºë¦­í„°íš¨ê³¼
     //
     public float moveDistance = 100f;
     public float moveDuration = 0.5f;
@@ -128,7 +128,7 @@ public class EffectManager : MonoBehaviour
 
 
     //
-    //¹è°æ °ü·Ã
+    //ë°°ê²½ ê´€ë ¨
     //
     private IEnumerator VerticalShakeScreen(SpriteRenderer target)
     {
@@ -204,7 +204,7 @@ public class EffectManager : MonoBehaviour
 
 
 
-    //Ä³¸¯ÅÍ °ü·Ã
+    //ìºë¦­í„° ê´€ë ¨
     private IEnumerator Jump(SpriteRenderer target)
     {
         Vector3 originalPos = target.transform.localPosition;
