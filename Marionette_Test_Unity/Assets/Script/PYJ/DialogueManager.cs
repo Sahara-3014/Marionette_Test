@@ -6,7 +6,7 @@ using System;
 
 public class DialogueManager : MonoBehaviour
 {
-    [SerializeField] private DialogueData[] dialogueList;
+    [SerializeField] private DialogueData[] dialogue;
     [SerializeField] private EffectManager effectManager;
     [SerializeField] private DialogSoundManager soundManager;
 
@@ -35,7 +35,7 @@ public class DialogueManager : MonoBehaviour
 {
     { "주한", "JUHAN" },
     { "미래", "MIRAE" },
-    { "이영희", "lee" }
+    { "계란", "EGG" }
     // 필요한 만큼 추가
 };
 
@@ -61,7 +61,7 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping = false;
     private int count = 0;
 
-    [SerializeField] private DialogueData[] dialogue;
+
 
     private Coroutine typingCoroutine;
 
@@ -210,12 +210,15 @@ public class DialogueManager : MonoBehaviour
         isTyping = false;
     }
 
-    int index = 0; // 예: 첫 번째 캐릭터
-    bool flag = true; // 활성화 여부
+
     private void OnOff(bool flag)
     {
+        foreach (var character in sprite_Characters)
+        {
+            character.gameObject.SetActive(flag);
+        }
+
         sprite_DialogueBox.gameObject.SetActive(flag);
-        sprite_Characters[index].gameObject.SetActive(flag);
         txt_Dialogue.gameObject.SetActive(flag);
         sprite_CharacterNameBox.gameObject.SetActive(flag);
         txt_CharacterName.gameObject.SetActive(flag);
