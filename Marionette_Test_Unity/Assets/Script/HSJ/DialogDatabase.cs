@@ -31,7 +31,8 @@ public class DialogDatabase : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded; 
+        Initalize();
     }
 
     private void Start()
