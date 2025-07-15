@@ -44,7 +44,7 @@ public class DayCycleSystem : MonoBehaviour
         onDayChangeEvent?.Invoke(days);
     }
 
-    /// <summary> ÀÓ½Ã </summary>
+    /// <summary> ìž„ì‹œ </summary>
     public void SetDays(int day) => days = day;
     public float GetTimes() => times;
 

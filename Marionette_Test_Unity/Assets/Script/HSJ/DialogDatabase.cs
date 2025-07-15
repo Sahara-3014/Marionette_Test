@@ -12,13 +12,13 @@ public class DialogDatabase : MonoBehaviour
     private DayCycleSystem dayCycleSystem;
 
     private SaveData saveData;
-    /// <summary> ÀúÀå½Ã ÀÎµ¦½º </summary>
+    /// <summary> ì €ì¥ì‹œ ì¸ë±ìŠ¤ </summary>
     public int savePlayIndex { get; private set; }
     private Dictionary<string, UnityAction> sceneChangeEvent = new();
     private Dictionary<string, Dictionary<int, List<Dialogue>>> dialogs;
 
 
-    #region ¾À ÀÌµ¿ ÀÌº¥Æ®
+    #region ì”¬ ì´ë™ ì´ë²¤íŠ¸
     private void Awake()
     {
         if (Instance == null)
@@ -51,7 +51,7 @@ public class DialogDatabase : MonoBehaviour
         if (sceneChangeEvent != null && sceneChangeEvent.ContainsKey(scene.name))
         {
             sceneChangeEvent[scene.name]?.Invoke();
-            sceneChangeEvent[scene.name] = null; // ÀÌº¥Æ® È£Ãâ ÈÄ Á¦°Å
+            sceneChangeEvent[scene.name] = null; // ì´ë²¤íŠ¸ í˜¸ì¶œ í›„ ì œê±°
         }
 
     }
@@ -75,7 +75,7 @@ public class DialogDatabase : MonoBehaviour
     #endregion
 
 
-    #region ´ëÈ­
+    #region ëŒ€í™”
     public List<Dialogue> GetDialogs_NeedID(string key, int id)
     {
         if(dialogs == null || dialogs.ContainsKey(key) == false)
@@ -141,7 +141,7 @@ public class DialogDatabase : MonoBehaviour
 
 
 
-    #region SaveData °ü·Ã º¯¼ö ¸Ş¼­µåÈ­
+    #region SaveData ê´€ë ¨ ë³€ìˆ˜ ë©”ì„œë“œí™”
     public SaveData SaveData_Get() => saveData;
     public int SaveData_GetIndex() => saveData.index;
 
@@ -202,7 +202,7 @@ public class DialogDatabase : MonoBehaviour
     #endregion
 
 
-    #region ³»ºÎ ÀúÀå
+    #region ë‚´ë¶€ ì €ì¥
 
     public void AutoSave(UnityAction _callback = null)
     {
@@ -233,16 +233,16 @@ public class DialogDatabase : MonoBehaviour
             _callback?.Invoke(new SaveData { index = -1 });
     }
 
-    /// <summary> Resources Æú´õ¿¡ ÀúÀå </summary>
-    /// <param name="key"> È®ÀåÀÚ ÇÊ¿ä </param>
-    /// <param name="value">Dictionary ¶Ç´Â ListÀÎ°æ¿ì JsonConvert, ³ª¸ÓÁö´Â JsonUtillity</param>
+    /// <summary> Resources í´ë”ì— ì €ì¥ </summary>
+    /// <param name="key"> í™•ì¥ì í•„ìš” </param>
+    /// <param name="value">Dictionary ë˜ëŠ” Listì¸ê²½ìš° JsonConvert, ë‚˜ë¨¸ì§€ëŠ” JsonUtillity</param>
     public void TextSave(string key, string value)
     {
         string path = Application.dataPath;
         File.WriteAllText($"{path}/Resources/{key}", value);
     }
 
-    /// <summary> Resources Æú´õ¿¡¼­ °¡Á®¿À±â </summary>
+    /// <summary> Resources í´ë”ì—ì„œ ê°€ì ¸ì˜¤ê¸° </summary>
     /// <param name="key"></param> 
     public string TextLoad(string key)
     {
@@ -252,31 +252,31 @@ public class DialogDatabase : MonoBehaviour
 }
 
 
-/// <summary> ¼±ÅÃÇÑ ½½·ÔÀÇ °ÔÀÓ µ¥ÀÌÅÍ </summary>
+/// <summary> ì„ íƒí•œ ìŠ¬ë¡¯ì˜ ê²Œì„ ë°ì´í„° </summary>
 [Serializable]
 public struct SaveData
 {
-    /// <summary> ÀúÀå ½½·Ô </summary>
+    /// <summary> ì €ì¥ ìŠ¬ë¡¯ </summary>
     public int index;
-    /// <summary> ÀúÀåÇÑ ½ÇÁ¦½Ã°£ </summary>
+    /// <summary> ì €ì¥í•œ ì‹¤ì œì‹œê°„ </summary>
     public string saveDate;
-    /// <summary> ÀÎ°ÔÀÓ NÀÏÂ÷ </summary>
+    /// <summary> ì¸ê²Œì„ Nì¼ì°¨ </summary>
     public int dayNum;
-    /// <summary> ÀÎ°ÔÀÓ ½Ã°£ </summary>
+    /// <summary> ì¸ê²Œì„ ì‹œê°„ </summary>
     public float gameTime;
-    /// <summary> ÀĞÀº ´ëÈ­ ID ¸ñ·Ï </summary>
+    /// <summary> ì½ì€ ëŒ€í™” ID ëª©ë¡ </summary>
     public Dictionary<string, List<int>> readDialogs;
-    /// <summary> ¼±ÅÃÁö ¸ñ·Ï </summary>
+    /// <summary> ì„ íƒì§€ ëª©ë¡ </summary>
     public Dictionary<string, List<int>> selectDialogs;
-    /// <summary> ÇöÀç ´ëÈ­ ID </summary>
+    /// <summary> í˜„ì¬ ëŒ€í™” ID </summary>
     public int nowDialog_id;
-    /// <summary> ÇöÀç ´ëÈ­ ÀÎµ¦½º </summary>
+    /// <summary> í˜„ì¬ ëŒ€í™” ì¸ë±ìŠ¤ </summary>
     public int nowDialog_index;
-    /// <summary> ÇöÀç Æ÷Áö¼Ç Å¸ÀÔ 0: Å½»ö, 1: ´ëÈ­, 2: ³íÀï 3:ÅõÇ¥, 3:¼øÂû, 4:ÈŞ½Ä </summary>
+    /// <summary> í˜„ì¬ í¬ì§€ì…˜ íƒ€ì… 0: íƒìƒ‰, 1: ëŒ€í™”, 2: ë…¼ìŸ 3:íˆ¬í‘œ, 3:ìˆœì°°, 4:íœ´ì‹ </summary>
     public int posType;
-    /// <summary> Ä³¸¯ÅÍ À§Ä¡ </summary>
+    /// <summary> ìºë¦­í„° ìœ„ì¹˜ </summary>
     public Vector2 position;
-    /// <summary> ÀÎº¥Åä¸® ¾ÆÀÌÅÛ </summary>
+    /// <summary> ì¸ë²¤í† ë¦¬ ì•„ì´í…œ </summary>
     public Dictionary<int, int> itmes;
 
     public SaveData(int index, int dayNum, string nowDate, float gameTime, 
@@ -298,12 +298,12 @@ public struct SaveData
     }
 }
 
-/// <summary> ³»ºÎÀûÀ¸·Î °¡Áö°íÀÖ¾î¾ßÇÏ´Â °ÔÀÓµ¥ÀÌÅÍ </summary>
+/// <summary> ë‚´ë¶€ì ìœ¼ë¡œ ê°€ì§€ê³ ìˆì–´ì•¼í•˜ëŠ” ê²Œì„ë°ì´í„° </summary>
 [Serializable]
 public struct GlobalData
 {
-    /// <summary> ¿£µùº» È½¼ö </summary>
+    /// <summary> ì—”ë”©ë³¸ íšŸìˆ˜ </summary>
     public int clearCount;
-    /// <summary> ½ÃÃ»ÇÑ ¿£µù </summary>
+    /// <summary> ì‹œì²­í•œ ì—”ë”© </summary>
     public List<int> watchedEnding;
 }
