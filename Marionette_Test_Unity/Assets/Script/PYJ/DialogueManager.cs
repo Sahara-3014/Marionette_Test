@@ -6,11 +6,11 @@ using System;
 
 public class DialogueManager : MonoBehaviour
 {
-    [SerializeField] private DialogueData[] dialogue;
-    [SerializeField] private EffectManager effectManager;
+    [SerializeField] private DialogueData[] dialogueList;
+    [SerializeField] private DialogEffectManager effectManager;
     [SerializeField] private DialogSoundManager soundManager;
 
-    // ¿¹: 0 = Left, 1 = Center, 2 = Right
+    // ì˜ˆ: 0 = Left, 1 = Center, 2 = Right
     [SerializeField] private SpriteRenderer[] sprite_Characters;
     [SerializeField] private SpriteRenderer sprite_BG;
     [SerializeField] private SpriteRenderer sprite_DialogueBox;
@@ -21,22 +21,22 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private CharacterPositionManager characterPositionManager;
 
-    [Header("¹è°æ ½ºÇÁ¶óÀÌÆ® µî·Ï")]
+    [Header("ë°°ê²½ ìŠ¤í”„ë¼ì´íŠ¸ ë“±ë¡")]
     [SerializeField] private List<Sprite> backgroundSprites;
     private Dictionary<string, Sprite> backgroundSpriteDict;
 
 
-    [Header("Ä³¸¯ÅÍ ½ºÇÁ¶óÀÌÆ® µî·Ï")]
-    [SerializeField] private List<Sprite> characterSprites; // ÀÌ¸§: ÆÄÀÏ ÀÌ¸§°ú µ¿ÀÏ
+    [Header("ìºë¦­í„° ìŠ¤í”„ë¼ì´íŠ¸ ë“±ë¡")]
+    [SerializeField] private List<Sprite> characterSprites; // ì´ë¦„: íŒŒì¼ ì´ë¦„ê³¼ ë™ì¼
     private Dictionary<string, Sprite> characterSpriteDict;
 
 
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
 {
-    { "ÁÖÇÑ", "JUHAN" },
-    { "¹Ì·¡", "MIRAE" },
-    { "°è¶õ", "EGG" }
-    // ÇÊ¿äÇÑ ¸¸Å­ Ãß°¡
+    { "ì£¼í•œ", "JUHAN" },
+    { "ë¯¸ë˜", "MIRAE" },
+    { "ì´ì˜í¬", "lee" }
+    // í•„ìš”í•œ ë§Œí¼ ì¶”ê°€
 };
 
 
@@ -61,7 +61,7 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping = false;
     private int count = 0;
 
-
+    [SerializeField] private DialogueData[] dialogue;
 
     private Coroutine typingCoroutine;
 
@@ -71,7 +71,7 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    //´ë»ç º¸¿©ÁÖ´Â ÇÔ¼ö
+    //ëŒ€ì‚¬ ë³´ì—¬ì£¼ëŠ” í•¨ìˆ˜
     public void ShowDialogue()
     {
         OnOff(true);
@@ -80,7 +80,7 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    //´ÙÀ½ ´ëÈ­·Î ³Ñ¾î°¡´Â ÇÔ¼ö
+    //ë‹¤ìŒ ëŒ€í™”ë¡œ ë„˜ì–´ê°€ëŠ” í•¨ìˆ˜
     private void NextDialogue()
     {
         var currentDialogue = dialogue[count];
@@ -112,17 +112,17 @@ public class DialogueManager : MonoBehaviour
 
 
 
-        // Ä³¸¯ÅÍ À§Ä¡ ÀÎµ¦½º È®ÀÎ
+        // ìºë¦­í„° ìœ„ì¹˜ ì¸ë±ìŠ¤ í™•ì¸
         int posIndex = (int)currentDialogue.charPos;
 
-        // Ä³¸¯ÅÍ ½ºÇÁ¶óÀÌÆ® ¼³Á¤
+        // ìºë¦­í„° ìŠ¤í”„ë¼ì´íŠ¸ ì„¤ì •
         if (posIndex >= 0 && posIndex < sprite_Characters.Length)
         {
             SpriteRenderer targetRenderer = sprite_Characters[posIndex];
 
             string englishName = characterNameMap.ContainsKey(displayName) ? characterNameMap[displayName] : displayName;
             string spriteKey = $"{englishName}_{currentDialogue.status}";
-            Debug.Log($"[Ä³¸¯ÅÍ ½ºÇÁ¶óÀÌÆ® Å°] {spriteKey}");
+            Debug.Log($"[ìºë¦­í„° ìŠ¤í”„ë¼ì´íŠ¸ í‚¤] {spriteKey}");
 
             if (!string.IsNullOrEmpty(spriteKey) && characterSpriteDict.ContainsKey(spriteKey))
             {
@@ -133,17 +133,17 @@ public class DialogueManager : MonoBehaviour
             {
                 targetRenderer.sprite = null;
                 targetRenderer.gameObject.SetActive(false);
-                Debug.LogWarning($"[½ºÇÁ¶óÀÌÆ® ¹ÌÀû¿ë] {spriteKey}´Â µî·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+                Debug.LogWarning($"[ìŠ¤í”„ë¼ì´íŠ¸ ë¯¸ì ìš©] {spriteKey}ëŠ” ë“±ë¡ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
             }
 
-            // À§Ä¡ ¼³Á¤
+            // ìœ„ì¹˜ ì„¤ì •
             if (characterPositionManager != null)
             {
                 characterPositionManager.SetCharacter(targetRenderer, currentDialogue.charPos);
-                Debug.Log($"[DialogueManager] Ä³¸¯ÅÍ À§Ä¡ ¼³Á¤: {currentDialogue.charPos}");
+                Debug.Log($"[DialogueManager] ìºë¦­í„° ìœ„ì¹˜ ì„¤ì •: {currentDialogue.charPos}");
             }
 
-            // Ä³¸¯ÅÍ ÀÌÆåÆ® Àû¿ë
+            // ìºë¦­í„° ì´í™íŠ¸ ì ìš©
             if (currentDialogue.charEffect != Dialog_CharEffect.None)
             {
                 StartCoroutine(effectManager.RunCharacterEffect(currentDialogue.charEffect, targetRenderer));
@@ -156,31 +156,31 @@ public class DialogueManager : MonoBehaviour
                 c.sprite = null;
                 c.gameObject.SetActive(false);
             }
-            Debug.Log("[DialogueManager] Ä³¸¯ÅÍ ÀüÃ¼ Clear");
+            Debug.Log("[DialogueManager] ìºë¦­í„° ì „ì²´ Clear");
         }
 
-        // ¹è°æ ¼³Á¤
+        // ë°°ê²½ ì„¤ì •
         string bgKey = currentDialogue.background;
-        Debug.Log($"[¹è°æ Å° È®ÀÎ] '{bgKey}'");
+        Debug.Log($"[ë°°ê²½ í‚¤ í™•ì¸] '{bgKey}'");
 
         if (!string.IsNullOrEmpty(bgKey) && backgroundSpriteDict.ContainsKey(bgKey))
         {
             sprite_BG.sprite = backgroundSpriteDict[bgKey];
-            Debug.Log($"[¹è°æ Àû¿ëµÊ] {bgKey}");
+            Debug.Log($"[ë°°ê²½ ì ìš©ë¨] {bgKey}");
         }
         else
         {
             sprite_BG.sprite = null;
-            Debug.LogWarning($"[¹è°æ ¹ÌÀû¿ë] {bgKey}´Â µî·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning($"[ë°°ê²½ ë¯¸ì ìš©] {bgKey}ëŠ” ë“±ë¡ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
         }
 
-        // È­¸é ÀÌÆåÆ® Àû¿ë (¹è°æ ´ë»ó)
+        // í™”ë©´ ì´í™íŠ¸ ì ìš© (ë°°ê²½ ëŒ€ìƒ)
         if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
         {
             StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         }
 
-        // ÅØ½ºÆ® Å¸ÀÌÇÎ È¿°ú ½ÃÀÛ
+        // í…ìŠ¤íŠ¸ íƒ€ì´í•‘ íš¨ê³¼ ì‹œì‘
         typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
 
         count++;
@@ -189,7 +189,7 @@ public class DialogueManager : MonoBehaviour
 
 
 
-    //´ë»ç¸¦ ÇÑ ÁÙ¾¿ ³ª¿À°Ô ÇÏ´Â ÇÔ¼ö
+    //ëŒ€ì‚¬ë¥¼ í•œ ì¤„ì”© ë‚˜ì˜¤ê²Œ í•˜ëŠ” í•¨ìˆ˜
     private IEnumerator TypeText(string sentence)
     {
         isTyping = true;
@@ -197,7 +197,7 @@ public class DialogueManager : MonoBehaviour
 
         foreach (char letter in sentence.ToCharArray())
         {
-            //  ÀÏ½ÃÁ¤ÁöÀÏ ¶§ ´ë±â
+            //  ì¼ì‹œì •ì§€ì¼ ë•Œ ëŒ€ê¸°
             while (isPaused)
             {
                 yield return null;
@@ -210,15 +210,12 @@ public class DialogueManager : MonoBehaviour
         isTyping = false;
     }
 
-
+    int index = 0; // ì˜ˆ: ì²« ë²ˆì§¸ ìºë¦­í„°
+    bool flag = true; // í™œì„±í™” ì—¬ë¶€
     private void OnOff(bool flag)
     {
-        foreach (var character in sprite_Characters)
-        {
-            character.gameObject.SetActive(flag);
-        }
-
         sprite_DialogueBox.gameObject.SetActive(flag);
+        sprite_Characters[index].gameObject.SetActive(flag);
         txt_Dialogue.gameObject.SetActive(flag);
         sprite_CharacterNameBox.gameObject.SetActive(flag);
         txt_CharacterName.gameObject.SetActive(flag);
@@ -233,12 +230,12 @@ public class DialogueManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SkipDialogue(); // ½ºÆäÀÌ½º ÀÔ·ÂÀ¸·Î SkipDialogue È£Ãâ
+            SkipDialogue(); // ìŠ¤í˜ì´ìŠ¤ ì…ë ¥ìœ¼ë¡œ SkipDialogue í˜¸ì¶œ
         }
     }
 
 
-    //´ë»ç ½ºÅµ ÇÔ¼ö
+    //ëŒ€ì‚¬ ìŠ¤í‚µ í•¨ìˆ˜
     public void SkipDialogue()
     {
         if (!isDialogue) return;
@@ -258,19 +255,19 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                OnOff(false); // ´ë»ç Á¾·á
+                OnOff(false); // ëŒ€ì‚¬ ì¢…ë£Œ
             }
         }
     }
 
 
-    //´ë»ç Á¤Áö,Àç°³ ÇÔ¼ö
+    //ëŒ€ì‚¬ ì •ì§€,ì¬ê°œ í•¨ìˆ˜
     private bool isPaused = false;
 
     public void TogglePauseDialogue()
     {
         isPaused = !isPaused;
-        Debug.Log(isPaused ? " ÀÏ½ÃÁ¤ÁöµÊ" : " ´Ù½Ã Àç»ıµÊ");
+        Debug.Log(isPaused ? " ì¼ì‹œì •ì§€ë¨" : " ë‹¤ì‹œ ì¬ìƒë¨");
     }
 
 
