@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 213348c7a5c8356419dd52476db942f8
+guid: 527940a7d495a274694be79fc5894e03
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5280897896942094492
-    second: crop_0
+      213: 8839535845487278456
+    second: SideScrollTestSprite1_0
+  - first:
+      213: 4334549458649562588
+    second: SideScrollTestSprite1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,53 +112,27 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: crop_0
+      name: SideScrollTestSprite1_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1920
-        height: 251
+        x: 753
+        y: 157
+        width: 1161
+        height: 2496
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c98475a68a4894940800000000000000
-      internalID: 5280897896942094492
+      spriteID: cdd3b2864c9672c30800000000000000
+      internalID: 4334549458649562588
       vertices: []
       indices: 
       edges: []
@@ -164,7 +141,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f0b3e5b6a30a354449164140e4f14ecb
     internalID: 0
     vertices: []
     indices: 
@@ -174,7 +151,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      crop_0: 5280897896942094492
+      SideScrollTestSprite1_1: 4334549458649562588
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
