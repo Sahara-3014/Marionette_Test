@@ -2,54 +2,16 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 using System.Collections.Generic;
-
-public enum Dialog_ScreenEffect
-{
-    ShakeVertical, ShakeHorizontal, Shake, None, ClearAll, FadeOutAll,
-    OtherColorEnable, OtherColorDisable, AllColorEnable, AllColorDisable
-}
-
-public enum Dialog_CharEffect
-{
-    Jump, ShakeVertical, ShakeHorizontal, Shake, MoveOut2Left, MoveOut2Right,
-    MoveLeft2Out, MoveRight2Out, MoveVertical, MoveUp, FadeIn, FadeOut,
-    ColorEnable, ColorDisable, None, MoveDown
-}
-public enum Dialog_CharPos
-{ Left = 0, Center = 1, Right = 2, New = -1, None = -2, Clear = -3 }
-
-
-[System.Serializable]
-public class Dialogue
-{
-    public string characterName;     // 대사 화자
-    public string status;            // 캐릭터 상태 (표정 등)
-    public string background;        // 배경 키
-
-    [TextArea]
-    public string dialogue;          // 대사 본문
-    public Sprite cg;                // 삽입 이미지 (옵션)
-
-    public Dialog_ScreenEffect screenEffect = Dialog_ScreenEffect.None;
-    public Dialog_CharEffect charEffect = Dialog_CharEffect.None;
-
-    public float delay = 0.05f;      // 타이핑 속도
-    public float duration = 0f;      // 대사 유지 시간
-
-    public DialogSE se1;             // 효과음 1
-    public DialogSE se2;             // 효과음 2
-    public DialogSE bgm;             // 배경음악 전환
-
-}
-
+using System;
 
 public class DialogueManager : MonoBehaviour
 {
-    [SerializeField] private Dialogue[] dialogueList;
+    [SerializeField] private DialogueData[] dialogueList;
     [SerializeField] private EffectManager effectManager;
     [SerializeField] private DialogSoundManager soundManager;
 
-    [SerializeField] private SpriteRenderer sprite_Character;
+    // 예: 0 = Left, 1 = Center, 2 = Right
+    [SerializeField] private SpriteRenderer[] sprite_Characters;
     [SerializeField] private SpriteRenderer sprite_BG;
     [SerializeField] private SpriteRenderer sprite_DialogueBox;
     [SerializeField] private SpriteRenderer sprite_CharacterNameBox;
@@ -57,6 +19,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txt_Dialogue;
     [SerializeField] private TextMeshProUGUI txt_CharacterName;
 
+    [SerializeField] private CharacterPositionManager characterPositionManager;
 
     [Header("배경 스프라이트 등록")]
     [SerializeField] private List<Sprite> backgroundSprites;
@@ -98,11 +61,11 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping = false;
     private int count = 0;
 
-    [SerializeField] private Dialogue[] dialogue;
+    [SerializeField] private DialogueData[] dialogue;
 
     private Coroutine typingCoroutine;
 
-    public void SetDialogue(Dialogue[] newDialogue)
+    public void SetDialogue(DialogueData[] newDialogue)
     {
         dialogue = newDialogue;
     }
@@ -120,41 +83,83 @@ public class DialogueManager : MonoBehaviour
     //다음 대화로 넘어가는 함수
     private void NextDialogue()
     {
+        var currentDialogue = dialogue[count];
+
+        foreach (var character in sprite_Characters)
+        {
+            character.sprite = null;
+            character.gameObject.SetActive(false);
+        }
+        Debug.Log($"[NextDialogue] charPos: {currentDialogue.charPos}");
 
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
         }
 
-        var currentDialogue = dialogue[count];
-
         string displayName = currentDialogue.characterName;
         txt_CharacterName.text = displayName;
 
         if (soundManager != null)
         {
-            if (currentDialogue.bgm != null)
+            if (currentDialogue.bgm != null && currentDialogue.bgm.clip != null)
                 soundManager.PlayDialogSE(currentDialogue.bgm);
-            if (currentDialogue.se1 != null)
+            if (currentDialogue.se1 != null && currentDialogue.se1.clip != null)
                 soundManager.PlayDialogSE(currentDialogue.se1);
-            if (currentDialogue.se2 != null)
+            if (currentDialogue.se2 != null && currentDialogue.se2.clip != null)
                 soundManager.PlayDialogSE(currentDialogue.se2);
         }
 
-        string englishName = characterNameMap.ContainsKey(displayName) ? characterNameMap[displayName] : displayName;
-        string spriteKey = $"{englishName}_{currentDialogue.status}";
-        Debug.Log($"[캐릭터 스프라이트 키] {spriteKey}");
 
-        if (!string.IsNullOrEmpty(spriteKey) && characterSpriteDict.ContainsKey(spriteKey))
+
+        // 캐릭터 위치 인덱스 확인
+        int posIndex = (int)currentDialogue.charPos;
+
+        // 캐릭터 스프라이트 설정
+        if (posIndex >= 0 && posIndex < sprite_Characters.Length)
         {
-            sprite_Character.sprite = characterSpriteDict[spriteKey];
+            SpriteRenderer targetRenderer = sprite_Characters[posIndex];
+
+            string englishName = characterNameMap.ContainsKey(displayName) ? characterNameMap[displayName] : displayName;
+            string spriteKey = $"{englishName}_{currentDialogue.status}";
+            Debug.Log($"[캐릭터 스프라이트 키] {spriteKey}");
+
+            if (!string.IsNullOrEmpty(spriteKey) && characterSpriteDict.ContainsKey(spriteKey))
+            {
+                targetRenderer.sprite = characterSpriteDict[spriteKey];
+                targetRenderer.gameObject.SetActive(true);
+            }
+            else
+            {
+                targetRenderer.sprite = null;
+                targetRenderer.gameObject.SetActive(false);
+                Debug.LogWarning($"[스프라이트 미적용] {spriteKey}는 등록되지 않았습니다.");
+            }
+
+            // 위치 설정
+            if (characterPositionManager != null)
+            {
+                characterPositionManager.SetCharacter(targetRenderer, currentDialogue.charPos);
+                Debug.Log($"[DialogueManager] 캐릭터 위치 설정: {currentDialogue.charPos}");
+            }
+
+            // 캐릭터 이펙트 적용
+            if (currentDialogue.charEffect != Dialog_CharEffect.None)
+            {
+                StartCoroutine(effectManager.RunCharacterEffect(currentDialogue.charEffect, targetRenderer));
+            }
         }
-        else
+        else if (currentDialogue.charPos == Dialog_CharPos.Clear)
         {
-            sprite_Character.sprite = null;
-            Debug.LogWarning($"[스프라이트 미적용] {spriteKey}는 등록되지 않았습니다.");
+            foreach (var c in sprite_Characters)
+            {
+                c.sprite = null;
+                c.gameObject.SetActive(false);
+            }
+            Debug.Log("[DialogueManager] 캐릭터 전체 Clear");
         }
 
+        // 배경 설정
         string bgKey = currentDialogue.background;
         Debug.Log($"[배경 키 확인] '{bgKey}'");
 
@@ -169,47 +174,19 @@ public class DialogueManager : MonoBehaviour
             Debug.LogWarning($"[배경 미적용] {bgKey}는 등록되지 않았습니다.");
         }
 
-        //  이펙트 실행
-        StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
-        StartCoroutine(effectManager.RunCharacterEffect(currentDialogue.charEffect, sprite_Character));
+        // 화면 이펙트 적용 (배경 대상)
+        if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
+        {
+            StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
+        }
 
-
+        // 텍스트 타이핑 효과 시작
         typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
+
         count++;
     }
 
 
-
-    private IEnumerator FadeInCharacter()
-    {
-        float time = 0;
-        Color c = sprite_Character.color;
-        c.a = 0;
-        sprite_Character.color = c;
-
-        while (time < 1f)
-        {
-            time += Time.deltaTime;
-            c.a = Mathf.Lerp(0f, 1f, time);
-            sprite_Character.color = c;
-            yield return null;
-        }
-    }
-    private IEnumerator FadeOutCharacter()
-    {
-        float time = 0;
-        Color c = sprite_Character.color;
-        c.a = 1f;
-        sprite_Character.color = c;
-
-        while (time < 1f)
-        {
-            time += Time.deltaTime;
-            c.a = Mathf.Lerp(1f, 0f, time);
-            sprite_Character.color = c;
-            yield return null;
-        }
-    }
 
 
     //대사를 한 줄씩 나오게 하는 함수
@@ -233,11 +210,12 @@ public class DialogueManager : MonoBehaviour
         isTyping = false;
     }
 
-
+    int index = 0; // 예: 첫 번째 캐릭터
+    bool flag = true; // 활성화 여부
     private void OnOff(bool flag)
     {
         sprite_DialogueBox.gameObject.SetActive(flag);
-        sprite_Character.gameObject.SetActive(flag);
+        sprite_Characters[index].gameObject.SetActive(flag);
         txt_Dialogue.gameObject.SetActive(flag);
         sprite_CharacterNameBox.gameObject.SetActive(flag);
         txt_CharacterName.gameObject.SetActive(flag);
@@ -283,7 +261,7 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    //대사 정지/재개 함수
+    //대사 정지,재개 함수
     private bool isPaused = false;
 
     public void TogglePauseDialogue()

@@ -9,7 +9,6 @@ public class DialogSoundManager : MonoBehaviour
 
     public void PlayDialogSE(DialogSE dialogSE)
     {
-        if (dialogSE == null || dialogSE.clip == null) return;
 
         switch (dialogSE.type)
         {
@@ -20,49 +19,73 @@ public class DialogSoundManager : MonoBehaviour
             case SEType.SE:
                 PlaySE(dialogSE);
                 break;
+
+            default:
+                break;
         }
     }
 
     public void PlayBGM(DialogSE bgm)
     {
+        if (bgmSource == null)
+        {
+            Debug.LogError("[PlayBGM] bgmSource가 할당되어 있지 않습니다!");
+            return;
+        }
+
+        if (bgm == null || bgm.clip == null)
+        {
+            Debug.LogWarning("[PlayBGM] 재생할 BGM이 없거나 AudioClip이 null입니다.");
+            return;
+        }
+
         bgmSource.clip = bgm.clip;
         bgmSource.volume = bgm.volume;
         bgmSource.loop = (bgm.loopCount == 0);
         bgmSource.Play();
+
+        Debug.Log($"[PlayBGM] BGM '{bgm.clip.name}' 재생 시작 (볼륨: {bgm.volume})");
     }
+
 
     public void PlaySE(DialogSE se)
     {
-        AudioSource source = seSource1;
+
+
+        AudioSource sourceToUse = null;
 
         if (!seSource1.isPlaying)
-            source = seSource1;
+            sourceToUse = seSource1;
         else if (!seSource2.isPlaying)
-            source = seSource2;
+            sourceToUse = seSource2;
         else
         {
+            Debug.Log("[PlaySE] 둘 다 재생 중이어서 seSource1 강제로 사용");
             seSource1.Stop();
-            source = seSource1;
+            sourceToUse = seSource1;
         }
 
-        source.clip = se.clip;
-        source.volume = se.volume;
-        source.loop = (se.loopCount == 0);
-        source.Play();
+        sourceToUse.clip = se.clip;
+        sourceToUse.volume = se.volume;
+        sourceToUse.loop = (se.loopCount == 0);
+        sourceToUse.Play();
+
+        Debug.Log($"[PlaySE] 효과음 '{se.clip.name}' 재생 시작 (볼륨: {se.volume})");
 
         if (se.loopCount > 0)
-            StartCoroutine(PlaySELoop(source, se.loopCount));
+            StartCoroutine(PlaySELoop(sourceToUse, se.loopCount));
     }
 
     private IEnumerator PlaySELoop(AudioSource source, int loopCount)
     {
-        int count = 1;
-        while (count < loopCount)
+        int playedCount = 1;
+        while (playedCount < loopCount)
         {
             yield return new WaitForSeconds(source.clip.length);
-            source.Play();
-            count++;
+            if (!source.isPlaying)
+                source.Play();
+
+            playedCount++;
         }
     }
-
 }
