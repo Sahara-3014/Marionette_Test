@@ -15,7 +15,7 @@ public class DialogDatabase : MonoBehaviour
     /// <summary> 저장시 인덱스 </summary>
     public int savePlayIndex { get; private set; }
     private Dictionary<string, UnityAction> sceneChangeEvent = new();
-    private Dictionary<string, Dictionary<int, List<Dialogue>>> dialogs;
+    private Dictionary<string, Dictionary<int, List<DialogueData>>> dialogs;
 
 
     #region 씬 이동 이벤트
@@ -76,7 +76,7 @@ public class DialogDatabase : MonoBehaviour
 
 
     #region 대화
-    public List<Dialogue> GetDialogs_NeedID(string key, int id)
+    public List<DialogueData> GetDialogs_NeedID(string key, int id)
     {
         if(dialogs == null || dialogs.ContainsKey(key) == false)
         {
@@ -84,7 +84,7 @@ public class DialogDatabase : MonoBehaviour
             if (text == null)
                 return null;
 
-            var dic = JsonConvert.DeserializeObject<Dictionary<int, List<Dialogue>>>(text);
+            var dic = JsonConvert.DeserializeObject<Dictionary<int, List<DialogueData>>>(text);
 
             if (dialogs == null)
                 dialogs = new();
@@ -107,7 +107,7 @@ public class DialogDatabase : MonoBehaviour
         }
     }
 
-    public Dictionary<int, List<Dialogue>> GetDialogs_NeedKey(string key)
+    public Dictionary<int, List<DialogueData>> GetDialogs_NeedKey(string key)
     {
         if (dialogs == null || dialogs.ContainsKey(key) == false)
         {
@@ -115,7 +115,7 @@ public class DialogDatabase : MonoBehaviour
             if (text == null)
                 return null;
 
-            var dic = JsonConvert.DeserializeObject<Dictionary<int, List<Dialogue>>>(text);
+            var dic = JsonConvert.DeserializeObject<Dictionary<int, List<DialogueData>>>(text);
 
             if (dialogs == null)
                 dialogs = new();
@@ -135,7 +135,7 @@ public class DialogDatabase : MonoBehaviour
         }
     }
 
-    public Dictionary<string, Dictionary<int, List<Dialogue>>> GetDialogs() => dialogs;
+    public Dictionary<string, Dictionary<int, List<DialogueData>>> GetDialogs() => dialogs;
     #endregion
 
 
