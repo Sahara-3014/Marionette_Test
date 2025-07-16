@@ -170,7 +170,8 @@ public class DialogueManager : MonoBehaviour
                 if (pos >= 0 && pos < posUsed.Length)
                 {
                     posUsed[pos] = true;
-                    ShowCharacter(ch.name, ch.head, ch.body, ch.position, currentDialogue.charEffect);
+                    ShowCharacter(ch.name, ch.head, ch.body, ch.position, ch.effect);
+
                 }
                 else
                 {

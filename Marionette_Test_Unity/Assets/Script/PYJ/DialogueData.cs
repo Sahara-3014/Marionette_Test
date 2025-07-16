@@ -9,6 +9,7 @@ public class CharacterStatus
     public string head;
     public string body;
     public Dialog_CharPos position;
+    public Dialog_CharEffect effect; // ← 개별 효과 필드 추가!
 }
 
 
