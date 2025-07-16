@@ -12,13 +12,13 @@ public enum SEType
 public class DialogSE
 {
 
-    public SEType type;          // BGMÀÎÁö SEÀÎÁö
-    public AudioClip clip;       // ½ÇÁ¦ ¿Àµğ¿À Å¬¸³
-    public int loopCount = 1;    // ¹İº¹ È½¼ö (0ÀÌ¸é ¹«ÇÑ ¹İº¹)
-    public float volume = 1.0f;  // º¼·ı (0~1)
+    public SEType type;          // BGMì¸ì§€ SEì¸ì§€
+    public AudioClip clip;       // ì‹¤ì œ ì˜¤ë””ì˜¤ í´ë¦½
+    public int loopCount = 1;    // ë°˜ë³µ íšŸìˆ˜ (0ì´ë©´ ë¬´í•œ ë°˜ë³µ)
+    public float volume = 1.0f;  // ë³¼ë¥¨ (0~1)
 
 
-    // »ı¼ºÀÚ Á¤ÀÇ
+    // ìƒì„±ì ì •ì˜
     public DialogSE(SEType type = SEType.SE, AudioClip clip = null, int loopCount = 1, float volume = 0.5f)
     {
         this.type = type;
@@ -27,6 +27,6 @@ public class DialogSE
         this.volume = volume;
     }
 
-    public DialogSE() { } // ¸Å°³º¯¼ö ¾ø´Â »ı¼ºÀÚ (ÃÊ±âÈ­¿ë)
+    public DialogSE() { } // ë§¤ê°œë³€ìˆ˜ ì—†ëŠ” ìƒì„±ì (ì´ˆê¸°í™”ìš©)
 
 }

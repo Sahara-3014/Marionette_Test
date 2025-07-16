@@ -6,12 +6,25 @@ using System;
 
 public class DialogueManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class CharacterStatus
+    {
+        public string name;
+        public string head;
+        public string body;
+        public Dialog_CharPos position;
+    }
+
+
     [SerializeField] private DialogueData[] dialogueList;
     [SerializeField] private DialogEffectManager effectManager;
     [SerializeField] private DialogSoundManager soundManager;
 
     // 예: 0 = Left, 1 = Center, 2 = Right
-    [SerializeField] private SpriteRenderer[] sprite_Characters;
+    // 캐릭터 위치당 스프라이트 두 개 (머리, 몸)
+    [SerializeField] private SpriteRenderer[] sprite_Heads;  // 머리
+    [SerializeField] private SpriteRenderer[] sprite_Bodies; // 몸
+
     [SerializeField] private SpriteRenderer sprite_BG;
     [SerializeField] private SpriteRenderer sprite_DialogueBox;
     [SerializeField] private SpriteRenderer sprite_CharacterNameBox;
@@ -35,7 +48,7 @@ public class DialogueManager : MonoBehaviour
 {
     { "주한", "JUHAN" },
     { "미래", "MIRAE" },
-    { "이영희", "lee" }
+    { "계란", "EGG" }
     // 필요한 만큼 추가
 };
 
@@ -79,112 +92,142 @@ public class DialogueManager : MonoBehaviour
         NextDialogue();
     }
 
+    private void ShowCharacter(string name, string head, string body, Dialog_CharPos pos, Dialog_CharEffect effect)
+    {
+        int posIndex = (int)pos;
+        if (posIndex < 0 || posIndex >= sprite_Heads.Length || posIndex >= sprite_Bodies.Length) return;
+
+        var headRenderer = sprite_Heads[posIndex];
+        var bodyRenderer = sprite_Bodies[posIndex];
+
+        string englishName = characterNameMap.ContainsKey(name) ? characterNameMap[name] : name;
+        string headKey = $"{englishName}_{head}";
+        string bodyKey = $"{englishName}_{body}";
+
+        // 머리 출력
+        Debug.Log($"headKey = '{headKey}', 등록 여부 = {characterSpriteDict.ContainsKey(headKey)}");
+
+        if (!string.IsNullOrEmpty(headKey) && characterSpriteDict.ContainsKey(headKey))
+        {
+            headRenderer.sprite = characterSpriteDict[headKey];
+            headRenderer.gameObject.SetActive(true);
+        }
+        else
+        {
+            headRenderer.sprite = null;
+            headRenderer.gameObject.SetActive(false);
+            Debug.LogWarning($"[머리 스프라이트 미적용] {headKey}는 등록되지 않았습니다.");
+        }
+
+        // 몸 출력
+        if (!string.IsNullOrEmpty(bodyKey) && characterSpriteDict.ContainsKey(bodyKey))
+        {
+            bodyRenderer.sprite = characterSpriteDict[bodyKey];
+            bodyRenderer.gameObject.SetActive(true);
+        }
+        else
+        {
+            bodyRenderer.sprite = null;
+            bodyRenderer.gameObject.SetActive(false);
+            Debug.LogWarning($"[몸통 스프라이트 미적용] {bodyKey}는 등록되지 않았습니다.");
+        }
+
+        if (characterPositionManager != null)
+        {
+            characterPositionManager.SetCharacter(headRenderer, pos);
+            characterPositionManager.SetCharacter(bodyRenderer, pos);
+        }
+
+        if (effect != Dialog_CharEffect.None)
+        {
+            StartCoroutine(effectManager.RunCharacterEffect(effect, headRenderer));
+            StartCoroutine(effectManager.RunCharacterEffect(effect, bodyRenderer));
+        }
+    }
+
 
     //다음 대화로 넘어가는 함수
     private void NextDialogue()
     {
+        // ✅ 배열 범위 초과 방지
+        if (count >= dialogue.Length)
+        {
+            OnOff(false); // 대사 종료 처리
+            return;
+        }
+
         var currentDialogue = dialogue[count];
 
-        foreach (var character in sprite_Characters)
+        // ✅ 현재 등장하는 위치만 추적
+        bool[] posUsed = new bool[sprite_Heads.Length];
+
+        // ✅ 캐릭터 출력 (머리 + 몸)
+        if (currentDialogue.characters != null)
         {
-            character.sprite = null;
-            character.gameObject.SetActive(false);
-        }
-        Debug.Log($"[NextDialogue] charPos: {currentDialogue.charPos}");
-
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-        }
-
-        string displayName = currentDialogue.characterName;
-        txt_CharacterName.text = displayName;
-
-        if (soundManager != null)
-        {
-            if (currentDialogue.bgm != null && currentDialogue.bgm.clip != null)
-                soundManager.PlayDialogSE(currentDialogue.bgm);
-            if (currentDialogue.se1 != null && currentDialogue.se1.clip != null)
-                soundManager.PlayDialogSE(currentDialogue.se1);
-            if (currentDialogue.se2 != null && currentDialogue.se2.clip != null)
-                soundManager.PlayDialogSE(currentDialogue.se2);
-        }
-
-
-
-        // 캐릭터 위치 인덱스 확인
-        int posIndex = (int)currentDialogue.charPos;
-
-        // 캐릭터 스프라이트 설정
-        if (posIndex >= 0 && posIndex < sprite_Characters.Length)
-        {
-            SpriteRenderer targetRenderer = sprite_Characters[posIndex];
-
-            string englishName = characterNameMap.ContainsKey(displayName) ? characterNameMap[displayName] : displayName;
-            string spriteKey = $"{englishName}_{currentDialogue.status}";
-            Debug.Log($"[캐릭터 스프라이트 키] {spriteKey}");
-
-            if (!string.IsNullOrEmpty(spriteKey) && characterSpriteDict.ContainsKey(spriteKey))
+            foreach (var ch in currentDialogue.characters)
             {
-                targetRenderer.sprite = characterSpriteDict[spriteKey];
-                targetRenderer.gameObject.SetActive(true);
-            }
-            else
-            {
-                targetRenderer.sprite = null;
-                targetRenderer.gameObject.SetActive(false);
-                Debug.LogWarning($"[스프라이트 미적용] {spriteKey}는 등록되지 않았습니다.");
-            }
-
-            // 위치 설정
-            if (characterPositionManager != null)
-            {
-                characterPositionManager.SetCharacter(targetRenderer, currentDialogue.charPos);
-                Debug.Log($"[DialogueManager] 캐릭터 위치 설정: {currentDialogue.charPos}");
-            }
-
-            // 캐릭터 이펙트 적용
-            if (currentDialogue.charEffect != Dialog_CharEffect.None)
-            {
-                StartCoroutine(effectManager.RunCharacterEffect(currentDialogue.charEffect, targetRenderer));
+                int pos = (int)ch.position;
+                if (pos >= 0 && pos < posUsed.Length)
+                {
+                    posUsed[pos] = true;
+                    ShowCharacter(ch.name, ch.head, ch.body, ch.position, currentDialogue.charEffect);
+                }
+                else
+                {
+                    Debug.LogWarning($"[오류] 유효하지 않은 캐릭터 위치: {pos}");
+                }
             }
         }
-        else if (currentDialogue.charPos == Dialog_CharPos.Clear)
+
+        // ✅ 등장하지 않은 위치는 끄기
+        for (int i = 0; i < sprite_Heads.Length; i++)
         {
-            foreach (var c in sprite_Characters)
+            if (!posUsed[i])
             {
-                c.sprite = null;
-                c.gameObject.SetActive(false);
+                sprite_Heads[i].sprite = null;
+                sprite_Heads[i].gameObject.SetActive(false);
+
+                sprite_Bodies[i].sprite = null;
+                sprite_Bodies[i].gameObject.SetActive(false);
             }
-            Debug.Log("[DialogueManager] 캐릭터 전체 Clear");
         }
 
-        // 배경 설정
+        // ✅ 대사 관련 텍스트 및 배경 처리
+        txt_CharacterName.text = currentDialogue.speaker;
+
         string bgKey = currentDialogue.background;
-        Debug.Log($"[배경 키 확인] '{bgKey}'");
-
         if (!string.IsNullOrEmpty(bgKey) && backgroundSpriteDict.ContainsKey(bgKey))
         {
             sprite_BG.sprite = backgroundSpriteDict[bgKey];
-            Debug.Log($"[배경 적용됨] {bgKey}");
         }
         else
         {
             sprite_BG.sprite = null;
-            Debug.LogWarning($"[배경 미적용] {bgKey}는 등록되지 않았습니다.");
         }
 
-        // 화면 이펙트 적용 (배경 대상)
+        // ✅ 배경 효과
         if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
         {
             StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         }
 
-        // 텍스트 타이핑 효과 시작
+        // ✅ 사운드 처리
+        if (currentDialogue.bgm != null)
+            soundManager.PlayDialogSE(currentDialogue.bgm);
+        if (currentDialogue.se1 != null)
+            soundManager.PlayDialogSE(currentDialogue.se1);
+        if (currentDialogue.se2 != null)
+            soundManager.PlayDialogSE(currentDialogue.se2);
+
+        // ✅ 텍스트 출력
         typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
 
+        // ✅ 다음 대사 인덱스로 이동
         count++;
     }
+
+
+
 
 
 
@@ -210,12 +253,22 @@ public class DialogueManager : MonoBehaviour
         isTyping = false;
     }
 
-    int index = 0; // 예: 첫 번째 캐릭터
-    bool flag = true; // 활성화 여부
     private void OnOff(bool flag)
     {
         sprite_DialogueBox.gameObject.SetActive(flag);
-        sprite_Characters[index].gameObject.SetActive(flag);
+
+        // 머리 오브젝트 켜거나 끔
+        foreach (var head in sprite_Heads)
+        {
+            head.gameObject.SetActive(flag);
+        }
+
+        // 몸 오브젝트 켜거나 끔
+        foreach (var body in sprite_Bodies)
+        {
+            body.gameObject.SetActive(flag);
+        }
+
         txt_Dialogue.gameObject.SetActive(flag);
         sprite_CharacterNameBox.gameObject.SetActive(flag);
         txt_CharacterName.gameObject.SetActive(flag);
@@ -223,6 +276,8 @@ public class DialogueManager : MonoBehaviour
 
         isDialogue = flag;
     }
+
+
 
     void Update()
     {

@@ -1,18 +1,32 @@
 using UnityEngine;
+using static DialogueManager;
+
+
+[System.Serializable]
+public class CharacterStatus
+{
+    public string name;
+    public string head;
+    public string body;
+    public Dialog_CharPos position;
+}
+
 
 [System.Serializable]
 public class DialogueData
 {
-    public string characterName;     // ´ë»ç È­ÀÚ ÀÌ¸§
-    public string status;            // Ä³¸¯ÅÍ »óÅÂ (¿¹: ¿ôÀ½, ºĞ³ë µî)
-    public string background;        // ¹è°æ Å° °ª
+    public CharacterStatus[] characters;
+
+
+
+    public string background;        // ë°°ê²½ í‚¤ ê°’
 
     [TextArea]
-    public string dialogue;          // ½ÇÁ¦ ´ë»ç ÅØ½ºÆ®
+    public string dialogue;          // ì‹¤ì œ ëŒ€ì‚¬ í…ìŠ¤íŠ¸
 
-    public Sprite cg;                // »ğÀÔ ÀÌ¹ÌÁö (CG µî)
+    public Sprite cg;                // ì‚½ì… ì´ë¯¸ì§€ (CG ë“±)
 
-    [HideInInspector] public int screenEffectIndex;  // ¿ÜºÎ ÀÔ·Â¿ë
+    [HideInInspector] public int screenEffectIndex;  // ì™¸ë¶€ ì…ë ¥ìš©
     [HideInInspector] public int charEffectIndex;
 
     public Dialog_ScreenEffect screenEffect = Dialog_ScreenEffect.None;
@@ -25,11 +39,19 @@ public class DialogueData
     public DialogSE se2;
     public DialogSE bgm;
 
-    public Dialog_CharPos charPos;
+    public Dialog_CharPos charPos1;
+    public Dialog_CharPos charPos2;
+
+
+
+    public string speaker; // ëŒ€ì‚¬ ì£¼ì¸ê³µ (characterName1 ë˜ëŠ” characterName2 ì¤‘ í•˜ë‚˜)
+
+
+
 
 
     /// <summary>
-    /// ¿ÜºÎ¿¡¼­ ¹øÈ£·Î °ªÀ» Ã¤¿î µÚ, È£ÃâÇØ¼­ enum¿¡ Àû¿ë
+    /// ì™¸ë¶€ì—ì„œ ë²ˆí˜¸ë¡œ ê°’ì„ ì±„ìš´ ë’¤, í˜¸ì¶œí•´ì„œ enumì— ì ìš©
     /// </summary>
     public void ApplyEffectIndices()
     {
