@@ -44,10 +44,30 @@ public class DialogEffectManager : MonoBehaviour
             case Dialog_ScreenEffect.AllColorDisable:
                 yield return StartCoroutine(ChangeCharacterColor(Color.white));
                 break;
+            case Dialog_ScreenEffect.MoveUp:
+                yield return StartCoroutine(MoveScreenUp(bg));
+                break;
+            case Dialog_ScreenEffect.MoveDown:
+                yield return StartCoroutine(MoveScreenDown(bg));
+                break;
+            case Dialog_ScreenEffect.FadeIn:
+                yield return StartCoroutine(FadeInScreen(bg));
+                break;
+            case Dialog_ScreenEffect.FadeOut:
+                yield return StartCoroutine(FadeOutScreen(bg));
+                break;
+            case Dialog_ScreenEffect.ColorEnable:
+                yield return StartCoroutine(EnableColorEffect(bg));
+                break;
+            case Dialog_ScreenEffect.ColorDisable:
+                yield return StartCoroutine(DisableColorEffect(bg));
+                break;
+
+            default:
+                yield break;
         }
-
-
     }
+
 
 
 
@@ -346,4 +366,64 @@ public class DialogEffectManager : MonoBehaviour
         }
         target.color = new Color(color.r, color.g, color.b, 0f);
     }
+
+    private IEnumerator MoveScreenUp(SpriteRenderer target)
+    {
+        Vector3 originalPos = target.transform.localPosition;
+        Vector3 targetPos = originalPos + Vector3.up * moveDistance;
+
+        float timer = 0f;
+        while (timer < moveDuration)
+        {
+            target.transform.localPosition = Vector3.Lerp(originalPos, targetPos, timer / moveDuration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        target.transform.localPosition = targetPos;
+    }
+
+    private IEnumerator MoveScreenDown(SpriteRenderer target)
+    {
+        Vector3 originalPos = target.transform.localPosition;
+        Vector3 targetPos = originalPos + Vector3.down * moveDistance;
+
+        float timer = 0f;
+        while (timer < moveDuration)
+        {
+            target.transform.localPosition = Vector3.Lerp(originalPos, targetPos, timer / moveDuration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        target.transform.localPosition = targetPos;
+    }
+
+    private IEnumerator FadeInScreen(SpriteRenderer target)
+    {
+        Color color = target.color;
+        float timer = 0f;
+        while (timer < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
+            target.color = new Color(color.r, color.g, color.b, alpha);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        target.color = new Color(color.r, color.g, color.b, 1f);
+    }
+
+    private IEnumerator EnableColorEffect(SpriteRenderer target)
+    {
+        // 예: tint 색을 빨간색으로 바꾸기 (임의 설정)
+        Color effectColor = new Color(1f, 0.5f, 0.5f, 1f);
+        target.color = effectColor;
+        yield break;
+    }
+
+    private IEnumerator DisableColorEffect(SpriteRenderer target)
+    {
+        target.color = Color.white;
+        yield break;
+    }
+
+
 }
