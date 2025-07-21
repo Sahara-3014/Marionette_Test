@@ -4,9 +4,15 @@ using TMPro;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
+    public void SetDialogue(DialogueData[] newDialogue)
+    {
+        dialogue = newDialogue;
+    }
+
     [System.Serializable]
     public class CharacterStatus
     {
@@ -54,6 +60,22 @@ public class DialogueManager : MonoBehaviour
     { "계란", "EGG" }
     // 필요한 만큼 추가
 };
+    [SerializeField] private GameObject choicePanel;        // 선택지 전체 UI
+    [SerializeField] private Button[] choiceButtons;          // 선택지 버튼들
+    [SerializeField] private TextMeshProUGUI[] choiceButtonTexts; // 버튼 텍스트
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private void Awake()
@@ -80,12 +102,6 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private DialogueData[] dialogue;
 
     private Coroutine typingCoroutine;
-
-    public void SetDialogue(DialogueData[] newDialogue)
-    {
-        dialogue = newDialogue;
-    }
-
 
     //대사 보여주는 함수
     public void ShowDialogue()
@@ -152,6 +168,7 @@ public class DialogueManager : MonoBehaviour
     //다음 대화로 넘어가는 함수
     private void NextDialogue()
     {
+        // ✅ 모든 대사 끝났을 때
         if (count >= dialogue.Length)
         {
             Debug.Log("대사 끝났음");
@@ -160,19 +177,15 @@ public class DialogueManager : MonoBehaviour
         }
 
         var currentDialogue = dialogue[count];
-
-        if (currentDialogue == null)
-        {
-            Debug.LogError($"currentDialogue가 null입니다! count={count}");
-            OnOff(false);
-            return;
-        }
-
-        Debug.Log($"NextDialogue 호출: count={count}, cutscene='{currentDialogue.cutscene}'");
-
+        Debug.Log($"[1] nextSheet = {currentDialogue.nextSheet}");
+        // ✅ 다음 대사 미리 준비
         count++;
-
-        // 대사가 끝나고 nextSheet가 있으면 시트 전환
+        //if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
+        //{
+        //    ShowChoices(currentDialogue.choices);
+        //    return; // 선택지 뜨면 대사 진행 멈춤
+        //}
+        // ✅ 마지막 대사였고, nextSheet가 존재하면
         if (count >= dialogue.Length && !string.IsNullOrEmpty(currentDialogue.nextSheet))
         {
             Debug.Log($"다음 시트로 이동: {currentDialogue.nextSheet}");
@@ -187,10 +200,11 @@ public class DialogueManager : MonoBehaviour
             {
                 Debug.LogError("GoogleSheetLoader를 찾을 수 없습니다!");
             }
+
             return;
         }
 
-        // 캐릭터 위치 처리
+        // ✅ 캐릭터 등장 위치 추적
         bool[] posUsed = new bool[sprite_Heads.Length];
 
         if (currentDialogue.characters != null)
@@ -210,7 +224,6 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        // 비어있는 위치는 캐릭터 스프라이트 끄기
         for (int i = 0; i < sprite_Heads.Length; i++)
         {
             if (!posUsed[i])
@@ -222,8 +235,7 @@ public class DialogueManager : MonoBehaviour
                 sprite_Bodies[i].gameObject.SetActive(false);
             }
         }
-
-        // 컷씬 처리
+        // ✅ 컷씬 처리: 여기가 추가되는 부분!
         if (!string.IsNullOrEmpty(currentDialogue.cutscene))
         {
             ShowCutscene(currentDialogue.cutscene);
@@ -233,25 +245,26 @@ public class DialogueManager : MonoBehaviour
             HideCutscene();
         }
 
-        // 이름, 배경 등 설정
+        // ✅ 이름/배경
         txt_CharacterName.text = currentDialogue.speaker;
 
-        if (!string.IsNullOrEmpty(currentDialogue.background) && backgroundSpriteDict.ContainsKey(currentDialogue.background))
+        string bgKey = currentDialogue.background;
+        if (!string.IsNullOrEmpty(bgKey) && backgroundSpriteDict.ContainsKey(bgKey))
         {
-            sprite_BG.sprite = backgroundSpriteDict[currentDialogue.background];
+            sprite_BG.sprite = backgroundSpriteDict[bgKey];
         }
         else
         {
             sprite_BG.sprite = null;
         }
 
-        // 화면 효과
+        // ✅ 화면 효과
         if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
         {
             StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         }
 
-        // 사운드 재생
+        // ✅ 사운드
         if (currentDialogue.bgm != null)
             soundManager.PlayDialogSE(currentDialogue.bgm);
         if (currentDialogue.se1 != null)
@@ -259,10 +272,9 @@ public class DialogueManager : MonoBehaviour
         if (currentDialogue.se2 != null)
             soundManager.PlayDialogSE(currentDialogue.se2);
 
-        // 텍스트 출력 시작
+        // ✅ 텍스트 출력
         typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
     }
-
 
 
 
@@ -279,18 +291,23 @@ public class DialogueManager : MonoBehaviour
 
         foreach (char letter in sentence.ToCharArray())
         {
-            //  일시정지일 때 대기
             while (isPaused)
-            {
                 yield return null;
-            }
 
             txt_Dialogue.text += letter;
             yield return new WaitForSeconds(0.05f);
         }
 
         isTyping = false;
+
+        // ✅ 텍스트 출력이 끝났을 때 선택지 있으면 보여주기
+        var currentDialogue = dialogue[count - 1];
+        if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
+        {
+            ShowChoices(currentDialogue.choices);
+        }
     }
+
 
     private void OnOff(bool flag)
     {
@@ -365,25 +382,24 @@ public class DialogueManager : MonoBehaviour
     }
     private void ShowCutscene(string cutsceneName)
     {
-        Debug.Log("ShowCutscene 호출됨: " + cutsceneName);
-
         if (cutsceneImageObject == null)
         {
             Debug.LogError("cutsceneImageObject가 할당되어 있지 않습니다!");
             return;
         }
 
-        SpriteRenderer sr = cutsceneImageObject.GetComponent<SpriteRenderer>();
+        var sr = cutsceneImageObject.GetComponent<SpriteRenderer>();
         if (sr == null)
         {
             Debug.LogError("cutsceneImageObject에 SpriteRenderer 컴포넌트가 없습니다!");
             return;
         }
 
+        Debug.Log("ShowCutscene 호출됨: " + cutsceneName);
         Sprite cutsceneSprite = Resources.Load<Sprite>($"Cutscenes/{cutsceneName}");
         if (cutsceneSprite == null)
         {
-            Debug.LogError($"컷씬 이미지 '{cutsceneName}'가 Resources 폴더에 없습니다!");
+            Debug.LogError($"컷씬 이미지 '{cutsceneName}'가 Resources/Cutscenes 폴더에 없습니다!");
             return;
         }
 
@@ -392,8 +408,8 @@ public class DialogueManager : MonoBehaviour
             chr.gameObject.SetActive(false);
         }
 
-        sr.sprite = cutsceneSprite;
         cutsceneImageObject.SetActive(true);
+        sr.sprite = cutsceneSprite;
     }
 
 
@@ -402,6 +418,51 @@ public class DialogueManager : MonoBehaviour
     {
         cutsceneImageObject.SetActive(false);
     }
+
+    private void OnChoiceSelected(string nextSheet)
+    {
+        choicePanel.SetActive(false);
+
+        if (!string.IsNullOrEmpty(nextSheet))
+        {
+            GoogleSheetLoader sheetLoader = UnityEngine.Object.FindFirstObjectByType<GoogleSheetLoader>();
+            if (sheetLoader != null)
+            {
+                sheetLoader.LoadNextSheet(nextSheet);
+            }
+            else
+            {
+                Debug.LogError("GoogleSheetLoader를 찾을 수 없습니다!");
+            }
+        }
+
+        OnOff(true); // 대사 UI 다시 켜기 (필요하면)
+    }
+
+
+    private void ShowChoices(DialogueChoice[] choices)
+    {
+        choicePanel.SetActive(true);
+
+        int count = Mathf.Min(choices.Length, choiceButtons.Length, choiceButtonTexts.Length);
+
+        for (int i = 0; i < count; i++)
+        {
+            choiceButtons[i].gameObject.SetActive(true);
+            choiceButtonTexts[i].text = choices[i].choiceText;
+
+            string nextSheet = choices[i].nextSheet;  // 지역 변수 복사
+
+            choiceButtons[i].onClick.RemoveAllListeners();
+            choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(nextSheet));
+        }
+
+        for (int i = count; i < choiceButtons.Length; i++)
+        {
+            choiceButtons[i].gameObject.SetActive(false);
+        }
+    }
+
 
 
 

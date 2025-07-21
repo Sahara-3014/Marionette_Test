@@ -90,14 +90,54 @@ public class GoogleSheetLoader : MonoBehaviour
             string background = (row.Count > 14) ? row[14].Value.Trim() : "";
 
             string dialogueText = (row.Count > 15) ? row[15].Value.Trim() : "";
-            string bgmName = (row.Count > 16) ? row[16].Value.Trim() : "";
-            string sfx1Name = (row.Count > 17) ? row[17].Value.Trim() : "";
-            string sfx2Name = (row.Count > 18) ? row[18].Value.Trim() : "";
+
+
+            string choice1 = (row.Count > 16) ? row[16].Value.Trim() : "";
+            string next1Str = (row.Count > 17) ? row[17].Value.Trim() : "";
+
+            string choice2 = (row.Count > 18) ? row[18].Value.Trim() : "";
+            string next2Str = (row.Count > 19) ? row[19].Value.Trim() : "";
+
+            string choice3 = (row.Count > 20) ? row[20].Value.Trim() : "";
+            string next3Str = (row.Count > 21) ? row[21].Value.Trim() : "";
+
+
+            string bgmName = (row.Count >22) ? row[22].Value.Trim() : "";
+            string sfx1Name = (row.Count > 23) ? row[23].Value.Trim() : "";
+            string sfx2Name = (row.Count > 24) ? row[24].Value.Trim() : "";
 
             string nextSheet = (row.Count > 1) ? row[1].Value.Trim() : "";
             string speaker = (row.Count > 2 && row[2] != null) ? row[2].Value.Trim() : characterName1;
 
-            string cutscene = (row.Count > 19) ? row[19].Value.Trim() : "";
+            string cutscene = (row.Count > 25) ? row[25].Value.Trim() : "";
+            List<DialogueChoice> choices = new List<DialogueChoice>();
+
+            int next1Index = -1;
+            if (!string.IsNullOrEmpty(next1Str))
+                int.TryParse(next1Str, out next1Index);
+
+            Debug.Log($"Choice1: {choice1}, next: {next1Index}");
+            if (!string.IsNullOrEmpty(choice1))
+                choices.Add(new DialogueChoice { choiceText = choice1, nextIndex = next1Index });
+
+            int next2Index = -1;
+            if (!string.IsNullOrEmpty(next2Str))
+                int.TryParse(next2Str, out next2Index);
+
+            Debug.Log($"Choice2: {choice2}, next: {next2Index}");
+            if (!string.IsNullOrEmpty(choice2))
+                choices.Add(new DialogueChoice { choiceText = choice2, nextIndex = next2Index });
+
+            int next3Index = -1;
+            if (!string.IsNullOrEmpty(next3Str))
+                int.TryParse(next3Str, out next3Index);
+
+            Debug.Log($"Choice3: {choice3}, next: {next3Index}");
+            if (!string.IsNullOrEmpty(choice3))
+                choices.Add(new DialogueChoice { choiceText = choice3, nextIndex = next3Index });
+
+
+
 
 
             Dialog_CharPos pos1 = ParseCharPos(posStr1);
@@ -146,15 +186,19 @@ public class GoogleSheetLoader : MonoBehaviour
                 screenEffect = screenEffect,
                 charEffect = Dialog_CharEffect.None,
                 nextSheet = nextSheet,
-                cutscene = cutscene
+                cutscene = cutscene,
+                choices = choices.ToArray()
             };
 
             dialogueList.Add(d);
         }
 
+        JSONArray jsonRows = values.AsArray;
         dialogueSystem.SetDialogue(dialogueList.ToArray());
         dialogueSystem.ShowDialogue();
+
     }
+
 
     private Dialog_CharPos ParseCharPos(string str)
     {

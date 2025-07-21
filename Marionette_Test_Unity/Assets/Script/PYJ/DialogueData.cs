@@ -1,3 +1,6 @@
+using SimpleJSON;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static DialogueManager;
 
@@ -13,10 +16,22 @@ public class CharacterStatus
     public string cutscene;
 }
 
+[System.Serializable]
+public class DialogueChoice
+{
+    public string choiceText;
+    public int nextIndex;
+    public string nextSheet;  // string 타입으로 선언
+}
+
+
+
 
 [System.Serializable]
 public class DialogueData
 {
+
+    public DialogueChoice[] choices;
     public CharacterStatus[] characters;
 
 
@@ -68,4 +83,11 @@ public class DialogueData
         else
             charEffect = Dialog_CharEffect.None;
     }
+
+
+    
+
+
+
+
 }
