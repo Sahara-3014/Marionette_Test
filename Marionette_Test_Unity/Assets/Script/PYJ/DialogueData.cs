@@ -10,6 +10,7 @@ public class CharacterStatus
     public string body;
     public Dialog_CharPos position;
     public Dialog_CharEffect effect; // ← 개별 효과 필드 추가!
+    public string cutscene;
 }
 
 
@@ -19,7 +20,7 @@ public class DialogueData
     public CharacterStatus[] characters;
 
 
-
+    public string nextSheet;
     public string background;        // 배경 키 값
 
     [TextArea]
@@ -46,6 +47,7 @@ public class DialogueData
 
 
     public string speaker; // 대사 주인공 (characterName1 또는 characterName2 중 하나)
+    internal string cutscene;
 
 
 

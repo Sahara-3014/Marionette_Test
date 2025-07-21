@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class DialogueManager : MonoBehaviour
         public Dialog_CharPos position;
     }
 
+    [SerializeField] private GameObject cutsceneImageObject; // UI Image or SpriteRenderer
+    [SerializeField] private SpriteRenderer[] characterRenderers;
 
     [SerializeField] private DialogueData[] dialogueList;
     [SerializeField] private DialogEffectManager effectManager;
@@ -149,19 +152,47 @@ public class DialogueManager : MonoBehaviour
     //다음 대화로 넘어가는 함수
     private void NextDialogue()
     {
-        // ✅ 배열 범위 초과 방지
         if (count >= dialogue.Length)
         {
-            OnOff(false); // 대사 종료 처리
+            Debug.Log("대사 끝났음");
+            OnOff(false);
             return;
         }
 
         var currentDialogue = dialogue[count];
 
-        // ✅ 현재 등장하는 위치만 추적
+        if (currentDialogue == null)
+        {
+            Debug.LogError($"currentDialogue가 null입니다! count={count}");
+            OnOff(false);
+            return;
+        }
+
+        Debug.Log($"NextDialogue 호출: count={count}, cutscene='{currentDialogue.cutscene}'");
+
+        count++;
+
+        // 대사가 끝나고 nextSheet가 있으면 시트 전환
+        if (count >= dialogue.Length && !string.IsNullOrEmpty(currentDialogue.nextSheet))
+        {
+            Debug.Log($"다음 시트로 이동: {currentDialogue.nextSheet}");
+            OnOff(false);
+
+            GoogleSheetLoader sheetLoader = UnityEngine.Object.FindFirstObjectByType<GoogleSheetLoader>();
+            if (sheetLoader != null)
+            {
+                sheetLoader.LoadNextSheet(currentDialogue.nextSheet);
+            }
+            else
+            {
+                Debug.LogError("GoogleSheetLoader를 찾을 수 없습니다!");
+            }
+            return;
+        }
+
+        // 캐릭터 위치 처리
         bool[] posUsed = new bool[sprite_Heads.Length];
 
-        // ✅ 캐릭터 출력 (머리 + 몸)
         if (currentDialogue.characters != null)
         {
             foreach (var ch in currentDialogue.characters)
@@ -171,7 +202,6 @@ public class DialogueManager : MonoBehaviour
                 {
                     posUsed[pos] = true;
                     ShowCharacter(ch.name, ch.head, ch.body, ch.position, ch.effect);
-
                 }
                 else
                 {
@@ -180,7 +210,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        // ✅ 등장하지 않은 위치는 끄기
+        // 비어있는 위치는 캐릭터 스프라이트 끄기
         for (int i = 0; i < sprite_Heads.Length; i++)
         {
             if (!posUsed[i])
@@ -193,26 +223,35 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        // ✅ 대사 관련 텍스트 및 배경 처리
+        // 컷씬 처리
+        if (!string.IsNullOrEmpty(currentDialogue.cutscene))
+        {
+            ShowCutscene(currentDialogue.cutscene);
+        }
+        else
+        {
+            HideCutscene();
+        }
+
+        // 이름, 배경 등 설정
         txt_CharacterName.text = currentDialogue.speaker;
 
-        string bgKey = currentDialogue.background;
-        if (!string.IsNullOrEmpty(bgKey) && backgroundSpriteDict.ContainsKey(bgKey))
+        if (!string.IsNullOrEmpty(currentDialogue.background) && backgroundSpriteDict.ContainsKey(currentDialogue.background))
         {
-            sprite_BG.sprite = backgroundSpriteDict[bgKey];
+            sprite_BG.sprite = backgroundSpriteDict[currentDialogue.background];
         }
         else
         {
             sprite_BG.sprite = null;
         }
 
-        // ✅ 배경 효과
+        // 화면 효과
         if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
         {
             StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         }
 
-        // ✅ 사운드 처리
+        // 사운드 재생
         if (currentDialogue.bgm != null)
             soundManager.PlayDialogSE(currentDialogue.bgm);
         if (currentDialogue.se1 != null)
@@ -220,12 +259,11 @@ public class DialogueManager : MonoBehaviour
         if (currentDialogue.se2 != null)
             soundManager.PlayDialogSE(currentDialogue.se2);
 
-        // ✅ 텍스트 출력
+        // 텍스트 출력 시작
         typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
-
-        // ✅ 다음 대사 인덱스로 이동
-        count++;
     }
+
+
 
 
 
@@ -325,7 +363,45 @@ public class DialogueManager : MonoBehaviour
         isPaused = !isPaused;
         Debug.Log(isPaused ? " 일시정지됨" : " 다시 재생됨");
     }
+    private void ShowCutscene(string cutsceneName)
+    {
+        Debug.Log("ShowCutscene 호출됨: " + cutsceneName);
 
+        if (cutsceneImageObject == null)
+        {
+            Debug.LogError("cutsceneImageObject가 할당되어 있지 않습니다!");
+            return;
+        }
+
+        SpriteRenderer sr = cutsceneImageObject.GetComponent<SpriteRenderer>();
+        if (sr == null)
+        {
+            Debug.LogError("cutsceneImageObject에 SpriteRenderer 컴포넌트가 없습니다!");
+            return;
+        }
+
+        Sprite cutsceneSprite = Resources.Load<Sprite>($"Cutscenes/{cutsceneName}");
+        if (cutsceneSprite == null)
+        {
+            Debug.LogError($"컷씬 이미지 '{cutsceneName}'가 Resources 폴더에 없습니다!");
+            return;
+        }
+
+        foreach (var chr in characterRenderers)
+        {
+            chr.gameObject.SetActive(false);
+        }
+
+        sr.sprite = cutsceneSprite;
+        cutsceneImageObject.SetActive(true);
+    }
+
+
+
+    private void HideCutscene()
+    {
+        cutsceneImageObject.SetActive(false);
+    }
 
 
 
