@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class DialogDatabase : MonoBehaviour
+public class SaveDatabase : MonoBehaviour
 {
-    public static DialogDatabase Instance { get; private set; }
+    public static SaveDatabase Instance { get; private set; }
     private DayCycleSystem dayCycleSystem;
 
     private SaveData saveData;
@@ -68,8 +68,8 @@ public class DialogDatabase : MonoBehaviour
 
     private void Initalize()
     {
-        dayCycleSystem.RigisterDayChangeEvent(SaveData_SetDayNum);
-        dayCycleSystem.RigisterTimeChangeEvent(SaveData_SetGameTime);
+        dayCycleSystem?.RigisterDayChangeEvent(SaveData_SetDayNum);
+        dayCycleSystem?.RigisterTimeChangeEvent(SaveData_SetGameTime);
     }
 
     #endregion
