@@ -2,31 +2,12 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 using UnityEngine.UI;
 
 
 public class DialogueManager : MonoBehaviour
 {
-
-    public void SetDialogue(DialogueData[] newDialogue)
-    {
-        dialogue = newDialogue;
-
-        dialogueDict = new Dictionary<int, DialogueData>();
-        foreach (var d in dialogue)
-        {
-            dialogueDict[d.index] = d;
-        }
-
-        if (!isDialogue) // 대화 중이 아니면 초기화
-        {
-            currentIndex = 1;
-            isDialogue = true;
-        }
-    }
-
 
 
     [System.Serializable]
@@ -38,16 +19,15 @@ public class DialogueManager : MonoBehaviour
         public string body;
         public Dialog_CharPos position;
     }
+
     [SerializeField] private GoogleSheetLoader sheetLoader;  // 에디터에서 할당 필요
     [SerializeField] private GameObject cutsceneImageObject; // UI Image or SpriteRenderer
     [SerializeField] private SpriteRenderer[] characterRenderers;
 
-    [SerializeField] private DialogueData[] dialogueList;
     [SerializeField] private DialogEffectManager effectManager;
     [SerializeField] private DialogSoundManager soundManager;
 
     // 예: 0 = Left, 1 = Center, 2 = Right
-    // 캐릭터 위치당 스프라이트 두 개 (머리, 몸)
     [SerializeField] private SpriteRenderer[] sprite_Heads;  // 머리
     [SerializeField] private SpriteRenderer[] sprite_Bodies; // 몸
 
@@ -91,6 +71,9 @@ public class DialogueManager : MonoBehaviour
     private bool canInput = false;
 
 
+    //
+    // 캐릭터 이름과 상태 매핑
+    //
     private void Awake()
     {
         characterSpriteDict = new Dictionary<string, Sprite>();
@@ -105,13 +88,28 @@ public class DialogueManager : MonoBehaviour
             backgroundSpriteDict[bg.name] = bg;
         }
 
-        //dialogueDict = new Dictionary<int, DialogueData>();
-        //foreach (var d in dialogue)
-        //{
-        //    dialogueDict[d.index] = d;
-        //}
+        
     }
 
+    //
+    // 대사 데이터 설정 함수
+    //
+    public void SetDialogue(DialogueData[] newDialogue)
+    {
+        dialogue = newDialogue;
+
+        dialogueDict = new Dictionary<int, DialogueData>();
+        foreach (var d in dialogue)
+        {
+            dialogueDict[d.index] = d;
+        }
+
+        if (!isDialogue) // 대화 중이 아니면 초기화
+        {
+            currentIndex = 1;
+            isDialogue = true;
+        }
+    }
 
 
     private bool isDialogue = false;
@@ -121,7 +119,12 @@ public class DialogueManager : MonoBehaviour
 
     private Coroutine typingCoroutine;
 
+
+
+
+    //
     //대사 보여주는 함수
+    //
     public void ShowDialogue()
     {
         if (!dialogueDict.ContainsKey(1))
@@ -136,8 +139,9 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-
-
+    //
+    //캐릭터 보여주는 함수
+    //
     private void ShowCharacter(string name, string head, string body, Dialog_CharPos pos, Dialog_CharEffect effect)
     {
         int posIndex = (int)pos;
@@ -194,8 +198,9 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
+    //
     //다음 대화로 넘어가는 함수
+    //
     private void NextDialogue()
     {
         Debug.Log($"NextDialogue 호출 currentIndex = {currentIndex}");
@@ -218,7 +223,7 @@ public class DialogueManager : MonoBehaviour
         var currentDialogue = dialogueDict[currentIndex];
         Debug.Log($"현재 대사 index: {currentIndex}, 다음 index: {currentDialogue.nextIndex}");
 
-        // ✅ 캐릭터 등장 위치 추적
+        // 캐릭터 등장 위치 추적
         bool[] posUsed = new bool[sprite_Heads.Length];
 
         if (currentDialogue.characters != null)
@@ -249,7 +254,7 @@ public class DialogueManager : MonoBehaviour
                 sprite_Bodies[i].gameObject.SetActive(false);
             }
         }
-        // ✅ 컷씬 처리: 여기가 추가되는 부분!
+        // 컷씬 처리: 여기가 추가되는 부분!
         if (!string.IsNullOrEmpty(currentDialogue.cutscene))
         {
             ShowCutscene(currentDialogue.cutscene);
@@ -259,7 +264,7 @@ public class DialogueManager : MonoBehaviour
             HideCutscene();
         }
 
-        // ✅ 이름/배경
+        // 이름/배경
         txt_CharacterName.text = currentDialogue.speaker;
 
         string bgKey = currentDialogue.background;
@@ -272,13 +277,13 @@ public class DialogueManager : MonoBehaviour
             sprite_BG.sprite = null;
         }
 
-        // ✅ 화면 효과
+        // 화면 효과
         if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
         {
             StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         }
 
-        // ✅ 사운드
+        // 사운드
         if (currentDialogue.bgm != null)
             soundManager.PlayDialogSE(currentDialogue.bgm);
         if (currentDialogue.se1 != null)
@@ -362,7 +367,9 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
+    //
+    // 대사 텍스트를 타이핑 효과로 보여주는 코루틴
+    //
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         isTyping = true;
@@ -421,6 +428,12 @@ public class DialogueManager : MonoBehaviour
         isDialogue = flag;
     }
 
+    private bool isProcessingInput = false;
+
+
+    //
+    // 매 프레임마다 입력 처리
+    //
     void Update()
     {
         if (isPaused) return;
@@ -428,32 +441,43 @@ public class DialogueManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log($"Space pressed: isTyping={isTyping}, canInput={canInput}");
-            if (canInput || isTyping)  // 입력 허용 상태일 때만
+            if (!isProcessingInput && (canInput || isTyping))
             {
-                SkipDialogue();
+                StartCoroutine(ProcessInputWithCooldown());
             }
         }
     }
 
 
+    //
+    // 입력 처리와 쿨타임 적용
+    //
+    private IEnumerator ProcessInputWithCooldown()
+    {
+        isProcessingInput = true;
 
+        SkipDialogue();
+
+        yield return new WaitForSeconds(0.2f);  // 0.2초 입력 쿨타임
+
+        isProcessingInput = false;
+    }
+
+
+
+    //
+    // 대화 건너뛰기 함수
+    //
     public void SkipDialogue()
     {
         if (isPaused) return;
-
-        Debug.Log($"SkipDialogue called. isTyping={isTyping}, canInput={canInput}");
 
         if (isTyping)
         {
             if (typingCoroutine != null)
                 StopCoroutine(typingCoroutine);
 
-            if (dialogueDict.ContainsKey(currentIndex))
-            {
-                txt_Dialogue.text = dialogueDict[currentIndex].dialogue;
-                Debug.Log($"Full dialogue shown for index {currentIndex}");
-            }
+            txt_Dialogue.text = dialogueDict[currentIndex].dialogue;
 
             isTyping = false;
             canInput = true;
@@ -462,7 +486,6 @@ public class DialogueManager : MonoBehaviour
         {
             canInput = false;
 
-            // 현재 보여준 대사의 다음 인덱스로 이동
             if (nextDialogueIndex > 0)
             {
                 currentIndex = nextDialogueIndex;
@@ -470,13 +493,8 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("다음 대사 인덱스가 유효하지 않습니다.");
                 OnOff(false);
             }
-        }
-        else
-        {
-            Debug.Log("SkipDialogue: 입력 대기 상태가 아니어서 아무 작업 안 함.");
         }
     }
 
@@ -486,7 +504,10 @@ public class DialogueManager : MonoBehaviour
 
 
 
+
+    //
     //대사 정지,재개 함수
+    //
     private bool isPaused = false;
 
     public void TogglePauseDialogue()
@@ -527,12 +548,19 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-
+    //
+    //컷씬 숨기기 함수
+    //
     private void HideCutscene()
     {
         cutsceneImageObject.SetActive(false);
     }
 
+
+
+    //
+    // 선택지 선택 시 호출되는 함수
+    //
     public void OnChoiceSelected(int nextIndex)
     {
         choicePanel.SetActive(false);
@@ -545,7 +573,9 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
+    //
+    // 선택지 보여주는 함수
+    //
     private void ShowChoices(DialogueChoice[] choices)
     {
         choicePanel.SetActive(true);

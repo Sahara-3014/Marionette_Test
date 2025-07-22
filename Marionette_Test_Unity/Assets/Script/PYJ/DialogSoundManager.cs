@@ -50,16 +50,6 @@ public class DialogSoundManager : MonoBehaviour
 
     public void PlaySE(DialogSE se)
     {
-        if (se == null)
-        {
-            Debug.LogWarning("PlaySE 호출 시 se가 null입니다.");
-            return;
-        }
-        if (se.clip == null)
-        {
-            Debug.LogWarning("PlaySE 호출 시 se.clip이 null입니다.");
-            return;
-        }
 
         AudioSource sourceToUse = null;
 

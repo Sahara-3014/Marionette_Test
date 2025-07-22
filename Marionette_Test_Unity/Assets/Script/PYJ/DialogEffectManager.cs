@@ -9,7 +9,7 @@ public class DialogEffectManager : MonoBehaviour
 
 
     //
-    //화면효과
+    //배경효과
     //
     public IEnumerator RunScreenEffect(Dialog_ScreenEffect effect, SpriteRenderer bg)
     {
@@ -136,20 +136,6 @@ public class DialogEffectManager : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    //
-    //배경 관련
-    //
     private IEnumerator VerticalShakeScreen(SpriteRenderer target)
     {
         Vector3 originalPos = target.transform.localPosition;
@@ -224,7 +210,12 @@ public class DialogEffectManager : MonoBehaviour
 
 
 
+
+
+
+    //
     //캐릭터 관련
+    //
     private IEnumerator Jump(SpriteRenderer target)
     {
         Vector3 originalPos = target.transform.localPosition;

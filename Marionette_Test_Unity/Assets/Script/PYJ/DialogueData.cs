@@ -266,38 +266,10 @@ public class DialogueData
         }
 
         // 오디오 클립 로드
-        if (!string.IsNullOrEmpty(bgmName))
-        {
-            bgm = new DialogSE
-            {
-                type = SEType.BGM,
-                clip = LoadAudioClipByName(bgmName),
-                volume = 1f,
-                loopCount = 1
-            };
-        }
+        bgm = new DialogSE(SEType.BGM, LoadAudioClipByName(bgmName));
+        se1 = new DialogSE(SEType.SE, LoadAudioClipByName(sfx1Name));
+        se2 = new DialogSE(SEType.SE, LoadAudioClipByName(sfx2Name));
 
-        if (!string.IsNullOrEmpty(sfx1Name))
-        {
-            se1 = new DialogSE
-            {
-                type = SEType.SE,
-                clip = LoadAudioClipByName(sfx1Name),
-                volume = 1f,
-                loopCount = 1
-            };
-        }
-
-        if (!string.IsNullOrEmpty(sfx2Name))
-        {
-            se2 = new DialogSE
-            {
-                type = SEType.SE,
-                clip = LoadAudioClipByName(sfx2Name),
-                volume = 1f,
-                loopCount = 1
-            };
-        }
     }
 
 
