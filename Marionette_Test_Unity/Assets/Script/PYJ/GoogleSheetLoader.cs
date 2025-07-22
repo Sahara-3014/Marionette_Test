@@ -127,28 +127,16 @@ public class GoogleSheetLoader : MonoBehaviour
 
             string cutscene = (row.Count > 25) ? row[25].Value.Trim() : "";
             List<DialogueChoice> choices = new List<DialogueChoice>();
-            int next1Index = -1;
-            if (!string.IsNullOrEmpty(next1Str))
-                int.TryParse(next1Str, out next1Index);
 
             if (!string.IsNullOrEmpty(choice1))
-                choices.Add(new DialogueChoice { choiceText = choice1, nextIndex = next1Index });
+                choices.Add(new DialogueChoice { choiceText = choice1, nextIndex = next1Str });
 
             if (!string.IsNullOrEmpty(choice2))
-            {
-                int next2Index = -1;
-                if (!string.IsNullOrEmpty(next2Str))
-                    int.TryParse(next2Str, out next2Index);
-                choices.Add(new DialogueChoice { choiceText = choice2, nextIndex = next2Index });
-            }
+                choices.Add(new DialogueChoice { choiceText = choice2, nextIndex = next2Str });
 
             if (!string.IsNullOrEmpty(choice3))
-            {
-                int next3Index = -1;
-                if (!string.IsNullOrEmpty(next3Str))
-                    int.TryParse(next3Str, out next3Index);
-                choices.Add(new DialogueChoice { choiceText = choice3, nextIndex = next3Index });
-            }
+                choices.Add(new DialogueChoice { choiceText = choice3, nextIndex = next3Str });
+
 
 
 
@@ -198,10 +186,10 @@ public class GoogleSheetLoader : MonoBehaviour
                 charPos2 = pos2,
                 screenEffect = screenEffect,
                 charEffect = Dialog_CharEffect.None,
-                nextIndex = nextIndexValue,
+                nextIndex = nextIndexStr, // 여기!
+                index = parsedIndex,
                 cutscene = cutscene,
-                choices = choices.ToArray(),
-                index = parsedIndex
+                choices = choices.ToArray()
             };
 
             dialogueList.Add(d);

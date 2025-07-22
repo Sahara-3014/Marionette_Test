@@ -27,12 +27,13 @@ public class DialogueManager : MonoBehaviour
     [System.Serializable]
     public class CharacterStatus
     {
+
         public string name;
         public string head;
         public string body;
         public Dialog_CharPos position;
     }
-
+    [SerializeField] private GoogleSheetLoader sheetLoader;  // 에디터에서 할당 필요
     [SerializeField] private GameObject cutsceneImageObject; // UI Image or SpriteRenderer
     [SerializeField] private SpriteRenderer[] characterRenderers;
 
@@ -81,7 +82,7 @@ public class DialogueManager : MonoBehaviour
 
     private Dictionary<int, DialogueData> dialogueDict;
     private int currentIndex = 1; // 시트 index 기준 시작 번호
-
+    private bool canInput = false;
 
 
     private void Awake()
@@ -109,7 +110,6 @@ public class DialogueManager : MonoBehaviour
 
     private bool isDialogue = false;
     private bool isTyping = false;
-    private int count = 0;
 
     [SerializeField] private DialogueData[] dialogue;
 
@@ -189,25 +189,25 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
-
-
-
-    private bool isChoiceSelected = false;
-
     //다음 대화로 넘어가는 함수
     private void NextDialogue()
     {
-        Debug.Log($"[NextDialogue] currentIndex = {currentIndex}");
-
-        Debug.Log($"NextDialogue 호출, currentIndex = {currentIndex}");
+        Debug.Log($"NextDialogue 호출 currentIndex = {currentIndex}");
+        if (dialogueDict.ContainsKey(currentIndex))
+        {
+            var d = dialogueDict[currentIndex];
+            Debug.Log($"대사 index={currentIndex}, choices 존재 여부={d.choices != null && d.choices.Length > 0}");
+        }
+        else
+        {
+            Debug.LogWarning($"대사 index {currentIndex} 없음");
+        }
         if (!dialogueDict.ContainsKey(currentIndex))
         {
-            Debug.LogWarning($"대사 인덱스 {currentIndex} 없음. 대사키 목록: [{string.Join(",", dialogueDict.Keys)}]");
+            Debug.LogWarning($"대사 인덱스 {currentIndex} 없음. 대사키 목록: [{string.Join(",", dialogueDict.Keys.Select(k => k.ToString()))}]");
             OnOff(false);
             return;
         }
-
 
         var currentDialogue = dialogueDict[currentIndex];
         Debug.Log($"현재 대사 index: {currentIndex}, 다음 index: {currentDialogue.nextIndex}");
@@ -280,47 +280,88 @@ public class DialogueManager : MonoBehaviour
         if (currentDialogue.se2 != null)
             soundManager.PlayDialogSE(currentDialogue.se2);
 
-        // ✅ 텍스트 출력
-        typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
+        typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue, currentIndex));
+
+
+        string nextIndexStr = currentDialogue.nextIndex?.Trim() ?? "";
+        int nextIndexNum;
+        bool isNumeric = int.TryParse(nextIndexStr, out nextIndexNum);
 
         if (currentDialogue.choices == null || currentDialogue.choices.Length == 0)
         {
-            // 선택지가 없으면 자동으로 nextIndex로 이동
-            currentIndex = currentDialogue.nextIndex;
-
-            // nextIndex가 0이거나 없으면 대사 종료 처리
-            if (currentIndex == 0)
+            if (isNumeric)
             {
-                OnOff(false);
+                if (nextIndexNum == 0)
+                {
+                    OnOff(false);
+                    return;
+                }
+                if (!dialogueDict.ContainsKey(nextIndexNum))
+                {
+                    Debug.LogWarning($"대사 인덱스 {nextIndexNum} 없음.");
+                    OnOff(false);
+                    return;
+                }
+                currentIndex = nextIndexNum;
+                isDialogue = true;
             }
             else
             {
-                isDialogue = true;
+                if (nextIndexStr == "END" || nextIndexStr == "-1")
+                {
+                    OnOff(false);
+                    return;
+                }
+                else if (!string.IsNullOrEmpty(nextIndexStr))
+                {
+                    // nextIndexStr을 시트명으로 간주하고 시트 로드 시도
+                    StartDialogueSheet(nextIndexStr);
+                    return;
+                }
+                else
+                {
+                    Debug.LogWarning($"알 수 없는 nextIndex 값: {nextIndexStr}");
+                    OnOff(false);
+                    return;
+                }
             }
+
         }
         else
         {
-            // 선택지 있을 땐 대사 진행 멈춤
             isDialogue = false;
         }
+
+
+
+
+    }
+
+
+    private void StartDialogueSheet(string sheetName)
+    {
+        Debug.Log($"StartDialogueSheet called with sheetName: {sheetName}");
+
+        if (sheetLoader == null)
+        {
+            Debug.LogError("GoogleSheetLoader가 할당되어 있지 않습니다!");
+            return;
+        }
+
+        // GoogleSheetLoader에게 해당 시트명으로 대사 로드 요청
+        sheetLoader.LoadDialoguesFromSheet(sheetName);
     }
 
 
 
 
 
-
-
-
-
     //대사를 한 줄씩 나오게 하는 함수
-    private IEnumerator TypeText(string sentence)
+    private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         isTyping = true;
+        canInput = false;
         txt_Dialogue.text = "";
-
-        int backupIndex = currentIndex; // 🔒 현재 인덱스 백업
-        DialogueData currentDialogue = dialogueDict[backupIndex];
 
         foreach (char letter in sentence)
         {
@@ -333,16 +374,18 @@ public class DialogueManager : MonoBehaviour
 
         isTyping = false;
 
-        if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
+        if (dialogueDict[dialogueIndex].choices != null && dialogueDict[dialogueIndex].choices.Length > 0)
         {
-            ShowChoices(currentDialogue.choices);
-            isDialogue = false;
+            ShowChoices(dialogueDict[dialogueIndex].choices);
+            canInput = false;
         }
         else
         {
-            isDialogue = true;
+            canInput = true;
         }
     }
+
+
 
 
 
@@ -376,10 +419,8 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (!isDialogue || isPaused) return;
-
-        if (choicePanel.activeSelf)
-            return;
+        if (!canInput || isPaused) return;
+        if (choicePanel.activeSelf) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -393,9 +434,10 @@ public class DialogueManager : MonoBehaviour
 
 
     //대사 스킵 함수
+
     public void SkipDialogue()
     {
-        if (!isDialogue) return;
+        if (!canInput) return;  // 입력 잠금 확인
 
         if (isTyping)
         {
@@ -403,10 +445,11 @@ public class DialogueManager : MonoBehaviour
             if (dialogueDict.ContainsKey(currentIndex))
                 txt_Dialogue.text = dialogueDict[currentIndex].dialogue;
             isTyping = false;
-            typingCoroutine = null;
+            canInput = true;  // 타이핑 중단 후 입력 허용
         }
         else
         {
+            canInput = false; // 다음 대사 로드 전 입력 잠금
             NextDialogue();
         }
     }
@@ -485,7 +528,14 @@ public class DialogueManager : MonoBehaviour
             choiceButtons[i].gameObject.SetActive(true);
             choiceButtonTexts[i].text = choices[i].choiceText;
 
-            int nextIndex = choices[i].nextIndex;  // 대사 인덱스
+            // nextIndex string → int 변환
+            string nextIndexStr = choices[i].nextIndex;
+            int nextIndex;
+            if (!int.TryParse(nextIndexStr, out nextIndex))
+            {
+                Debug.LogWarning($"nextIndex '{nextIndexStr}'를 int로 변환하지 못했습니다. 기본값 -1로 설정합니다.");
+                nextIndex = -1;
+            }
 
             choiceButtons[i].onClick.RemoveAllListeners();
             choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(nextIndex));
@@ -496,6 +546,7 @@ public class DialogueManager : MonoBehaviour
             choiceButtons[i].gameObject.SetActive(false);
         }
     }
+
 
 
 

@@ -2118,6 +2118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3de67f55823c8e4abbf9e9a11ec0401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sheetLoader: {fileID: 363324648}
   cutsceneImageObject: {fileID: 878208177}
   characterRenderers:
   - {fileID: 1586103882}

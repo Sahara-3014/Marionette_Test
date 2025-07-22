@@ -20,7 +20,7 @@ public class CharacterStatus
 public class DialogueChoice
 {
     public string choiceText;
-    public int nextIndex; // 선택 후 이동할 대사 배열 내 인덱스
+    public string nextIndex; // 선택 후 이동할 대사 배열 내 인덱스
 }
 
 
@@ -30,7 +30,7 @@ public class DialogueChoice
 public class DialogueData
 {
     public string choiceText;
-    public int nextIndex;
+    public string nextIndex;
     public int index;
 
     public DialogueChoice[] choices;
