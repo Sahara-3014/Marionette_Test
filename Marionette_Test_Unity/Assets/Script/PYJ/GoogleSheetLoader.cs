@@ -13,7 +13,8 @@ public class GoogleSheetLoader : MonoBehaviour
     public List<string> fixedSheetSequence = new List<string> { "INTRO", "START", "CHAPTER1" };
 
     private int currentFixedIndex = 0;
-    private bool usingBranching = false;
+    public bool usingBranching = false;
+
     private string currentSheet = "";
 
     public DialogueManager dialogueSystem; // 대화 시스템 참조
@@ -106,36 +107,48 @@ public class GoogleSheetLoader : MonoBehaviour
             string sfx1Name = (row.Count > 23) ? row[23].Value.Trim() : "";
             string sfx2Name = (row.Count > 24) ? row[24].Value.Trim() : "";
 
-            string nextSheet = (row.Count > 1) ? row[1].Value.Trim() : "";
+            string currentindex = (row.Count > 0) ? row[0].Value.Trim() : "";
+            int parsedIndex = -1;
+            if (!string.IsNullOrEmpty(currentindex))
+            {
+                int.TryParse(currentindex, out parsedIndex);
+            }
+            string nextIndexStr = (row.Count > 1) ? row[1].Value.Trim() : ""; // 예를 들면 "다음_인덱스" 열 위치 맞춰서 조정
+            int nextIndexValue = 0;
+            if (!string.IsNullOrEmpty(nextIndexStr) && int.TryParse(nextIndexStr, out int parsedNextIndex))
+            {
+                nextIndexValue = parsedNextIndex;
+            }
+            else
+            {
+                nextIndexValue = 0; // 없으면 0 또는 종료 표시값
+            }
             string speaker = (row.Count > 2 && row[2] != null) ? row[2].Value.Trim() : characterName1;
 
             string cutscene = (row.Count > 25) ? row[25].Value.Trim() : "";
             List<DialogueChoice> choices = new List<DialogueChoice>();
-
             int next1Index = -1;
             if (!string.IsNullOrEmpty(next1Str))
                 int.TryParse(next1Str, out next1Index);
 
-            Debug.Log($"Choice1: {choice1}, next: {next1Index}");
             if (!string.IsNullOrEmpty(choice1))
                 choices.Add(new DialogueChoice { choiceText = choice1, nextIndex = next1Index });
 
-            int next2Index = -1;
-            if (!string.IsNullOrEmpty(next2Str))
-                int.TryParse(next2Str, out next2Index);
-
-            Debug.Log($"Choice2: {choice2}, next: {next2Index}");
             if (!string.IsNullOrEmpty(choice2))
+            {
+                int next2Index = -1;
+                if (!string.IsNullOrEmpty(next2Str))
+                    int.TryParse(next2Str, out next2Index);
                 choices.Add(new DialogueChoice { choiceText = choice2, nextIndex = next2Index });
+            }
 
-            int next3Index = -1;
-            if (!string.IsNullOrEmpty(next3Str))
-                int.TryParse(next3Str, out next3Index);
-
-            Debug.Log($"Choice3: {choice3}, next: {next3Index}");
             if (!string.IsNullOrEmpty(choice3))
+            {
+                int next3Index = -1;
+                if (!string.IsNullOrEmpty(next3Str))
+                    int.TryParse(next3Str, out next3Index);
                 choices.Add(new DialogueChoice { choiceText = choice3, nextIndex = next3Index });
-
+            }
 
 
 
@@ -185,9 +198,10 @@ public class GoogleSheetLoader : MonoBehaviour
                 charPos2 = pos2,
                 screenEffect = screenEffect,
                 charEffect = Dialog_CharEffect.None,
-                nextSheet = nextSheet,
+                nextIndex = nextIndexValue,
                 cutscene = cutscene,
-                choices = choices.ToArray()
+                choices = choices.ToArray(),
+                index = parsedIndex
             };
 
             dialogueList.Add(d);

@@ -20,8 +20,7 @@ public class CharacterStatus
 public class DialogueChoice
 {
     public string choiceText;
-    public int nextIndex;
-    public string nextSheet;  // string 타입으로 선언
+    public int nextIndex; // 선택 후 이동할 대사 배열 내 인덱스
 }
 
 
@@ -30,6 +29,9 @@ public class DialogueChoice
 [System.Serializable]
 public class DialogueData
 {
+    public string choiceText;
+    public int nextIndex;
+    public int index;
 
     public DialogueChoice[] choices;
     public CharacterStatus[] characters;
