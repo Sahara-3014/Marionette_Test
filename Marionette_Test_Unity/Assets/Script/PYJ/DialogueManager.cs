@@ -20,8 +20,13 @@ public class DialogueManager : MonoBehaviour
             dialogueDict[d.index] = d;
         }
 
-        currentIndex = 1; // 시작 인덱스 초기화
+        if (!isDialogue) // 대화 중이 아니면 초기화
+        {
+            currentIndex = 1;
+            isDialogue = true;
+        }
     }
+
 
 
     [System.Serializable]
@@ -81,7 +86,8 @@ public class DialogueManager : MonoBehaviour
 
 
     private Dictionary<int, DialogueData> dialogueDict;
-    private int currentIndex = 1; // 시트 index 기준 시작 번호
+    private int currentIndex = 1;    // 현재 대사 인덱스
+    private int nextDialogueIndex = -1;  // 다음 대사 인덱스 저장용
     private bool canInput = false;
 
 
@@ -302,9 +308,10 @@ public class DialogueManager : MonoBehaviour
                     OnOff(false);
                     return;
                 }
-                currentIndex = nextIndexNum;
+                nextDialogueIndex = nextIndexNum;  // 현재 대사를 바로 바꾸지 말고 다음 대사 인덱스를 저장
                 isDialogue = true;
             }
+
             else
             {
                 if (nextIndexStr == "END" || nextIndexStr == "-1")
@@ -334,7 +341,6 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
     }
 
 
@@ -356,7 +362,7 @@ public class DialogueManager : MonoBehaviour
 
 
 
-    //대사를 한 줄씩 나오게 하는 함수
+
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         isTyping = true;
@@ -415,44 +421,67 @@ public class DialogueManager : MonoBehaviour
         isDialogue = flag;
     }
 
-
-
     void Update()
     {
-        if (!canInput || isPaused) return;
+        if (isPaused) return;
         if (choicePanel.activeSelf) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SkipDialogue();
+            Debug.Log($"Space pressed: isTyping={isTyping}, canInput={canInput}");
+            if (canInput || isTyping)  // 입력 허용 상태일 때만
+            {
+                SkipDialogue();
+            }
         }
     }
 
 
-
-
-
-
-    //대사 스킵 함수
 
     public void SkipDialogue()
     {
-        if (!canInput) return;  // 입력 잠금 확인
+        if (isPaused) return;
+
+        Debug.Log($"SkipDialogue called. isTyping={isTyping}, canInput={canInput}");
 
         if (isTyping)
         {
-            StopCoroutine(typingCoroutine);
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
+
             if (dialogueDict.ContainsKey(currentIndex))
+            {
                 txt_Dialogue.text = dialogueDict[currentIndex].dialogue;
+                Debug.Log($"Full dialogue shown for index {currentIndex}");
+            }
+
             isTyping = false;
-            canInput = true;  // 타이핑 중단 후 입력 허용
+            canInput = true;
+        }
+        else if (canInput)
+        {
+            canInput = false;
+
+            // 현재 보여준 대사의 다음 인덱스로 이동
+            if (nextDialogueIndex > 0)
+            {
+                currentIndex = nextDialogueIndex;
+                NextDialogue();
+            }
+            else
+            {
+                Debug.LogWarning("다음 대사 인덱스가 유효하지 않습니다.");
+                OnOff(false);
+            }
         }
         else
         {
-            canInput = false; // 다음 대사 로드 전 입력 잠금
-            NextDialogue();
+            Debug.Log("SkipDialogue: 입력 대기 상태가 아니어서 아무 작업 안 함.");
         }
     }
+
+
+
 
 
 
