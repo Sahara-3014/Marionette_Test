@@ -29,13 +29,13 @@ public class DialogSoundManager : MonoBehaviour
     {
         if (bgmSource == null)
         {
-            Debug.LogError("[PlayBGM] bgmSource°¡ ÇÒ´çµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù!");
+            Debug.LogError("[PlayBGM] bgmSourceê°€ í• ë‹¹ë˜ì–´ ìžˆì§€ ì•ŠìŠµë‹ˆë‹¤!");
             return;
         }
 
         if (bgm == null || bgm.clip == null)
         {
-            Debug.LogWarning("[PlayBGM] Àç»ýÇÒ BGMÀÌ ¾ø°Å³ª AudioClipÀÌ nullÀÔ´Ï´Ù.");
+            Debug.LogWarning("[PlayBGM] ìž¬ìƒí•  BGMì´ ì—†ê±°ë‚˜ AudioClipì´ nullìž…ë‹ˆë‹¤.");
             return;
         }
 
@@ -44,13 +44,12 @@ public class DialogSoundManager : MonoBehaviour
         bgmSource.loop = (bgm.loopCount == 0);
         bgmSource.Play();
 
-        Debug.Log($"[PlayBGM] BGM '{bgm.clip.name}' Àç»ý ½ÃÀÛ (º¼·ý: {bgm.volume})");
+        Debug.Log($"[PlayBGM] BGM '{bgm.clip.name}' ìž¬ìƒ ì‹œìž‘ (ë³¼ë¥¨: {bgm.volume})");
     }
 
 
     public void PlaySE(DialogSE se)
     {
-
 
         AudioSource sourceToUse = null;
 
@@ -60,7 +59,7 @@ public class DialogSoundManager : MonoBehaviour
             sourceToUse = seSource2;
         else
         {
-            Debug.Log("[PlaySE] µÑ ´Ù Àç»ý ÁßÀÌ¾î¼­ seSource1 °­Á¦·Î »ç¿ë");
+            Debug.Log("[PlaySE] ë‘˜ ë‹¤ ìž¬ìƒ ì¤‘ì´ì–´ì„œ seSource1 ê°•ì œë¡œ ì‚¬ìš©");
             seSource1.Stop();
             sourceToUse = seSource1;
         }
@@ -70,7 +69,7 @@ public class DialogSoundManager : MonoBehaviour
         sourceToUse.loop = (se.loopCount == 0);
         sourceToUse.Play();
 
-        Debug.Log($"[PlaySE] È¿°úÀ½ '{se.clip.name}' Àç»ý ½ÃÀÛ (º¼·ý: {se.volume})");
+        Debug.Log($"[PlaySE] íš¨ê³¼ìŒ '{se.clip.name}' ìž¬ìƒ ì‹œìž‘ (ë³¼ë¥¨: {se.volume})");
 
         if (se.loopCount > 0)
             StartCoroutine(PlaySELoop(sourceToUse, se.loopCount));
