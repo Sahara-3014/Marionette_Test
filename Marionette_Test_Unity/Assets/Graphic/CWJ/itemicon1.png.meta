@@ -156,6 +156,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: itemicon1_2
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 1546
+        width: 616
+        height: 614
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58461a79497e8a54cb09d49c8ee62df5
+      internalID: -585654175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -172,6 +194,7 @@ TextureImporter:
     nameFileIdTable:
       itemicon1_0: -1823259351099792032
       itemicon1_1: 1346292839
+      itemicon1_2: -585654175
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
