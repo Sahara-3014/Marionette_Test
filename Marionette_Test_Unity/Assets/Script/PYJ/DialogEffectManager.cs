@@ -1,11 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-<<<<<<<< HEAD:Marionette_Test_Unity/Assets/Script/PYJ/DialogEffectManager.cs
 public class DialogEffectManager : MonoBehaviour
-========
-public class DialogueEffectManager : MonoBehaviour
->>>>>>>> origin/Hoyoung(ver1):Marionette_Test_Unity/Assets/Script/PYJ/DialogueEffectManager.cs
 {
     public Color otherColor = Color.red;        // OtherColorEnable용
     public Color darkenColor = new Color(0.5f, 0.5f, 0.5f, 1f); // AllColorEnable용
