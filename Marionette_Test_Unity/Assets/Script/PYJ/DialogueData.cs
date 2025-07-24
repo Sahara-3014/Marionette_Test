@@ -31,6 +31,8 @@ public class DialogueChoice
 [System.Serializable]
 public class DialogueData
 {
+    public int effectIndex;
+
     public string choiceText;
     public string nextIndex;
     public int index;
@@ -118,6 +120,11 @@ public class DialogueData
         string body2 = GetText(node, 12);
 
         string bgEffectStr = GetText(node, 13);
+        if (!int.TryParse(bgEffectStr, out screenEffectIndex))
+            screenEffectIndex = -1;  // 없으면 -1 처리
+
+        ApplyEffectIndices(); // 기존 enum 변환 함수 호출
+
         background = GetText(node, 14);
         dialogue = GetText(node, 15);
 

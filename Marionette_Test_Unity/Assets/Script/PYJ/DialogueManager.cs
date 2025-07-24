@@ -197,12 +197,39 @@ public class DialogueManager : MonoBehaviour
 
 
 
+    //private List<int> currentEffects = new List<int>();
+
+    //private void StopCurrentEffects()
+    //{
+    //    // 1. EffectManager를 통해 재생 중인 모든 이펙트 중 멈출 이펙트 타입들 멈추기
+    //    // 예를 들어 FireAshes, HealingSparkle 등 모든 활성화된 이펙트를 멈추려면
+    //    foreach (EffectType effectType in System.Enum.GetValues(typeof(EffectType)))
+    //    {
+    //        if (effectType == EffectType.None) continue;
+    //        EffectManager.Instance.StopEffect(effectType, stopImmediately: false);
+    //    }
+
+    //    // 2. 활성화된 포스트 프로세싱 효과 모두 끄기
+    //    foreach (PostProcessingEffectType ppType in System.Enum.GetValues(typeof(PostProcessingEffectType)))
+    //    {
+    //        if (ppType == PostProcessingEffectType.None) continue;
+    //        EffectManager.Instance.DisablePP(ppType, 0.5f);  // 페이드 아웃 시간 조절 가능
+    //    }
+
+    //    // 3. 혹시 개별 캐릭터 효과도 있다면 여기도 멈추기 (필요하면 구현)
+    //    // ex) 캐릭터별 효과 관리하는 로직 호출
+    //}
+
 
     //
     //다음 대화로 넘어가는 함수
     //
     private void NextDialogue()
     {
+
+        //StopCurrentEffects();  // 이전 효과 끄기
+
+
         Debug.Log($"NextDialogue 호출 currentIndex = {currentIndex}");
         if (dialogueDict.ContainsKey(currentIndex))
         {
@@ -372,6 +399,7 @@ public class DialogueManager : MonoBehaviour
     //
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
+        
         isTyping = true;
         canInput = false;
         txt_Dialogue.text = "";
@@ -384,7 +412,11 @@ public class DialogueManager : MonoBehaviour
             txt_Dialogue.text += letter;
             yield return new WaitForSeconds(0.05f);
         }
-
+        int effectIdx = dialogueDict[dialogueIndex].screenEffectIndex;
+        if (effectIdx >= 0)
+        {
+            EffectManager.Instance.PlayEffect(effectIdx);
+        }
         isTyping = false;
 
         if (dialogueDict[dialogueIndex].choices != null && dialogueDict[dialogueIndex].choices.Length > 0)
