@@ -3,13 +3,13 @@
 
 public enum Dialog_CharPos
 {
-    Left = 0,               // ¿ÞÂÊ À§Ä¡
-    Center = 1,             // Áß¾Ó À§Ä¡
-    Right = 2,              // ¿À¸¥ÂÊ À§Ä¡
+    Left = 0,               // ì™¼ìª½ ìœ„ì¹˜
+    Center = 1,             // ì¤‘ì•™ ìœ„ì¹˜
+    Right = 2,              // ì˜¤ë¥¸ìª½ ìœ„ì¹˜
 
-    New = -1,               // »õ·Î µîÀåÇÏ´Â Ä³¸¯ÅÍ (±âÁ¸ À§Ä¡ ¹«½Ã)
-    None = -2,              // À§Ä¡ ÁöÁ¤ÇÏÁö ¾ÊÀ½
-    Clear = -3              // ÇØ´ç À§Ä¡ÀÇ Ä³¸¯ÅÍ Á¦°Å
+    New = -1,               // ìƒˆë¡œ ë“±ìž¥í•˜ëŠ” ìºë¦­í„° (ê¸°ì¡´ ìœ„ì¹˜ ë¬´ì‹œ)
+    None = -2,              // ìœ„ì¹˜ ì§€ì •í•˜ì§€ ì•ŠìŒ
+    Clear = -3              // í•´ë‹¹ ìœ„ì¹˜ì˜ ìºë¦­í„° ì œê±°
 }
 
 public enum Dialog_ScreenEffect
@@ -57,41 +57,41 @@ public enum Dialog_CharEffect
 
 //public enum Dialog_ScreenEffect
 //{
-//    ShakeVertical,          // È­¸éÀ» À§¾Æ·¡·Î Èçµé±â
-//    ShakeHorizontal,        // È­¸éÀ» ÁÂ¿ì·Î Èçµé±â
-//    Shake,                  // È­¸éÀ» ·£´ý ¹æÇâÀ¸·Î Èçµé±â
-//    None,                   // ¾Æ¹« È¿°ú ¾øÀ½
-//    ClearAll,               // ¸ðµç È­¸é ¿ä¼Ò Á¦°Å
-//    FadeOutAll,             // ÀüÃ¼ È­¸éÀ» ¼­¼­È÷ »ç¶óÁö°Ô ÇÏ±â
-//    OtherColorEnable,       // ¹è°æ»ö º¯°æ È¿°ú (´Ù¸¥ »ö»ó Àû¿ë)
-//    OtherColorDisable,      // ¿ø·¡ ¹è°æ»öÀ¸·Î º¹±¸
-//    AllColorEnable,         // ¸ðµç Ä³¸¯ÅÍ »ö»ó º¯È­ Àû¿ë (ex. ¾îµÎ¿öÁö±â)
-//    AllColorDisable         // ¸ðµç Ä³¸¯ÅÍ »ö»ó ¿ø»óº¹±¸
+//    ShakeVertical,          // í™”ë©´ì„ ìœ„ì•„ëž˜ë¡œ í”ë“¤ê¸°
+//    ShakeHorizontal,        // í™”ë©´ì„ ì¢Œìš°ë¡œ í”ë“¤ê¸°
+//    Shake,                  // í™”ë©´ì„ ëžœë¤ ë°©í–¥ìœ¼ë¡œ í”ë“¤ê¸°
+//    None,                   // ì•„ë¬´ íš¨ê³¼ ì—†ìŒ
+//    ClearAll,               // ëª¨ë“  í™”ë©´ ìš”ì†Œ ì œê±°
+//    FadeOutAll,             // ì „ì²´ í™”ë©´ì„ ì„œì„œížˆ ì‚¬ë¼ì§€ê²Œ í•˜ê¸°
+//    OtherColorEnable,       // ë°°ê²½ìƒ‰ ë³€ê²½ íš¨ê³¼ (ë‹¤ë¥¸ ìƒ‰ìƒ ì ìš©)
+//    OtherColorDisable,      // ì›ëž˜ ë°°ê²½ìƒ‰ìœ¼ë¡œ ë³µêµ¬
+//    AllColorEnable,         // ëª¨ë“  ìºë¦­í„° ìƒ‰ìƒ ë³€í™” ì ìš© (ex. ì–´ë‘ì›Œì§€ê¸°)
+//    AllColorDisable         // ëª¨ë“  ìºë¦­í„° ìƒ‰ìƒ ì›ìƒë³µêµ¬
 //}
 
 //public enum Dialog_CharEffect
 //{
-//    Jump,                   // Ä³¸¯ÅÍ°¡ Á¡ÇÁ (Âª°Ô À§·Î Æ¦)
-//    ShakeVertical,          // Ä³¸¯ÅÍ¸¦ À§¾Æ·¡·Î Èçµê
-//    ShakeHorizontal,        // Ä³¸¯ÅÍ¸¦ ÁÂ¿ì·Î Èçµê
-//    Shake,                  // Ä³¸¯ÅÍ¸¦ ·£´ý ¹æÇâÀ¸·Î Èçµê
+//    Jump,                   // ìºë¦­í„°ê°€ ì í”„ (ì§§ê²Œ ìœ„ë¡œ íŠ)
+//    ShakeVertical,          // ìºë¦­í„°ë¥¼ ìœ„ì•„ëž˜ë¡œ í”ë“¦
+//    ShakeHorizontal,        // ìºë¦­í„°ë¥¼ ì¢Œìš°ë¡œ í”ë“¦
+//    Shake,                  // ìºë¦­í„°ë¥¼ ëžœë¤ ë°©í–¥ìœ¼ë¡œ í”ë“¦
 
-//    MoveOut2Left,           // È­¸é ¹ÛÀ¸·Î ¿ÞÂÊÀ¸·Î ³ª°¨
-//    MoveOut2Right,          // È­¸é ¹ÛÀ¸·Î ¿À¸¥ÂÊÀ¸·Î ³ª°¨
-//    MoveLeft2Out,           // ¿ÞÂÊ¿¡¼­ ³ª°¡°Ô ÇÔ
-//    MoveRight2Out,          // ¿À¸¥ÂÊ¿¡¼­ ³ª°¡°Ô ÇÔ
+//    MoveOut2Left,           // í™”ë©´ ë°–ìœ¼ë¡œ ì™¼ìª½ìœ¼ë¡œ ë‚˜ê°
+//    MoveOut2Right,          // í™”ë©´ ë°–ìœ¼ë¡œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ë‚˜ê°
+//    MoveLeft2Out,           // ì™¼ìª½ì—ì„œ ë‚˜ê°€ê²Œ í•¨
+//    MoveRight2Out,          // ì˜¤ë¥¸ìª½ì—ì„œ ë‚˜ê°€ê²Œ í•¨
 
-//    MoveVertical,           // À§ ¶Ç´Â ¾Æ·¡·Î ¿òÁ÷ÀÓ
-//    MoveUp,                 // À§·Î ÀÌµ¿
-//    MoveDown,               // ¾Æ·¡·Î ÀÌµ¿
+//    MoveVertical,           // ìœ„ ë˜ëŠ” ì•„ëž˜ë¡œ ì›€ì§ìž„
+//    MoveUp,                 // ìœ„ë¡œ ì´ë™
+//    MoveDown,               // ì•„ëž˜ë¡œ ì´ë™
 
-//    FadeIn,                 // ¼­¼­È÷ ³ªÅ¸³²
-//    FadeOut,                // ¼­¼­È÷ »ç¶óÁü
+//    FadeIn,                 // ì„œì„œížˆ ë‚˜íƒ€ë‚¨
+//    FadeOut,                // ì„œì„œížˆ ì‚¬ë¼ì§
 
-//    ColorEnable,            // »ö»ó °­Á¶ (¹àÈ÷±â)
-//    ColorDisable,           // »ö»ó ºñÈ°¼ºÈ­ (¾îµÓ°Ô ÇÏ±â)
+//    ColorEnable,            // ìƒ‰ìƒ ê°•ì¡° (ë°ížˆê¸°)
+//    ColorDisable,           // ìƒ‰ìƒ ë¹„í™œì„±í™” (ì–´ë‘¡ê²Œ í•˜ê¸°)
 
-//    None                    // È¿°ú ¾øÀ½
+//    None                    // íš¨ê³¼ ì—†ìŒ
 //}
 
 

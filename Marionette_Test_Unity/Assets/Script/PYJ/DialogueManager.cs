@@ -2,16 +2,35 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 using System.Collections.Generic;
-using System;
+using System.Linq;
+using UnityEngine.UI;
+
 
 public class DialogueManager : MonoBehaviour
 {
-    [SerializeField] private DialogueData[] dialogueList;
+
+
+    [System.Serializable]
+    public class CharacterStatus
+    {
+
+        public string name;
+        public string head;
+        public string body;
+        public Dialog_CharPos position;
+    }
+
+    [SerializeField] private GoogleSheetLoader sheetLoader;  // 에디터에서 할당 필요
+    [SerializeField] private GameObject cutsceneImageObject; // UI Image or SpriteRenderer
+    [SerializeField] private SpriteRenderer[] characterRenderers;
+
     [SerializeField] private DialogEffectManager effectManager;
     [SerializeField] private DialogSoundManager soundManager;
 
     // 예: 0 = Left, 1 = Center, 2 = Right
-    [SerializeField] private SpriteRenderer[] sprite_Characters;
+    [SerializeField] private SpriteRenderer[] sprite_Heads;  // 머리
+    [SerializeField] private SpriteRenderer[] sprite_Bodies; // 몸
+
     [SerializeField] private SpriteRenderer sprite_BG;
     [SerializeField] private SpriteRenderer sprite_DialogueBox;
     [SerializeField] private SpriteRenderer sprite_CharacterNameBox;
@@ -35,11 +54,26 @@ public class DialogueManager : MonoBehaviour
 {
     { "주한", "JUHAN" },
     { "미래", "MIRAE" },
-    { "이영희", "lee" }
+    { "계란", "EGG" }
     // 필요한 만큼 추가
 };
+    [SerializeField] private GameObject choicePanel;        // 선택지 전체 UI
+    [SerializeField] private Button[] choiceButtons;          // 선택지 버튼들
+    [SerializeField] private TextMeshProUGUI[] choiceButtonTexts; // 버튼 텍스트
 
 
+
+
+
+    private Dictionary<int, DialogueData> dialogueDict;
+    private int currentIndex = 1;    // 현재 대사 인덱스
+    private int nextDialogueIndex = -1;  // 다음 대사 인덱스 저장용
+    private bool canInput = false;
+
+
+    //
+    // 캐릭터 이름과 상태 매핑
+    //
     private void Awake()
     {
         characterSpriteDict = new Dictionary<string, Sprite>();
@@ -53,169 +87,339 @@ public class DialogueManager : MonoBehaviour
         {
             backgroundSpriteDict[bg.name] = bg;
         }
+
+        
     }
 
+    //
+    // 대사 데이터 설정 함수
+    //
+    public void SetDialogue(DialogueData[] newDialogue)
+    {
+        dialogue = newDialogue;
+
+        dialogueDict = new Dictionary<int, DialogueData>();
+        foreach (var d in dialogue)
+        {
+            dialogueDict[d.index] = d;
+        }
+
+        if (!isDialogue) // 대화 중이 아니면 초기화
+        {
+            currentIndex = 1;
+            isDialogue = true;
+        }
+    }
 
 
     private bool isDialogue = false;
     private bool isTyping = false;
-    private int count = 0;
 
     [SerializeField] private DialogueData[] dialogue;
 
     private Coroutine typingCoroutine;
 
-    public void SetDialogue(DialogueData[] newDialogue)
-    {
-        dialogue = newDialogue;
-    }
 
 
+
+    //
     //대사 보여주는 함수
+    //
     public void ShowDialogue()
     {
+        if (!dialogueDict.ContainsKey(1))
+        {
+            Debug.LogError("초기 인덱스 1번 대사가 존재하지 않습니다!");
+            return;
+        }
+
         OnOff(true);
-        count = 0;
+        currentIndex = 1;
         NextDialogue();
     }
 
 
+    //
+    //캐릭터 보여주는 함수
+    //
+    private void ShowCharacter(string name, string head, string body, Dialog_CharPos pos, Dialog_CharEffect effect)
+    {
+        int posIndex = (int)pos;
+        if (posIndex < 0 || posIndex >= sprite_Heads.Length || posIndex >= sprite_Bodies.Length) return;
+
+        var headRenderer = sprite_Heads[posIndex];
+        var bodyRenderer = sprite_Bodies[posIndex];
+
+        string englishName = characterNameMap.ContainsKey(name) ? characterNameMap[name] : name;
+        string headKey = $"{englishName}_{head}";
+        string bodyKey = $"{englishName}_{body}";
+
+        // 머리 출력
+        Debug.Log($"headKey = '{headKey}', 등록 여부 = {characterSpriteDict.ContainsKey(headKey)}");
+
+        if (!string.IsNullOrEmpty(headKey) && characterSpriteDict.ContainsKey(headKey))
+        {
+            headRenderer.sprite = characterSpriteDict[headKey];
+            headRenderer.gameObject.SetActive(true);
+        }
+        else
+        {
+            headRenderer.sprite = null;
+            headRenderer.gameObject.SetActive(false);
+            Debug.LogWarning($"[머리 스프라이트 미적용] {headKey}는 등록되지 않았습니다.");
+        }
+
+        // 몸 출력
+        if (!string.IsNullOrEmpty(bodyKey) && characterSpriteDict.ContainsKey(bodyKey))
+        {
+            bodyRenderer.sprite = characterSpriteDict[bodyKey];
+            bodyRenderer.gameObject.SetActive(true);
+        }
+        else
+        {
+            bodyRenderer.sprite = null;
+            bodyRenderer.gameObject.SetActive(false);
+            Debug.LogWarning($"[몸통 스프라이트 미적용] {bodyKey}는 등록되지 않았습니다.");
+        }
+
+        if (characterPositionManager != null)
+        {
+            characterPositionManager.SetCharacter(headRenderer, pos);
+            characterPositionManager.SetCharacter(bodyRenderer, pos);
+        }
+
+        if (effect != Dialog_CharEffect.None)
+        {
+            StartCoroutine(effectManager.RunCharacterEffect(effect, headRenderer));
+            StartCoroutine(effectManager.RunCharacterEffect(effect, bodyRenderer));
+        }
+    }
+
+
+
+
+    //
     //다음 대화로 넘어가는 함수
+    //
     private void NextDialogue()
     {
-        var currentDialogue = dialogue[count];
-
-        foreach (var character in sprite_Characters)
+        Debug.Log($"NextDialogue 호출 currentIndex = {currentIndex}");
+        if (dialogueDict.ContainsKey(currentIndex))
         {
-            character.sprite = null;
-            character.gameObject.SetActive(false);
+            var d = dialogueDict[currentIndex];
+            Debug.Log($"대사 index={currentIndex}, choices 존재 여부={d.choices != null && d.choices.Length > 0}");
         }
-        Debug.Log($"[NextDialogue] charPos: {currentDialogue.charPos}");
-
-        if (typingCoroutine != null)
+        else
         {
-            StopCoroutine(typingCoroutine);
+            Debug.LogWarning($"대사 index {currentIndex} 없음");
         }
-
-        string displayName = currentDialogue.characterName;
-        txt_CharacterName.text = displayName;
-
-        if (soundManager != null)
+        if (!dialogueDict.ContainsKey(currentIndex))
         {
-            if (currentDialogue.bgm != null && currentDialogue.bgm.clip != null)
-                soundManager.PlayDialogSE(currentDialogue.bgm);
-            if (currentDialogue.se1 != null && currentDialogue.se1.clip != null)
-                soundManager.PlayDialogSE(currentDialogue.se1);
-            if (currentDialogue.se2 != null && currentDialogue.se2.clip != null)
-                soundManager.PlayDialogSE(currentDialogue.se2);
+            Debug.LogWarning($"대사 인덱스 {currentIndex} 없음. 대사키 목록: [{string.Join(",", dialogueDict.Keys.Select(k => k.ToString()))}]");
+            OnOff(false);
+            return;
         }
 
+        var currentDialogue = dialogueDict[currentIndex];
+        Debug.Log($"현재 대사 index: {currentIndex}, 다음 index: {currentDialogue.nextIndex}");
 
+        // 캐릭터 등장 위치 추적
+        bool[] posUsed = new bool[sprite_Heads.Length];
 
-        // 캐릭터 위치 인덱스 확인
-        int posIndex = (int)currentDialogue.charPos;
-
-        // 캐릭터 스프라이트 설정
-        if (posIndex >= 0 && posIndex < sprite_Characters.Length)
+        if (currentDialogue.characters != null)
         {
-            SpriteRenderer targetRenderer = sprite_Characters[posIndex];
-
-            string englishName = characterNameMap.ContainsKey(displayName) ? characterNameMap[displayName] : displayName;
-            string spriteKey = $"{englishName}_{currentDialogue.status}";
-            Debug.Log($"[캐릭터 스프라이트 키] {spriteKey}");
-
-            if (!string.IsNullOrEmpty(spriteKey) && characterSpriteDict.ContainsKey(spriteKey))
+            foreach (var ch in currentDialogue.characters)
             {
-                targetRenderer.sprite = characterSpriteDict[spriteKey];
-                targetRenderer.gameObject.SetActive(true);
-            }
-            else
-            {
-                targetRenderer.sprite = null;
-                targetRenderer.gameObject.SetActive(false);
-                Debug.LogWarning($"[스프라이트 미적용] {spriteKey}는 등록되지 않았습니다.");
-            }
-
-            // 위치 설정
-            if (characterPositionManager != null)
-            {
-                characterPositionManager.SetCharacter(targetRenderer, currentDialogue.charPos);
-                Debug.Log($"[DialogueManager] 캐릭터 위치 설정: {currentDialogue.charPos}");
-            }
-
-            // 캐릭터 이펙트 적용
-            if (currentDialogue.charEffect != Dialog_CharEffect.None)
-            {
-                StartCoroutine(effectManager.RunCharacterEffect(currentDialogue.charEffect, targetRenderer));
+                int pos = (int)ch.position;
+                if (pos >= 0 && pos < posUsed.Length)
+                {
+                    posUsed[pos] = true;
+                    ShowCharacter(ch.name, ch.head, ch.body, ch.position, ch.effect);
+                }
+                else
+                {
+                    Debug.LogWarning($"[오류] 유효하지 않은 캐릭터 위치: {pos}");
+                }
             }
         }
-        else if (currentDialogue.charPos == Dialog_CharPos.Clear)
+
+        for (int i = 0; i < sprite_Heads.Length; i++)
         {
-            foreach (var c in sprite_Characters)
+            if (!posUsed[i])
             {
-                c.sprite = null;
-                c.gameObject.SetActive(false);
+                sprite_Heads[i].sprite = null;
+                sprite_Heads[i].gameObject.SetActive(false);
+
+                sprite_Bodies[i].sprite = null;
+                sprite_Bodies[i].gameObject.SetActive(false);
             }
-            Debug.Log("[DialogueManager] 캐릭터 전체 Clear");
+        }
+        // 컷씬 처리: 여기가 추가되는 부분!
+        if (!string.IsNullOrEmpty(currentDialogue.cutscene))
+        {
+            ShowCutscene(currentDialogue.cutscene);
+        }
+        else
+        {
+            HideCutscene();
         }
 
-        // 배경 설정
+        // 이름/배경
+        txt_CharacterName.text = currentDialogue.speaker;
+
         string bgKey = currentDialogue.background;
-        Debug.Log($"[배경 키 확인] '{bgKey}'");
-
         if (!string.IsNullOrEmpty(bgKey) && backgroundSpriteDict.ContainsKey(bgKey))
         {
             sprite_BG.sprite = backgroundSpriteDict[bgKey];
-            Debug.Log($"[배경 적용됨] {bgKey}");
         }
         else
         {
             sprite_BG.sprite = null;
-            Debug.LogWarning($"[배경 미적용] {bgKey}는 등록되지 않았습니다.");
         }
 
-        // 화면 이펙트 적용 (배경 대상)
+        // 화면 효과
         if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
         {
             StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         }
 
-        // 텍스트 타이핑 효과 시작
-        typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue));
+        // 사운드
+        if (currentDialogue.bgm != null)
+            soundManager.PlayDialogSE(currentDialogue.bgm);
+        if (currentDialogue.se1 != null)
+            soundManager.PlayDialogSE(currentDialogue.se1);
+        if (currentDialogue.se2 != null)
+            soundManager.PlayDialogSE(currentDialogue.se2);
 
-        count++;
+        typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue, currentIndex));
+
+
+        string nextIndexStr = currentDialogue.nextIndex?.Trim() ?? "";
+        int nextIndexNum;
+        bool isNumeric = int.TryParse(nextIndexStr, out nextIndexNum);
+
+        if (currentDialogue.choices == null || currentDialogue.choices.Length == 0)
+        {
+            if (isNumeric)
+            {
+                if (nextIndexNum == 0)
+                {
+                    OnOff(false);
+                    return;
+                }
+                if (!dialogueDict.ContainsKey(nextIndexNum))
+                {
+                    Debug.LogWarning($"대사 인덱스 {nextIndexNum} 없음.");
+                    OnOff(false);
+                    return;
+                }
+                nextDialogueIndex = nextIndexNum;  // 현재 대사를 바로 바꾸지 말고 다음 대사 인덱스를 저장
+                isDialogue = true;
+            }
+
+            else
+            {
+                if (nextIndexStr == "END" || nextIndexStr == "-1")
+                {
+                    OnOff(false);
+                    return;
+                }
+                else if (!string.IsNullOrEmpty(nextIndexStr))
+                {
+                    // nextIndexStr을 시트명으로 간주하고 시트 로드 시도
+                    StartDialogueSheet(nextIndexStr);
+                    return;
+                }
+                else
+                {
+                    Debug.LogWarning($"알 수 없는 nextIndex 값: {nextIndexStr}");
+                    OnOff(false);
+                    return;
+                }
+            }
+
+        }
+        else
+        {
+            isDialogue = false;
+        }
+
+
+
+    }
+
+
+    private void StartDialogueSheet(string sheetName)
+    {
+        Debug.Log($"StartDialogueSheet called with sheetName: {sheetName}");
+
+        if (sheetLoader == null)
+        {
+            Debug.LogError("GoogleSheetLoader가 할당되어 있지 않습니다!");
+            return;
+        }
+
+        // GoogleSheetLoader에게 해당 시트명으로 대사 로드 요청
+        sheetLoader.LoadDialoguesFromSheet(sheetName);
     }
 
 
 
 
-    //대사를 한 줄씩 나오게 하는 함수
-    private IEnumerator TypeText(string sentence)
+
+    //
+    // 대사 텍스트를 타이핑 효과로 보여주는 코루틴
+    //
+    private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         isTyping = true;
+        canInput = false;
         txt_Dialogue.text = "";
 
-        foreach (char letter in sentence.ToCharArray())
+        foreach (char letter in sentence)
         {
-            //  일시정지일 때 대기
             while (isPaused)
-            {
                 yield return null;
-            }
 
             txt_Dialogue.text += letter;
             yield return new WaitForSeconds(0.05f);
         }
 
         isTyping = false;
+
+        if (dialogueDict[dialogueIndex].choices != null && dialogueDict[dialogueIndex].choices.Length > 0)
+        {
+            ShowChoices(dialogueDict[dialogueIndex].choices);
+            canInput = false;
+        }
+        else
+        {
+            canInput = true;
+        }
     }
 
-    int index = 0; // 예: 첫 번째 캐릭터
-    bool flag = true; // 활성화 여부
+
+
+
+
+
+
     private void OnOff(bool flag)
     {
         sprite_DialogueBox.gameObject.SetActive(flag);
-        sprite_Characters[index].gameObject.SetActive(flag);
+
+        // 머리 오브젝트 켜거나 끔
+        foreach (var head in sprite_Heads)
+        {
+            head.gameObject.SetActive(flag);
+        }
+
+        // 몸 오브젝트 켜거나 끔
+        foreach (var body in sprite_Bodies)
+        {
+            body.gameObject.SetActive(flag);
+        }
+
         txt_Dialogue.gameObject.SetActive(flag);
         sprite_CharacterNameBox.gameObject.SetActive(flag);
         txt_CharacterName.gameObject.SetActive(flag);
@@ -224,44 +428,86 @@ public class DialogueManager : MonoBehaviour
         isDialogue = flag;
     }
 
+    private bool isProcessingInput = false;
+
+
+    //
+    // 매 프레임마다 입력 처리
+    //
     void Update()
     {
-        if (!isDialogue || isPaused) return;
+        if (isPaused) return;
+        if (choicePanel.activeSelf) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SkipDialogue(); // 스페이스 입력으로 SkipDialogue 호출
+            if (!isProcessingInput && (canInput || isTyping))
+            {
+                StartCoroutine(ProcessInputWithCooldown());
+            }
         }
     }
 
 
-    //대사 스킵 함수
+    //
+    // 입력 처리와 쿨타임 적용
+    //
+    private IEnumerator ProcessInputWithCooldown()
+    {
+        isProcessingInput = true;
+
+        SkipDialogue();
+
+        yield return new WaitForSeconds(0.2f);  // 0.2초 입력 쿨타임
+
+        isProcessingInput = false;
+    }
+
+
+
+    //
+    // 대화 건너뛰기 함수
+    //
     public void SkipDialogue()
     {
-        if (!isDialogue) return;
+        if (isPaused) return;
 
         if (isTyping)
         {
-            StopCoroutine(typingCoroutine);
-            txt_Dialogue.text = dialogue[count - 1].dialogue;
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
+
+            txt_Dialogue.text = dialogueDict[currentIndex].dialogue;
+
             isTyping = false;
-            typingCoroutine = null;
+            canInput = true;
         }
-       
+        else if (canInput)
         {
-            if (count < dialogue.Length)
+            canInput = false;
+
+            if (nextDialogueIndex > 0)
             {
+                currentIndex = nextDialogueIndex;
                 NextDialogue();
             }
             else
             {
-                OnOff(false); // 대사 종료
+                OnOff(false);
             }
         }
     }
 
 
+
+
+
+
+
+
+    //
     //대사 정지,재개 함수
+    //
     private bool isPaused = false;
 
     public void TogglePauseDialogue()
@@ -269,6 +515,98 @@ public class DialogueManager : MonoBehaviour
         isPaused = !isPaused;
         Debug.Log(isPaused ? " 일시정지됨" : " 다시 재생됨");
     }
+    private void ShowCutscene(string cutsceneName)
+    {
+        if (cutsceneImageObject == null)
+        {
+            Debug.LogError("cutsceneImageObject가 할당되어 있지 않습니다!");
+            return;
+        }
+
+        var sr = cutsceneImageObject.GetComponent<SpriteRenderer>();
+        if (sr == null)
+        {
+            Debug.LogError("cutsceneImageObject에 SpriteRenderer 컴포넌트가 없습니다!");
+            return;
+        }
+
+        Debug.Log("ShowCutscene 호출됨: " + cutsceneName);
+        Sprite cutsceneSprite = Resources.Load<Sprite>($"Cutscenes/{cutsceneName}");
+        if (cutsceneSprite == null)
+        {
+            Debug.LogError($"컷씬 이미지 '{cutsceneName}'가 Resources/Cutscenes 폴더에 없습니다!");
+            return;
+        }
+
+        foreach (var chr in characterRenderers)
+        {
+            chr.gameObject.SetActive(false);
+        }
+
+        cutsceneImageObject.SetActive(true);
+        sr.sprite = cutsceneSprite;
+    }
+
+
+    //
+    //컷씬 숨기기 함수
+    //
+    private void HideCutscene()
+    {
+        cutsceneImageObject.SetActive(false);
+    }
+
+
+
+    //
+    // 선택지 선택 시 호출되는 함수
+    //
+    public void OnChoiceSelected(int nextIndex)
+    {
+        choicePanel.SetActive(false);
+        currentIndex = nextIndex;
+        isDialogue = true;
+        NextDialogue();
+    }
+
+
+
+
+
+    //
+    // 선택지 보여주는 함수
+    //
+    private void ShowChoices(DialogueChoice[] choices)
+    {
+        choicePanel.SetActive(true);
+
+        int countChoices = Mathf.Min(choices.Length, choiceButtons.Length, choiceButtonTexts.Length);
+
+        for (int i = 0; i < countChoices; i++)
+        {
+            choiceButtons[i].gameObject.SetActive(true);
+            choiceButtonTexts[i].text = choices[i].choiceText;
+
+            // nextIndex string → int 변환
+            string nextIndexStr = choices[i].nextIndex;
+            int nextIndex;
+            if (!int.TryParse(nextIndexStr, out nextIndex))
+            {
+                Debug.LogWarning($"nextIndex '{nextIndexStr}'를 int로 변환하지 못했습니다. 기본값 -1로 설정합니다.");
+                nextIndex = -1;
+            }
+
+            choiceButtons[i].onClick.RemoveAllListeners();
+            choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(nextIndex));
+        }
+
+        for (int i = countChoices; i < choiceButtons.Length; i++)
+        {
+            choiceButtons[i].gameObject.SetActive(false);
+        }
+    }
+
+
 
 
 

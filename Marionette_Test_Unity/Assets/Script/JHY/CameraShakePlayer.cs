@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CameraShakePlayer : MonoBehaviour
@@ -48,7 +48,7 @@ public class CameraShakePlayer : MonoBehaviour
 
         while (elapsedTime < duration)
         {
-            // 펄린 노이즈를 사용해 부드럽고 불규칙한 값을 생성,서로 다른 시드 값을 주기 위해 X, Y 좌표에 큰 수를 더 한다.
+            // 펄린 노이즈를 사용해 부드럽고 불규칙한 값을 생성,서로 다른 시드 값을 주기 위해 X, Y 좌표에 큰 수를 더 함.
             float xOffset = (Mathf.PerlinNoise(Time.time * frequency, 100f) * 2 - 1) * magnitude * horizontalFactor;
             float yOffset = (Mathf.PerlinNoise(200f, Time.time * frequency) * 2 - 1) * magnitude * verticalFactor;
 

@@ -4,15 +4,26 @@ using System.Collections.Generic;
 
 public class testplay : MonoBehaviour
 {
-    public List<DirectionSetSO> directionSetslist;
-
+    public int effectIdx = 0;
+    private bool isPlay = false;
     IEnumerator Start()
     {
         yield return new WaitUntil(() =>
             EffectManager.Instance != null &&
             IsInitialized(EffectManager.Instance));
 
-        EffectManager.Instance.PlayDirectionSet(directionSetslist[1]);
+        //EffectManager.Instance.PlayDirectionSet(directionSetslist[1]);
+        EffectManager.Instance.PlayEffect(effectIdx);
+    }
+
+    private void Update()
+    {
+        if (isPlay) return;
+        if(!isPlay)
+        {
+            EffectManager.Instance.PlayEffect(effectIdx);
+            isPlay = true;
+        }
     }
 
     private bool IsInitialized(EffectManager manager)
