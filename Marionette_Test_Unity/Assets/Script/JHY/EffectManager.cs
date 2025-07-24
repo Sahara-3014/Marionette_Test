@@ -206,6 +206,62 @@ public class EffectManager : MonoBehaviour
         }
     }
 
+    public void StopEffect(int idx, bool stopParticlesImmediately = false)
+    {
+        int singleCount = 0;
+        int seqCount = 0;
+
+        if (directionSetList != null)
+        {
+            singleCount = directionSetList.Count;
+        }
+        if (sequenceList != null)
+        {
+            seqCount = sequenceList.Count;
+        }
+
+        if (idx < 0)
+        {
+            Debug.LogWarning($"[EffectManager] 인덱스가 0보다 작습니다: {idx}");
+            return;
+        }
+        if (singleCount == 0 && seqCount == 0)
+        {
+            Debug.LogWarning("[EffectManager] 연출 리스트가 모두 비어 있습니다.");
+            return;
+        }
+
+        if (idx < singleCount)
+        {
+            var set = directionSetList[idx];
+            if (set != null)
+                StopDirectionSet(set, stopParticlesImmediately);
+            else
+                Debug.LogWarning($"[EffectManager] {idx}번 단일 연출 SO가 null입니다.");
+        }
+        else if (idx - singleCount < seqCount)
+        {
+            var seq = sequenceList[idx - singleCount];
+            if (seq != null)
+                StopSequence(seq);
+            else
+                Debug.LogWarning($"[EffectManager] {idx}번 시퀀스 SO가 null입니다.");
+        }
+        else
+        {
+            Debug.LogWarning($"[EffectManager] {idx}번 인덱스의 연출이 없습니다.");
+        }
+    }
+
+    private void StopSequence(EffectSequenceSO so)
+    {
+        if (so == null) return;
+        if (sequencePlayer != null)
+            sequencePlayer.StopSequence(so);
+        else
+            Debug.LogWarning("[EffectManager] 시퀀스 플레이어가 할당되지 않았습니다.");
+    }
+
     #endregion
 
     #region 함수 구현

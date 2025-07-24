@@ -28,9 +28,26 @@ public class EffectSequencePlayer : MonoBehaviour
         return null;
     }
 
+    private Coroutine currentSequenceCoroutine = null;
+
     public Coroutine Play(EffectSequenceSO so)
     {
-        return StartCoroutine(PlaySequence(so));
+        if (currentSequenceCoroutine != null)
+        {
+            StopCoroutine(currentSequenceCoroutine);
+            currentSequenceCoroutine = null;
+        }
+        currentSequenceCoroutine = StartCoroutine(PlaySequence(so));
+        return currentSequenceCoroutine;
+    }
+
+    public void StopSequence(EffectSequenceSO so)
+    {
+        if (currentSequenceCoroutine != null)
+        {
+            StopCoroutine(currentSequenceCoroutine);
+            currentSequenceCoroutine = null;
+        }
     }
 
     private IEnumerator PlaySequence(EffectSequenceSO so)
@@ -51,7 +68,7 @@ public class EffectSequencePlayer : MonoBehaviour
             yield return new WaitForSeconds(step.delayAfter);
         }
     }
-    
+
     private bool IsInitialized(EffectManager manager)
     {
         var field = manager.GetType().GetField("effectPrefabs", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);

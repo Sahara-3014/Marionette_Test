@@ -1,0 +1,3806 @@
+fileFormatVersion: 2
+guid: 607447923a7cded4c9cb7157e6692a6a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3166795487800717921
+    second: BloodTex_0
+  - first:
+      213: -7696832315830146943
+    second: BloodTex_1
+  - first:
+      213: -6086369313255529479
+    second: BloodTex_2
+  - first:
+      213: 342441018582569629
+    second: BloodTex_3
+  - first:
+      213: -7338671921568117853
+    second: BloodTex_4
+  - first:
+      213: 7623384858346600936
+    second: BloodTex_5
+  - first:
+      213: 4624178206002323835
+    second: BloodTex_6
+  - first:
+      213: -9070221970496906405
+    second: BloodTex_7
+  - first:
+      213: 1129350252012865853
+    second: BloodTex_8
+  - first:
+      213: -228321022673024889
+    second: BloodTex_9
+  - first:
+      213: 4837949617440822836
+    second: BloodTex_10
+  - first:
+      213: 1772127461908456049
+    second: BloodTex_11
+  - first:
+      213: -5048493565756538537
+    second: BloodTex_12
+  - first:
+      213: 2576365360743329752
+    second: BloodTex_13
+  - first:
+      213: -5511502972170895000
+    second: BloodTex_14
+  - first:
+      213: -952746654003957640
+    second: BloodTex_15
+  - first:
+      213: -7489412266180799089
+    second: BloodTex_16
+  - first:
+      213: -1775773268325510015
+    second: BloodTex_17
+  - first:
+      213: 3461802554725785432
+    second: BloodTex_18
+  - first:
+      213: -4183205886842391591
+    second: BloodTex_19
+  - first:
+      213: -8581163791510175123
+    second: BloodTex_20
+  - first:
+      213: -3493873358404451170
+    second: BloodTex_21
+  - first:
+      213: 7637515420636912816
+    second: BloodTex_22
+  - first:
+      213: 5098236083603885685
+    second: BloodTex_23
+  - first:
+      213: -6018939482236598527
+    second: BloodTex_24
+  - first:
+      213: -8291221129442591235
+    second: BloodTex_25
+  - first:
+      213: 1792456733110455078
+    second: BloodTex_26
+  - first:
+      213: 4773623588767175830
+    second: BloodTex_27
+  - first:
+      213: 2919440819581303866
+    second: BloodTex_28
+  - first:
+      213: 1522025324125361865
+    second: BloodTex_29
+  - first:
+      213: -2133760073267430898
+    second: BloodTex_30
+  - first:
+      213: 1816896673353853033
+    second: BloodTex_31
+  - first:
+      213: 5256052872580584546
+    second: BloodTex_32
+  - first:
+      213: 5488141330785243186
+    second: BloodTex_33
+  - first:
+      213: 3975975860375179188
+    second: BloodTex_34
+  - first:
+      213: -5914646105966625302
+    second: BloodTex_35
+  - first:
+      213: 8178003101120989362
+    second: BloodTex_36
+  - first:
+      213: 8885639693724953470
+    second: BloodTex_37
+  - first:
+      213: 7651512644671615632
+    second: BloodTex_38
+  - first:
+      213: 3484157193242221869
+    second: BloodTex_39
+  - first:
+      213: -8295884309797974371
+    second: BloodTex_40
+  - first:
+      213: 4413193361235730333
+    second: BloodTex_41
+  - first:
+      213: -3677564047801937643
+    second: BloodTex_42
+  - first:
+      213: 4772516375142300619
+    second: BloodTex_43
+  - first:
+      213: 4218941302353974387
+    second: BloodTex_44
+  - first:
+      213: -4275361658536907418
+    second: BloodTex_45
+  - first:
+      213: 6509214387811002370
+    second: BloodTex_46
+  - first:
+      213: -7722926791388565986
+    second: BloodTex_47
+  - first:
+      213: 7839324795782397287
+    second: BloodTex_48
+  - first:
+      213: 1233255486499655288
+    second: BloodTex_49
+  - first:
+      213: 4724885079159137835
+    second: BloodTex_50
+  - first:
+      213: 8672098116846138068
+    second: BloodTex_51
+  - first:
+      213: -8598204225336698563
+    second: BloodTex_52
+  - first:
+      213: -8771972319767053417
+    second: BloodTex_53
+  - first:
+      213: -1736452167408650580
+    second: BloodTex_54
+  - first:
+      213: -6875218369248750980
+    second: BloodTex_55
+  - first:
+      213: -4163119031319623108
+    second: BloodTex_56
+  - first:
+      213: 4075334055858845068
+    second: BloodTex_57
+  - first:
+      213: 6174833009363426523
+    second: BloodTex_58
+  - first:
+      213: 160155058405515633
+    second: BloodTex_59
+  - first:
+      213: -3359865451209736990
+    second: BloodTex_60
+  - first:
+      213: -342357828351263993
+    second: BloodTex_61
+  - first:
+      213: -3750462435958611738
+    second: BloodTex_62
+  - first:
+      213: -7808705640546232326
+    second: BloodTex_63
+  - first:
+      213: 367809091612185415
+    second: BloodTex_64
+  - first:
+      213: 1032170000331790266
+    second: BloodTex_65
+  - first:
+      213: -2475982156681547532
+    second: BloodTex_66
+  - first:
+      213: 8562537067737791660
+    second: BloodTex_67
+  - first:
+      213: 4302885186435084146
+    second: BloodTex_68
+  - first:
+      213: 9061999136126158632
+    second: BloodTex_69
+  - first:
+      213: -7978117860600969467
+    second: BloodTex_70
+  - first:
+      213: -5988208047145967283
+    second: BloodTex_71
+  - first:
+      213: -1731894047837697378
+    second: BloodTex_72
+  - first:
+      213: -8798074455053416983
+    second: BloodTex_73
+  - first:
+      213: 8932849818687988301
+    second: BloodTex_74
+  - first:
+      213: -1131827546799347864
+    second: BloodTex_75
+  - first:
+      213: 7356751552734246852
+    second: BloodTex_76
+  - first:
+      213: -5496802629740113768
+    second: BloodTex_77
+  - first:
+      213: -5608122426965216966
+    second: BloodTex_78
+  - first:
+      213: -7387574297993644818
+    second: BloodTex_79
+  - first:
+      213: 7805949334225550832
+    second: BloodTex_80
+  - first:
+      213: 8352343323318013313
+    second: BloodTex_81
+  - first:
+      213: -3374698478943708975
+    second: BloodTex_82
+  - first:
+      213: -3198390724512723775
+    second: BloodTex_83
+  - first:
+      213: -9159097646824446931
+    second: BloodTex_84
+  - first:
+      213: 6390984107949083498
+    second: BloodTex_85
+  - first:
+      213: 593111630075000292
+    second: BloodTex_86
+  - first:
+      213: 2402009454539219385
+    second: BloodTex_87
+  - first:
+      213: -1212524806984725121
+    second: BloodTex_88
+  - first:
+      213: -7392086057875107355
+    second: BloodTex_89
+  - first:
+      213: -6246946038842276080
+    second: BloodTex_90
+  - first:
+      213: -1260158922493876933
+    second: BloodTex_91
+  - first:
+      213: 3544704857009550068
+    second: BloodTex_92
+  - first:
+      213: 8291342560689872981
+    second: BloodTex_93
+  - first:
+      213: 6804016024050443300
+    second: BloodTex_94
+  - first:
+      213: -7422909291414262326
+    second: BloodTex_95
+  - first:
+      213: 5219125839240835476
+    second: BloodTex_96
+  - first:
+      213: 1540430588098594678
+    second: BloodTex_97
+  - first:
+      213: 6064639396422965256
+    second: BloodTex_98
+  - first:
+      213: -8834091023669894914
+    second: BloodTex_99
+  - first:
+      213: -2322262259358010974
+    second: BloodTex_100
+  - first:
+      213: 7797561185511540561
+    second: BloodTex_101
+  - first:
+      213: 5275719074053980260
+    second: BloodTex_102
+  - first:
+      213: 4067176366797147953
+    second: BloodTex_103
+  - first:
+      213: 2013336247715653287
+    second: BloodTex_104
+  - first:
+      213: 5955317360059306744
+    second: BloodTex_105
+  - first:
+      213: -2987892919904745126
+    second: BloodTex_106
+  - first:
+      213: 160098513660570841
+    second: BloodTex_107
+  - first:
+      213: -6213609545054977034
+    second: BloodTex_108
+  - first:
+      213: -2963735510896972838
+    second: BloodTex_109
+  - first:
+      213: -6438278703081950066
+    second: BloodTex_110
+  - first:
+      213: 7095178025571997008
+    second: BloodTex_111
+  - first:
+      213: -8773543576770549581
+    second: BloodTex_112
+  - first:
+      213: -8822878989809831795
+    second: BloodTex_113
+  - first:
+      213: 1021610014179223450
+    second: BloodTex_114
+  - first:
+      213: -5014965326062580770
+    second: BloodTex_115
+  - first:
+      213: -3646734241931750053
+    second: BloodTex_116
+  - first:
+      213: -6540630222096658524
+    second: BloodTex_117
+  - first:
+      213: -1582450406154010771
+    second: BloodTex_118
+  - first:
+      213: 8520157780950708160
+    second: BloodTex_119
+  - first:
+      213: 5785922432697264615
+    second: BloodTex_120
+  - first:
+      213: 6567952285774738839
+    second: BloodTex_121
+  - first:
+      213: -1623367338368326415
+    second: BloodTex_122
+  - first:
+      213: -2757282657896382730
+    second: BloodTex_123
+  - first:
+      213: 2080828083594720311
+    second: BloodTex_124
+  - first:
+      213: -8059387884869389462
+    second: BloodTex_125
+  - first:
+      213: 4292020297890879040
+    second: BloodTex_126
+  - first:
+      213: -9112143467606262943
+    second: BloodTex_127
+  - first:
+      213: 5035567030082460057
+    second: BloodTex_128
+  - first:
+      213: 3940000897967204805
+    second: BloodTex_129
+  - first:
+      213: -722127776228269242
+    second: BloodTex_130
+  - first:
+      213: 6788104477892360004
+    second: BloodTex_131
+  - first:
+      213: -8262397340867725577
+    second: BloodTex_132
+  - first:
+      213: 6288522735241383645
+    second: BloodTex_133
+  - first:
+      213: 6234510891567687059
+    second: BloodTex_134
+  - first:
+      213: 7265698392125131929
+    second: BloodTex_135
+  - first:
+      213: -1992131179166538757
+    second: BloodTex_136
+  - first:
+      213: 4712141077866336242
+    second: BloodTex_137
+  - first:
+      213: 3357160976103810305
+    second: BloodTex_138
+  - first:
+      213: -515693879904071875
+    second: BloodTex_139
+  - first:
+      213: 7566377139357928737
+    second: BloodTex_140
+  - first:
+      213: -6637943815027074970
+    second: BloodTex_141
+  - first:
+      213: -27258238110323948
+    second: BloodTex_142
+  - first:
+      213: 7554945686734093506
+    second: BloodTex_143
+  - first:
+      213: 8071769804487614084
+    second: BloodTex_144
+  - first:
+      213: 2845343551694014698
+    second: BloodTex_145
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BloodTex_0
+      rect:
+        serializedVersion: 2
+        x: 734
+        y: 3559
+        width: 176
+        height: 222
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 162fbaeb7b7b2fb20800000000000000
+      internalID: 3166795487800717921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_1
+      rect:
+        serializedVersion: 2
+        x: 1309
+        y: 3693
+        width: 140
+        height: 131
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 188623fc9cb5f2590800000000000000
+      internalID: -7696832315830146943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_2
+      rect:
+        serializedVersion: 2
+        x: 3035
+        y: 3370
+        width: 418
+        height: 497
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f3e0974b5fd88ba0800000000000000
+      internalID: -6086369313255529479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_3
+      rect:
+        serializedVersion: 2
+        x: 3205
+        y: 3635
+        width: 653
+        height: 365
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d921325ca4890c400800000000000000
+      internalID: 342441018582569629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_4
+      rect:
+        serializedVersion: 2
+        x: 3449
+        y: 3598
+        width: 123
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ab8ccfe4ccc72a90800000000000000
+      internalID: -7338671921568117853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_5
+      rect:
+        serializedVersion: 2
+        x: 1641
+        y: 3530
+        width: 103
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e937d36324bbc960800000000000000
+      internalID: 7623384858346600936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_6
+      rect:
+        serializedVersion: 2
+        x: 1869
+        y: 3371
+        width: 331
+        height: 309
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b712fd214916c2040800000000000000
+      internalID: 4624178206002323835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_7
+      rect:
+        serializedVersion: 2
+        x: 2582
+        y: 3646
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5b96968c29102280800000000000000
+      internalID: -9070221970496906405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_8
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 3571
+        width: 66
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d39893612124caf00800000000000000
+      internalID: 1129350252012865853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_9
+      rect:
+        serializedVersion: 2
+        x: 999
+        y: 3293
+        width: 365
+        height: 301
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78802d45d37d4dcf0800000000000000
+      internalID: -228321022673024889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_10
+      rect:
+        serializedVersion: 2
+        x: 3538
+        y: 3509
+        width: 38
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4361cc46b89d32340800000000000000
+      internalID: 4837949617440822836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_11
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 3335
+        width: 79
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 172a4c7998cd79810800000000000000
+      internalID: 1772127461908456049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_12
+      rect:
+        serializedVersion: 2
+        x: 2997
+        y: 3370
+        width: 50
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7518c3a99d520f9b0800000000000000
+      internalID: -5048493565756538537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_13
+      rect:
+        serializedVersion: 2
+        x: 3062
+        y: 3331
+        width: 73
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8df2aba35a611c320800000000000000
+      internalID: 2576365360743329752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_14
+      rect:
+        serializedVersion: 2
+        x: 1986
+        y: 3324
+        width: 32
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8618e3d7f353383b0800000000000000
+      internalID: -5511502972170895000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_15
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 3286
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 870f62f47f927c2f0800000000000000
+      internalID: -952746654003957640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_16
+      rect:
+        serializedVersion: 2
+        x: 993
+        y: 3080
+        width: 263
+        height: 231
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8517d97933401890800000000000000
+      internalID: -7489412266180799089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_17
+      rect:
+        serializedVersion: 2
+        x: 1934
+        y: 3195
+        width: 77
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 184d2d3fe9f2b57e0800000000000000
+      internalID: -1775773268325510015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_18
+      rect:
+        serializedVersion: 2
+        x: 3106
+        y: 3234
+        width: 66
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85f58f4051bca0030800000000000000
+      internalID: 3461802554725785432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_19
+      rect:
+        serializedVersion: 2
+        x: 1880
+        y: 2682
+        width: 729
+        height: 587
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d3bf64d86442f5c0800000000000000
+      internalID: -4183205886842391591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_20
+      rect:
+        serializedVersion: 2
+        x: 2620
+        y: 3134
+        width: 112
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d62879f1ff499e880800000000000000
+      internalID: -8581163791510175123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_21
+      rect:
+        serializedVersion: 2
+        x: 2781
+        y: 3213
+        width: 30
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e940a1e11b4438fc0800000000000000
+      internalID: -3493873358404451170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_22
+      rect:
+        serializedVersion: 2
+        x: 2828
+        y: 3229
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bc91ad4fc7edf960800000000000000
+      internalID: 7637515420636912816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_23
+      rect:
+        serializedVersion: 2
+        x: 2927
+        y: 3212
+        width: 72
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57ec948d4b290c640800000000000000
+      internalID: 5098236083603885685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_24
+      rect:
+        serializedVersion: 2
+        x: 568
+        y: 3106
+        width: 115
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 107c6bc3e6e687ca0800000000000000
+      internalID: -6018939482236598527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_25
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 3076
+        width: 83
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfd7c51cf4aafec80800000000000000
+      internalID: -8291221129442591235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_26
+      rect:
+        serializedVersion: 2
+        x: 2899
+        y: 3124
+        width: 61
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62b4e44e6e510e810800000000000000
+      internalID: 1792456733110455078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_27
+      rect:
+        serializedVersion: 2
+        x: 3154
+        y: 3123
+        width: 81
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69494ebbc515f3240800000000000000
+      internalID: 4773623588767175830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_28
+      rect:
+        serializedVersion: 2
+        x: 3166
+        y: 3087
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3c3be125ffe38820800000000000000
+      internalID: 2919440819581303866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_29
+      rect:
+        serializedVersion: 2
+        x: 2738
+        y: 3036
+        width: 44
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c614afd7f15f1510800000000000000
+      internalID: 1522025324125361865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_30
+      rect:
+        serializedVersion: 2
+        x: 2933
+        y: 2989
+        width: 94
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0abbfcb48c5362e0800000000000000
+      internalID: -2133760073267430898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_31
+      rect:
+        serializedVersion: 2
+        x: 3456
+        y: 2994
+        width: 30
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96868d8e5e9e63910800000000000000
+      internalID: 1816896673353853033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_32
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 2870
+        width: 100
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26456d66d3041f840800000000000000
+      internalID: 5256052872580584546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_33
+      rect:
+        serializedVersion: 2
+        x: 1877
+        y: 2864
+        width: 89
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2301892867bc92c40800000000000000
+      internalID: 5488141330785243186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_34
+      rect:
+        serializedVersion: 2
+        x: 3112
+        y: 2809
+        width: 153
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bfc039baf08d2730800000000000000
+      internalID: 3975975860375179188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_35
+      rect:
+        serializedVersion: 2
+        x: 3436
+        y: 2851
+        width: 27
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aed36b924b4faeda0800000000000000
+      internalID: -5914646105966625302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_36
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 2544
+        width: 315
+        height: 272
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b80c56dd7a1e7170800000000000000
+      internalID: 8178003101120989362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_37
+      rect:
+        serializedVersion: 2
+        x: 1764
+        y: 2798
+        width: 50
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7b269a2932205b70800000000000000
+      internalID: 8885639693724953470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_38
+      rect:
+        serializedVersion: 2
+        x: 2949
+        y: 2507
+        width: 256
+        height: 308
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 092bf0cf532af2a60800000000000000
+      internalID: 7651512644671615632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_39
+      rect:
+        serializedVersion: 2
+        x: 3184
+        y: 2471
+        width: 423
+        height: 350
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2d13d4e1863a5030800000000000000
+      internalID: 3484157193242221869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_40
+      rect:
+        serializedVersion: 2
+        x: 1048
+        y: 2727
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9e41c87c291fdc80800000000000000
+      internalID: -8295884309797974371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_41
+      rect:
+        serializedVersion: 2
+        x: 2076
+        y: 2606
+        width: 45
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9f519ddaffce3d30800000000000000
+      internalID: 4413193361235730333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_42
+      rect:
+        serializedVersion: 2
+        x: 2272
+        y: 2606
+        width: 47
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 511940cabfaa6fcc0800000000000000
+      internalID: -3677564047801937643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_43
+      rect:
+        serializedVersion: 2
+        x: 2536
+        y: 2574
+        width: 37
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcb77197b526b3240800000000000000
+      internalID: 4772516375142300619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_44
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 2511
+        width: 46
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3745807f2c0bc8a30800000000000000
+      internalID: 4218941302353974387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_45
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 2497
+        width: 31
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66d2590393ddaa4c0800000000000000
+      internalID: -4275361658536907418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_46
+      rect:
+        serializedVersion: 2
+        x: 1581
+        y: 2264
+        width: 222
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20826589fff555a50800000000000000
+      internalID: 6509214387811002370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_47
+      rect:
+        serializedVersion: 2
+        x: 2212
+        y: 2503
+        width: 42
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1eefe44007a2d490800000000000000
+      internalID: -7722926791388565986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_48
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 2408
+        width: 51
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76d75830e50eacc60800000000000000
+      internalID: 7839324795782397287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_49
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 2439
+        width: 35
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87e0d16b4576d1110800000000000000
+      internalID: 1233255486499655288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_50
+      rect:
+        serializedVersion: 2
+        x: 2522
+        y: 2472
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b26e2db22f9229140800000000000000
+      internalID: 4724885079159137835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_51
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 2426
+        width: 37
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d2b2ff5a4b795870800000000000000
+      internalID: 8672098116846138068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_52
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 2407
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d391b82ffca0da880800000000000000
+      internalID: -8598204225336698563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_53
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 2407
+        width: 37
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79bb9bca6a1b34680800000000000000
+      internalID: -8771972319767053417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_54
+      rect:
+        serializedVersion: 2
+        x: 3044
+        y: 2421
+        width: 20
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca6762034f1e6e7e0800000000000000
+      internalID: -1736452167408650580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_55
+      rect:
+        serializedVersion: 2
+        x: 3295
+        y: 2359
+        width: 74
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7210b3d1515690a0800000000000000
+      internalID: -6875218369248750980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_56
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 2388
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3a86845c41a936c0800000000000000
+      internalID: -4163119031319623108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_57
+      rect:
+        serializedVersion: 2
+        x: 1391
+        y: 2258
+        width: 154
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c85b4845bbe7e8830800000000000000
+      internalID: 4075334055858845068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_58
+      rect:
+        serializedVersion: 2
+        x: 2120
+        y: 2346
+        width: 60
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdc967608e961b550800000000000000
+      internalID: 6174833009363426523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_59
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 2293
+        width: 94
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1712e355d2cf83200800000000000000
+      internalID: 160155058405515633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_60
+      rect:
+        serializedVersion: 2
+        x: 2790
+        y: 2324
+        width: 35
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ec39876c2c5f51d0800000000000000
+      internalID: -3359865451209736990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_61
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 2241
+        width: 42
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70b7c077e53bf3bf0800000000000000
+      internalID: -342357828351263993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_62
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 2281
+        width: 36
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e0ad39094ea3fbc0800000000000000
+      internalID: -3750462435958611738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_63
+      rect:
+        serializedVersion: 2
+        x: 3270
+        y: 2259
+        width: 40
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af717ab9797e1a390800000000000000
+      internalID: -7808705640546232326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_64
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 2247
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74314ba8b68ba1500800000000000000
+      internalID: 367809091612185415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_65
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 2182
+        width: 113
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab757998521035e00800000000000000
+      internalID: 1032170000331790266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_66
+      rect:
+        serializedVersion: 2
+        x: 2169
+        y: 2236
+        width: 35
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f07ac8c85b83add0800000000000000
+      internalID: -2475982156681547532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_67
+      rect:
+        serializedVersion: 2
+        x: 534
+        y: 2176
+        width: 58
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cac30aac81e34d670800000000000000
+      internalID: 8562537067737791660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_68
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 2146
+        width: 75
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27fe0c6874be6bb30800000000000000
+      internalID: 4302885186435084146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_69
+      rect:
+        serializedVersion: 2
+        x: 3084
+        y: 2208
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82742b7a330b2cd70800000000000000
+      internalID: 9061999136126158632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_70
+      rect:
+        serializedVersion: 2
+        x: 1199
+        y: 2109
+        width: 68
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5070eae5318084190800000000000000
+      internalID: -7978117860600969467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_71
+      rect:
+        serializedVersion: 2
+        x: 1956
+        y: 2080
+        width: 110
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d41aabc028c95eca0800000000000000
+      internalID: -5988208047145967283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_72
+      rect:
+        serializedVersion: 2
+        x: 3135
+        y: 2161
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9a450a1a8317f7e0800000000000000
+      internalID: -1731894047837697378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_73
+      rect:
+        serializedVersion: 2
+        x: 1604
+        y: 2130
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e54a17b5e5f6e580800000000000000
+      internalID: -8798074455053416983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_74
+      rect:
+        serializedVersion: 2
+        x: 3146
+        y: 2121
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d426fc2f49bd7fb70800000000000000
+      internalID: 8932849818687988301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_75
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 2048
+        width: 29
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 867e506c7d0fa40f0800000000000000
+      internalID: -1131827546799347864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_76
+      rect:
+        serializedVersion: 2
+        x: 1121
+        y: 2030
+        width: 71
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c737893f8e681660800000000000000
+      internalID: 7356751552734246852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_77
+      rect:
+        serializedVersion: 2
+        x: 2136
+        y: 2065
+        width: 27
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89058eda12f67b3b0800000000000000
+      internalID: -5496802629740113768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_78
+      rect:
+        serializedVersion: 2
+        x: 1757
+        y: 2020
+        width: 38
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3136d3ad52fb22b0800000000000000
+      internalID: -5608122426965216966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_79
+      rect:
+        serializedVersion: 2
+        x: 2065
+        y: 1883
+        width: 174
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee4784821501a7990800000000000000
+      internalID: -7387574297993644818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_80
+      rect:
+        serializedVersion: 2
+        x: 2510
+        y: 2023
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fdf531df8d445c60800000000000000
+      internalID: 7805949334225550832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_81
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 1571
+        width: 484
+        height: 380
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18dc97cfffb79e370800000000000000
+      internalID: 8352343323318013313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_82
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 1880
+        width: 70
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d852820d99aa21d0800000000000000
+      internalID: -3374698478943708975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_83
+      rect:
+        serializedVersion: 2
+        x: 1806
+        y: 1615
+        width: 231
+        height: 334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ccc384f4980d93d0800000000000000
+      internalID: -3198390724512723775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_84
+      rect:
+        serializedVersion: 2
+        x: 3603
+        y: 1910
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d24a9e9973954e080800000000000000
+      internalID: -9159097646824446931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_85
+      rect:
+        serializedVersion: 2
+        x: 2459
+        y: 1476
+        width: 429
+        height: 391
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6bc87f6f2651b850800000000000000
+      internalID: 6390984107949083498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_86
+      rect:
+        serializedVersion: 2
+        x: 3074
+        y: 1772
+        width: 42
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e5f5c692e72b3800800000000000000
+      internalID: 593111630075000292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_87
+      rect:
+        serializedVersion: 2
+        x: 3493
+        y: 1507
+        width: 351
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b1a0fc5fd6a55120800000000000000
+      internalID: 2402009454539219385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_88
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 1649
+        width: 97
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7d835ebc1f3c2fe0800000000000000
+      internalID: -1212524806984725121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_89
+      rect:
+        serializedVersion: 2
+        x: 1659
+        y: 1724
+        width: 41
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e19c3335e80a6990800000000000000
+      internalID: -7392086057875107355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_90
+      rect:
+        serializedVersion: 2
+        x: 2298
+        y: 1616
+        width: 135
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 017c5c7eca36e49a0800000000000000
+      internalID: -6246946038842276080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_91
+      rect:
+        serializedVersion: 2
+        x: 1535
+        y: 1673
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b35a638f224038ee0800000000000000
+      internalID: -1260158922493876933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_92
+      rect:
+        serializedVersion: 2
+        x: 3393
+        y: 1607
+        width: 73
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f2f7ab6942513130800000000000000
+      internalID: 3544704857009550068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_93
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 1546
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5506ff82124c01370800000000000000
+      internalID: 8291342560689872981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_94
+      rect:
+        serializedVersion: 2
+        x: 1496
+        y: 1518
+        width: 50
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 424a79f4688bc6e50800000000000000
+      internalID: 6804016024050443300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_95
+      rect:
+        serializedVersion: 2
+        x: 1606
+        y: 1563
+        width: 83
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acd6e45e3578cf890800000000000000
+      internalID: -7422909291414262326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_96
+      rect:
+        serializedVersion: 2
+        x: 1241
+        y: 1466
+        width: 52
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49133067c4f0e6840800000000000000
+      internalID: 5219125839240835476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_97
+      rect:
+        serializedVersion: 2
+        x: 2392
+        y: 1502
+        width: 66
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67743c45575b06510800000000000000
+      internalID: 1540430588098594678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_98
+      rect:
+        serializedVersion: 2
+        x: 2960
+        y: 1495
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80851a2366de92450800000000000000
+      internalID: 6064639396422965256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_99
+      rect:
+        serializedVersion: 2
+        x: 3020
+        y: 1322
+        width: 168
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef060bcd401076580800000000000000
+      internalID: -8834091023669894914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_100
+      rect:
+        serializedVersion: 2
+        x: 1549
+        y: 1439
+        width: 17
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a17bab67caa5cfd0800000000000000
+      internalID: -2322262259358010974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_101
+      rect:
+        serializedVersion: 2
+        x: 2306
+        y: 1452
+        width: 45
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1570ac0c590863c60800000000000000
+      internalID: 7797561185511540561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_102
+      rect:
+        serializedVersion: 2
+        x: 2964
+        y: 1426
+        width: 35
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4608dbfbb8e173940800000000000000
+      internalID: 5275719074053980260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_103
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 1286
+        width: 157
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13fcec55b53817830800000000000000
+      internalID: 4067176366797147953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_104
+      rect:
+        serializedVersion: 2
+        x: 1439
+        y: 1321
+        width: 55
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a6628276aec0fb10800000000000000
+      internalID: 2013336247715653287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_105
+      rect:
+        serializedVersion: 2
+        x: 1514
+        y: 604
+        width: 672
+        height: 808
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f25d0b169985a250800000000000000
+      internalID: 5955317360059306744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_106
+      rect:
+        serializedVersion: 2
+        x: 2272
+        y: 1273
+        width: 177
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a594c2a483fd886d0800000000000000
+      internalID: -2987892919904745126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_107
+      rect:
+        serializedVersion: 2
+        x: 2791
+        y: 1324
+        width: 49
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dc6ecbffb8c83200800000000000000
+      internalID: 160098513660570841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_108
+      rect:
+        serializedVersion: 2
+        x: 2856
+        y: 1361
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f385063a03d4c9a0800000000000000
+      internalID: -6213609545054977034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_109
+      rect:
+        serializedVersion: 2
+        x: 1329
+        y: 1305
+        width: 50
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adb66c06142bed6d0800000000000000
+      internalID: -2963735510896972838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_110
+      rect:
+        serializedVersion: 2
+        x: 2204
+        y: 1326
+        width: 32
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8476d981a3a6a6a0800000000000000
+      internalID: -6438278703081950066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_111
+      rect:
+        serializedVersion: 2
+        x: 3517
+        y: 1300
+        width: 54
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 055506882d2277260800000000000000
+      internalID: 7095178025571997008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_112
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 1245
+        width: 66
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b86e25e99c1e3680800000000000000
+      internalID: -8773543576770549581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_113
+      rect:
+        serializedVersion: 2
+        x: 931
+        y: 1180
+        width: 125
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d80b02ced46de8580800000000000000
+      internalID: -8822878989809831795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_114
+      rect:
+        serializedVersion: 2
+        x: 3290
+        y: 1304
+        width: 18
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a97622a25ec7d2e00800000000000000
+      internalID: 1021610014179223450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_115
+      rect:
+        serializedVersion: 2
+        x: 1430
+        y: 1217
+        width: 76
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edb832b3b93476ab0800000000000000
+      internalID: -5014965326062580770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_116
+      rect:
+        serializedVersion: 2
+        x: 2790
+        y: 1261
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5597673782346dc0800000000000000
+      internalID: -3646734241931750053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_117
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 1108
+        width: 71
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4af8ebc77730b35a0800000000000000
+      internalID: -6540630222096658524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_118
+      rect:
+        serializedVersion: 2
+        x: 2838
+        y: 1152
+        width: 96
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6f74826db10a0ae0800000000000000
+      internalID: -1582450406154010771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_119
+      rect:
+        serializedVersion: 2
+        x: 2419
+        y: 889
+        width: 93
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cfe8db2c5ead3670800000000000000
+      internalID: 8520157780950708160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_120
+      rect:
+        serializedVersion: 2
+        x: 2660
+        y: 979
+        width: 33
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e962e22cc9bb4050800000000000000
+      internalID: 5785922432697264615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_121
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 599
+        width: 278
+        height: 310
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 795715f2ecd062b50800000000000000
+      internalID: 6567952285774738839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_122
+      rect:
+        serializedVersion: 2
+        x: 3016
+        y: 889
+        width: 24
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f4a598b104a879e0800000000000000
+      internalID: -1623367338368326415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_123
+      rect:
+        serializedVersion: 2
+        x: 881
+        y: 616
+        width: 87
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6febdb6080a2cb9d0800000000000000
+      internalID: -2757282657896382730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_124
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 658
+        width: 74
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 734f1590e1690ec10800000000000000
+      internalID: 2080828083594720311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_125
+      rect:
+        serializedVersion: 2
+        x: 2813
+        y: 226
+        width: 883
+        height: 589
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a63f54f4b6d472090800000000000000
+      internalID: -8059387884869389462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_126
+      rect:
+        serializedVersion: 2
+        x: 3616
+        y: 605
+        width: 130
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0465d8888b1509b30800000000000000
+      internalID: 4292020297890879040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_127
+      rect:
+        serializedVersion: 2
+        x: 3795
+        y: 630
+        width: 27
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16bbeee5bc92b8180800000000000000
+      internalID: -9112143467606262943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_128
+      rect:
+        serializedVersion: 2
+        x: 789
+        y: 532
+        width: 44
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 999dbb6c88de1e540800000000000000
+      internalID: 5035567030082460057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_129
+      rect:
+        serializedVersion: 2
+        x: 3627
+        y: 568
+        width: 72
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c92e0211f1bda630800000000000000
+      internalID: 3940000897967204805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_130
+      rect:
+        serializedVersion: 2
+        x: 701
+        y: 469
+        width: 41
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 643a87f0d9c7af5f0800000000000000
+      internalID: -722127776228269242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_131
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 495
+        width: 60
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4473307ce01343e50800000000000000
+      internalID: 6788104477892360004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_132
+      rect:
+        serializedVersion: 2
+        x: 2149
+        y: 306
+        width: 256
+        height: 232
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f672700561165d80800000000000000
+      internalID: -8262397340867725577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_133
+      rect:
+        serializedVersion: 2
+        x: 2784
+        y: 513
+        width: 44
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddec7041c12554750800000000000000
+      internalID: 6288522735241383645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_134
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 420
+        width: 41
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3952230cf9e658650800000000000000
+      internalID: 6234510891567687059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_135
+      rect:
+        serializedVersion: 2
+        x: 2764
+        y: 458
+        width: 31
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99ccebb3132f4d460800000000000000
+      internalID: 7265698392125131929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_136
+      rect:
+        serializedVersion: 2
+        x: 1884
+        y: 339
+        width: 70
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf36ccf4f378a54e0800000000000000
+      internalID: -1992131179166538757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_137
+      rect:
+        serializedVersion: 2
+        x: 2712
+        y: 393
+        width: 36
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ffcfb52853e46140800000000000000
+      internalID: 4712141077866336242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_138
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 338
+        width: 29
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 105a87aee18079e20800000000000000
+      internalID: 3357160976103810305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_139
+      rect:
+        serializedVersion: 2
+        x: 3756
+        y: 243
+        width: 111
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3f89730623e7d8f0800000000000000
+      internalID: -515693879904071875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_140
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 283
+        width: 35
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12dc01c7beb210960800000000000000
+      internalID: 7566377139357928737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_141
+      rect:
+        serializedVersion: 2
+        x: 2089
+        y: 214
+        width: 70
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6685f42054941e3a0800000000000000
+      internalID: -6637943815027074970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_142
+      rect:
+        serializedVersion: 2
+        x: 1704
+        y: 202
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41b2b30e6c82f9ff0800000000000000
+      internalID: -27258238110323948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_143
+      rect:
+        serializedVersion: 2
+        x: 1735
+        y: 145
+        width: 92
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ccb723031f88d860800000000000000
+      internalID: 7554945686734093506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_144
+      rect:
+        serializedVersion: 2
+        x: 1855
+        y: 0
+        width: 130
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48e55310fdfa40070800000000000000
+      internalID: 8071769804487614084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodTex_145
+      rect:
+        serializedVersion: 2
+        x: 2132
+        y: 0
+        width: 80
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae88bae82e0bc7720800000000000000
+      internalID: 2845343551694014698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

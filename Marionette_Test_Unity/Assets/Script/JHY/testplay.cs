@@ -6,6 +6,8 @@ public class testplay : MonoBehaviour
 {
     public int effectIdx = 0;
     private bool isPlay = false;
+    private bool isEnable = false;
+    public bool isTest = false;
     IEnumerator Start()
     {
         yield return new WaitUntil(() =>
@@ -19,10 +21,20 @@ public class testplay : MonoBehaviour
     private void Update()
     {
         if (isPlay) return;
-        if(!isPlay)
+        if (!isPlay)
         {
+            if (!isTest) return;
             EffectManager.Instance.PlayEffect(effectIdx);
             isPlay = true;
+        }
+    }
+
+    private void OnEnable()
+    {
+        isEnable = true;
+        if(isEnable)
+        {
+            EffectManager.Instance.StopEffect(effectIdx);
         }
     }
 
