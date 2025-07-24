@@ -14,6 +14,9 @@ public class RaycastInput : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return; // UI 위에 마우스가 있을 경우 Raycast 무시
+
         var _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var _hits = Physics.RaycastAll(_ray.origin, _ray.direction, 1000);
 
@@ -86,14 +89,14 @@ public class RaycastInput : MonoBehaviour
         int _index = 0;
         for (int i = 0; i < hits.Count; i++)
         {
+            if (_index >= index)
+                break;
             if (hits[i].collider.gameObject.GetComponent<InterectObject>() != null)
             {
                 var obj = hits[i].collider.gameObject.GetComponent<InterectObject>();
                 obj.OnBtnPress();
                 mousePressObject = obj;
                 _index += 1;
-                if(_index >= index)
-                    break;
             }
         }
     }
