@@ -12,6 +12,10 @@ public class Item : MonoBehaviour
     [SerializeField]
     private Sprite sprite;
 
+    [TextArea]
+    [SerializeField]
+    private string ItemDescription;
+
     private InventoryManager inventoryManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,9 +32,9 @@ public class Item : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (Input.GetButtonDown("Interaction") && collision.gameObject.tag == "Player")
+        if (Input.GetButtonDown("Interaction") && collision.gameObject.tag == "Interaction")
         {
-            inventoryManager.AddItem(itemName, quantity, sprite);
+            inventoryManager.AddItem(itemName, quantity, sprite, ItemDescription);
             Destroy(gameObject);
         }
     }

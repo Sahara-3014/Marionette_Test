@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 61075f09430905d4cad217fad4755ba4
+guid: 1158ba173936a98429a6fdafe1fe7ade
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4623119676586761486
-    second: Inventory Icon UI1_0
+      213: 922620030469034074
+    second: MapObject1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Inventory Icon UI1_0
+      name: MapObject1_0
       rect:
         serializedVersion: 2
-        x: 147
-        y: 1699
-        width: 158
-        height: 376
+        x: 0
+        y: 1766
+        width: 945
+        height: 394
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,30 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2f26de2062167dfb0800000000000000
-      internalID: -4623119676586761486
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Inventory Icon UI1_2
-      rect:
-        serializedVersion: 2
-        x: 3322
-        y: 110
-        width: 356
-        height: 370
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 93ac8c39ffe13d045b081480ed228c30
-      internalID: 555449189
+      spriteID: a5054ca870ecdcc00800000000000000
+      internalID: 922620030469034074
       vertices: []
       indices: 
       edges: []
@@ -160,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 23718c6e3580d5c4f96d79882307bf28
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -169,10 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Inventory Icon UI1_0: -4623119676586761486
-      Inventory Icon UI1_1: -22628869
-      Inventory Icon UI1_2: 555449189
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
