@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class DialogDatabase : MonoBehaviour
+public class SaveDatabase : MonoBehaviour
 {
-    public static DialogDatabase Instance { get; private set; }
+    public static SaveDatabase Instance { get; private set; }
     private DayCycleSystem dayCycleSystem;
 
     private SaveData saveData;
@@ -68,8 +68,8 @@ public class DialogDatabase : MonoBehaviour
 
     private void Initalize()
     {
-        dayCycleSystem.RigisterDayChangeEvent(SaveData_SetDayNum);
-        dayCycleSystem.RigisterTimeChangeEvent(SaveData_SetGameTime);
+        dayCycleSystem?.RigisterDayChangeEvent(SaveData_SetDayNum);
+        dayCycleSystem?.RigisterTimeChangeEvent(SaveData_SetGameTime);
     }
 
     #endregion
@@ -163,42 +163,42 @@ public class DialogDatabase : MonoBehaviour
 
     public void SaveData_AddReadDialog(string key, int id)
     {
-        if (saveData.readDialogs == null)
-            saveData.readDialogs = new Dictionary<string, List<int>>();
-        if (saveData.readDialogs.ContainsKey(key) == false)
-            saveData.readDialogs.Add(key, new() { id });
+        if (saveData.localPlayerData.readDialogs == null)
+            saveData.localPlayerData.readDialogs = new Dictionary<string, List<int>>();
+        if (saveData.localPlayerData.readDialogs.ContainsKey(key) == false)
+            saveData.localPlayerData.readDialogs.Add(key, new() { id });
         else
-            saveData.readDialogs[key].Add(id);
+            saveData.localPlayerData.readDialogs[key].Add(id);
     }
-    public Dictionary<string, List<int>> SaveData_GetReadDialog() => saveData.readDialogs;
-    public List<int> SaveData_GetReadDialog_NeedKey(string key) => saveData.readDialogs[key];
+    public Dictionary<string, List<int>> SaveData_GetReadDialog() => saveData.localPlayerData.readDialogs;
+    public List<int> SaveData_GetReadDialog_NeedKey(string key) => saveData.localPlayerData.readDialogs[key];
 
     public void SaveData_AddSelectDialog(string key, int id)
     {
-        if (saveData.selectDialogs == null)
-            saveData.selectDialogs = new Dictionary<string, List<int>>();
-        if (saveData.selectDialogs.ContainsKey(key) == false)
-            saveData.selectDialogs.Add(key, new() { id });
+        if (saveData.localPlayerData.selectDialogs == null)
+            saveData.localPlayerData.selectDialogs = new Dictionary<string, List<int>>();
+        if (saveData.localPlayerData.selectDialogs.ContainsKey(key) == false)
+            saveData.localPlayerData.selectDialogs.Add(key, new() { id });
         else
-            saveData.selectDialogs[key].Add(id);
+            saveData.localPlayerData.selectDialogs[key].Add(id);
     }
-    public Dictionary<string, List<int>> SaveData_GetSelectDialog() => saveData.selectDialogs;
-    public List<int> SaveData_GetSelectDialog_NeedKey(string key) => saveData.selectDialogs[key];
+    public Dictionary<string, List<int>> SaveData_GetSelectDialog() => saveData.localPlayerData.selectDialogs;
+    public List<int> SaveData_GetSelectDialog_NeedKey(string key) => saveData.localPlayerData.selectDialogs[key];
 
-    public int SaveData_GetNowDialogID() => saveData.nowDialog_id;
-    public void SaveData_SetNowDialogID(int id) => saveData.nowDialog_id = id;
+    public int SaveData_GetNowDialogID() => saveData.localPlayerData.nowDialog_id;
+    public void SaveData_SetNowDialogID(int id) => saveData.localPlayerData.nowDialog_id = id;
 
-    public int SaveData_GetNowDialogIndex() => saveData.nowDialog_index;
-    public void SaveData_SetNowDialogIndex(int index) => saveData.nowDialog_index = index;
+    public int SaveData_GetNowDialogIndex() => saveData.localPlayerData.nowDialog_index;
+    public void SaveData_SetNowDialogIndex(int index) => saveData.localPlayerData.nowDialog_index = index;
 
-    public int SaveData_GetPosType() => saveData.posType;
-    public void SaveData_SetPosType(int type) => saveData.posType = type;
+    public int SaveData_GetPosType() => saveData.localPlayerData.posType;
+    public void SaveData_SetPosType(int type) => saveData.localPlayerData.posType = type;
 
-    public Vector2 SaveData_GetPosition() => saveData.position;
-    public void SaveData_SetPosition(Vector2 pos) => saveData.position = pos;
+    public Vector2 SaveData_GetPosition() => saveData.localPlayerData.position;
+    public void SaveData_SetPosition(Vector2 pos) => saveData.localPlayerData.position = pos;
 
-    public Dictionary<int, int> SaveData_GetItems() => saveData.itmes;
-    public void SaveData_SetItems(Dictionary<int, int> items) => saveData.itmes = items;
+    public Dictionary<int, int> SaveData_GetItems() => saveData.localPlayerData.itmes;
+    public void SaveData_SetItems(Dictionary<int, int> items) => saveData.localPlayerData.itmes = items;
     #endregion
 
 
@@ -264,10 +264,25 @@ public struct SaveData
     public int dayNum;
     /// <summary> 인게임 시간 </summary>
     public float gameTime;
-    /// <summary> 읽은 대화 ID 목록 </summary>
-    public Dictionary<string, List<int>> readDialogs;
-    /// <summary> 선택지 목록 </summary>
-    public Dictionary<string, List<int>> selectDialogs;
+    /// <summary> 내 현재 플레이 데이터 </summary>
+    public LocalPlayerData localPlayerData;
+    /// <summary> 등장인물 데이터 </summary>
+    public Dictionary<string, CharAttributeData> charsData;
+
+    public SaveData(int index, int dayNum, string nowDate, float gameTime, 
+        LocalPlayerData playData, Dictionary<string, CharAttributeData> charsData)
+    {
+        this.index = index;
+        this.saveDate = nowDate;
+        this.dayNum = dayNum;
+        this.gameTime = gameTime;
+        this.localPlayerData = playData;
+        this.charsData = charsData;
+    }
+}
+
+public struct LocalPlayerData
+{
     /// <summary> 현재 대화 ID </summary>
     public int nowDialog_id;
     /// <summary> 현재 대화 인덱스 </summary>
@@ -278,23 +293,51 @@ public struct SaveData
     public Vector2 position;
     /// <summary> 인벤토리 아이템 </summary>
     public Dictionary<int, int> itmes;
+    /// <summary> 읽은 대화 ID 목록 </summary>
+    public Dictionary<string, List<int>> readDialogs;
+    /// <summary> 선택지 목록 </summary>
+    public Dictionary<string, List<int>> selectDialogs;
 
-    public SaveData(int index, int dayNum, string nowDate, float gameTime, 
-        Dictionary<string, List<int>> readDialogs, Dictionary<string, List<int>> selectDialogs, 
-        int nowDialog_id, int nowDialog_index, int posType, Vector2 position, 
-        Dictionary<int, int> inventoryItems)
+    public LocalPlayerData(int nowDialog_id, int nowDialog_index, int posType, Vector2 position,
+        Dictionary<int, int> itmes, Dictionary<string, List<int>> readDialogs,
+        Dictionary<string, List<int>> selectDialogs)
     {
-        this.index = index;
-        this.saveDate = nowDate;
-        this.dayNum = dayNum;
-        this.gameTime = gameTime;
-        this.readDialogs = readDialogs;
-        this.selectDialogs = selectDialogs;
         this.nowDialog_id = nowDialog_id;
         this.nowDialog_index = nowDialog_index;
         this.posType = posType;
         this.position = position;
-        this.itmes = inventoryItems;
+        this.itmes = itmes;
+        this.readDialogs = readDialogs;
+        this.selectDialogs = selectDialogs;
+    }
+}
+
+[Serializable]
+public class CharAttributeData
+{
+    /// <summary> 신뢰도 MAX </summary>
+    public float maxTrust;
+    /// <summary> 신뢰도 </summary>
+    public float nowTrust;
+    /// <summary> 의심도 MAX </summary>
+    public float maxSuspicion;
+    /// <summary> 의심도 </summary>
+    public float nowSuspicion;
+    /// <summary> 정신력 MAX </summary>
+    public float maxMental_Strength;
+    /// <summary> 정신력 </summary>
+    public float nowMental_Strength;
+
+    public CharAttributeData(float maxTrust, float nowTrust,
+        float maxSuspicion, float nowSuspicion,
+        float maxMental_Strength, float nowMental_Strength)
+    {
+        this.maxTrust = maxTrust;
+        this.nowTrust = nowTrust;
+        this.maxSuspicion = maxSuspicion;
+        this.nowSuspicion = nowSuspicion;
+        this.maxMental_Strength = maxMental_Strength;
+        this.nowMental_Strength = nowMental_Strength;
     }
 }
 
