@@ -1,4 +1,4 @@
-﻿// FadePlayer.cs
+// FadePlayer.cs
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -11,15 +11,24 @@ public class FadePlayer : MonoBehaviour
     public Color targetColor = Color.black;
     [Tooltip("체크하면 투명하게(Fade In),해제하면 투명한 상태에서 이 색상으로(Fade Out)")]
     public bool isFadeIn = false;
+    [Header("페이드 아웃-인 사이 대기 시간(초)")]
+    public float waitTime = 0.5f;
+
+    [Header("시작 시 페이드 아웃-인 자동 실행 여부")]
+    public bool autoFadeOutIn = false;
 
     private Image fadeImage;
 
     void Start()
     {
         fadeImage = GetComponentInChildren<Image>();
-        StartCoroutine(FadeCoroutine());
+        if (autoFadeOutIn)
+            PlayFadeOutIn();
+        else
+            StartCoroutine(FadeCoroutine());
     }
 
+    // 단일 페이드 인/아웃
     private IEnumerator FadeCoroutine()
     {
         Color startColor;
@@ -46,5 +55,44 @@ public class FadePlayer : MonoBehaviour
         }
 
         fadeImage.color = endColor;
+    }
+
+    // 페이드 아웃-대기-페이드 인 연출
+    public void PlayFadeOutIn()
+    {
+        if (fadeImage == null)
+            fadeImage = GetComponentInChildren<Image>();
+        StartCoroutine(FadeOutInCoroutine());
+    }
+
+    private IEnumerator FadeOutInCoroutine()
+    {
+        // 페이드 아웃
+        Color outStart = new Color(targetColor.r, targetColor.g, targetColor.b, 0f);
+        Color outEnd = new Color(targetColor.r, targetColor.g, targetColor.b, 1f);
+        float t = 0;
+        fadeImage.color = outStart;
+        while (t < duration)
+        {
+            fadeImage.color = Color.Lerp(outStart, outEnd, t / duration);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        fadeImage.color = outEnd;
+        // 대기
+        if (waitTime > 0f)
+            yield return new WaitForSeconds(waitTime);
+
+        // 페이드 인
+        Color inStart = new Color(targetColor.r, targetColor.g, targetColor.b, 1f);
+        Color inEnd = new Color(targetColor.r, targetColor.g, targetColor.b, 0f);
+        t = 0;
+        while (t < duration)
+        {
+            fadeImage.color = Color.Lerp(inStart, inEnd, t / duration);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        fadeImage.color = inEnd;
     }
 }
