@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 3729017764940693339}
   - component: {fileID: 5177402922851255031}
   - component: {fileID: 5324243716176740083}
-  - component: {fileID: 667060339930976110}
-  - component: {fileID: 6363837208698710282}
+  - component: {fileID: 3358950856698620834}
+  - component: {fileID: 547589592961583364}
   m_Layer: 5
-  m_Name: FX_FadeFromBlack
+  m_Name: FX_FadeOut_FadeIn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &667060339930976110
+--- !u!114 &3358950856698620834
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,8 +118,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 3
   targetColor: {r: 0, g: 0, b: 0, a: 0}
-  isFadeIn: 1
---- !u!114 &6363837208698710282
+  isFadeIn: 0
+  waitTime: 0.5
+  autoFadeOutIn: 1
+--- !u!114 &547589592961583364
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
