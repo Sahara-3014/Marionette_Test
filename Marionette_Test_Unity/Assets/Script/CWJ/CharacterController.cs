@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CharacterController2D : MonoBehaviour
+public class CharacterController : MonoBehaviour
 {
     [SerializeField] private float m_JumpForce = 400f;                          // 점프 힘
     [Range(0, 1)][SerializeField] private float m_CrouchSpeed = .36f;           // 앉기 움직임 최대 속도 1 = 100%
@@ -24,6 +24,8 @@ public class CharacterController2D : MonoBehaviour
 
     public UnityEvent OnLandEvent;
 
+    public PlayerAnimatorController Animatorcontroller;
+
     [System.Serializable]
     public class BoolEvent : UnityEvent<bool> { }
 
@@ -40,6 +42,7 @@ public class CharacterController2D : MonoBehaviour
         if (OnCrouchEvent == null)
             OnCrouchEvent = new BoolEvent();
     }
+
 
     private void FixedUpdate()
     {
@@ -113,7 +116,7 @@ public class CharacterController2D : MonoBehaviour
             Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.linearVelocity.y);
             // And then smoothing it out and applying it to the character
             m_Rigidbody2D.linearVelocity = Vector3.SmoothDamp(m_Rigidbody2D.linearVelocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
-
+           
             // 만약 오른쪽으로 움직이는데 왼쪽으로 바라보고 있다면
             if (move > 0 && !m_FacingRight)
             {
@@ -133,6 +136,16 @@ public class CharacterController2D : MonoBehaviour
             // 플레이어에게 세로 방향 힘 적용
             m_Grounded = false;
             m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+        }
+
+        //플레이어 애니메이터
+        if (move != 0)
+        {
+            Animatorcontroller.playerState = "Walk";
+        }
+        else
+        {
+           Animatorcontroller.playerState = "Idle";
         }
     }
 
