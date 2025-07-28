@@ -70,6 +70,8 @@ public class DialogueManager : MonoBehaviour
     private int nextDialogueIndex = -1;  // 다음 대사 인덱스 저장용
     private bool canInput = false;
     private int lastEffectIndex = -1;
+    private bool inputQueuedBeforeChoice = false; // 선택지 전 입력 저장용
+    private bool waitingForChoiceDisplay = false; // 선택지 뜨기 전 상태
 
     //
     // 캐릭터 이름과 상태 매핑
@@ -330,36 +332,37 @@ public class DialogueManager : MonoBehaviour
                     OnOff(false);
                     return;
                 }
-                nextDialogueIndex = nextIndexNum;  // 현재 대사를 바로 바꾸지 말고 다음 대사 인덱스를 저장
+                if (nextIndexNum == currentIndex)
+                {
+                    Debug.LogWarning("다음 대사 인덱스가 현재 대사 인덱스와 같습니다! 자동으로 다음 인덱스 (currentIndex+1)로 진행합니다.");
+                    nextIndexNum = currentIndex + 1;
+
+                    if (!dialogueDict.ContainsKey(nextIndexNum))
+                    {
+                        Debug.LogWarning($"자동 진행할 다음 대사 인덱스 {nextIndexNum}가 존재하지 않습니다. 대사를 종료합니다.");
+                        nextDialogueIndex = nextIndexNum; // 할당 먼저
+                        OnOff(false);
+                        return;
+                    }
+                }
+                nextDialogueIndex = nextIndexNum;
+
                 isDialogue = true;
             }
 
-            else
-            {
-                if (nextIndexStr == "END" || nextIndexStr == "-1")
-                {
-                    OnOff(false);
-                    return;
-                }
-                else if (!string.IsNullOrEmpty(nextIndexStr))
-                {
-                    // nextIndexStr을 시트명으로 간주하고 시트 로드 시도
-                    StartDialogueSheet(nextIndexStr);
-                    return;
-                }
-                else
-                {
-                    Debug.LogWarning($"알 수 없는 nextIndex 값: {nextIndexStr}");
-                    OnOff(false);
-                    return;
-                }
-            }
 
         }
         else
         {
             isDialogue = false;
         }
+
+        if (nextDialogueIndex == currentIndex)
+        {
+            Debug.LogWarning("nextDialogueIndex가 currentIndex와 같음. 다음 대사 인덱스를 변경하세요.");
+            // 또는 자동으로 +1 하거나 처리 필요
+        }
+
 
 
 
@@ -389,10 +392,14 @@ public class DialogueManager : MonoBehaviour
     //
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
-        
         isTyping = true;
         canInput = false;
         txt_Dialogue.text = "";
+
+        // 선택지가 있는 경우엔 타이핑 전부터 입력 큐 체크 시작
+        bool hasChoice = dialogueDict[dialogueIndex].choices != null && dialogueDict[dialogueIndex].choices.Length > 0;
+        if (hasChoice)
+            waitingForChoiceDisplay = true;
 
         foreach (char letter in sentence)
         {
@@ -402,21 +409,24 @@ public class DialogueManager : MonoBehaviour
             txt_Dialogue.text += letter;
             yield return new WaitForSeconds(0.05f);
         }
-        int effectIdx = dialogueDict[dialogueIndex].screenEffectIndex;
 
+        isTyping = false;
 
-        if (dialogueDict[dialogueIndex].choices != null && dialogueDict[dialogueIndex].choices.Length > 0)
+        if (hasChoice)
         {
+            yield return new WaitForSeconds(0.1f);  // 선택지 뜨기 전 살짝 대기
+            waitingForChoiceDisplay = false;
+
             ShowChoices(dialogueDict[dialogueIndex].choices);
-            canInput = false;
+
+            // 선택지는 자동 진행 안 함
+            canInput = true;
         }
         else
         {
             canInput = true;
         }
     }
-
-
 
 
 
@@ -455,16 +465,37 @@ public class DialogueManager : MonoBehaviour
     void Update()
     {
         if (isPaused) return;
-        if (choicePanel.activeSelf) return;
+
+        // 선택지 패널이 열려 있으면 입력 무시
+        if (choicePanel.activeInHierarchy)
+            return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (!isProcessingInput && (canInput || isTyping))
+            if (waitingForChoiceDisplay)
             {
-                StartCoroutine(ProcessInputWithCooldown());
+                // 선택지 나오기 전 입력이면 → 대사만 다 보여주고 멈춘다
+                inputQueuedBeforeChoice = true;
+                Debug.Log("선택지 뜨기 전 입력 감지 → 대사만 출력하고 멈춤");
+                return;  // 추가: 대사만 보여주고 다음 대사로 안 넘김
+            }
+
+            if (isTyping)
+            {
+                if (!isProcessingInput)
+                    StartCoroutine(ProcessInputWithCooldown());
+            }
+            else if (canInput)
+            {
+                if (!isProcessingInput)
+                    StartCoroutine(ProcessInputWithCooldown());
             }
         }
     }
+
+
+
+
 
 
     //
@@ -490,6 +521,21 @@ public class DialogueManager : MonoBehaviour
     {
         if (isPaused) return;
 
+        // 선택지 활성화 되어 있으면 건너뛰기 무시
+        if (choicePanel.activeInHierarchy)
+        {
+            Debug.Log("선택지 열려있음, 건너뛰기 무시");
+            return;
+        }
+
+        // 🔐 선택지 뜨기 전 상태일 때: 다음 대사로 안 넘어가고 멈춘다!
+        if (waitingForChoiceDisplay)
+        {
+            Debug.Log("선택지 뜨기 전 입력 감지 → 대사 다 보여주고 멈춤");
+            inputQueuedBeforeChoice = true;
+            return;
+        }
+
         if (isTyping)
         {
             if (typingCoroutine != null)
@@ -499,26 +545,37 @@ public class DialogueManager : MonoBehaviour
 
             isTyping = false;
             canInput = true;
+
+            return;
         }
-        else if (canInput)
+
+        if (canInput)
         {
+            Debug.Log($"SkipDialogue: nextDialogueIndex={nextDialogueIndex}, currentIndex={currentIndex}");
             canInput = false;
 
-            if (nextDialogueIndex > 0)
+            if (nextDialogueIndex > 0 && nextDialogueIndex != currentIndex)
             {
                 currentIndex = nextDialogueIndex;
                 NextDialogue();
             }
             else
             {
-                OnOff(false);
+                int tryNext = currentIndex + 1;
+                if (dialogueDict.ContainsKey(tryNext))
+                {
+                    Debug.LogWarning("nextDialogueIndex가 현재와 같거나 없어서 자동으로 다음 인덱스로 진행합니다.");
+                    currentIndex = tryNext;
+                    NextDialogue();
+                }
+                else
+                {
+                    Debug.Log("더 이상 진행할 대사가 없어 대사 종료");
+                    OnOff(false);
+                }
             }
         }
     }
-
-
-
-
 
 
 
@@ -584,6 +641,10 @@ public class DialogueManager : MonoBehaviour
         choicePanel.SetActive(false);
         currentIndex = nextIndex;
         isDialogue = true;
+
+        canInput = false;   // 여기 추가
+        isTyping = false;   // 여기 추가
+
         NextDialogue();
     }
 
@@ -596,7 +657,10 @@ public class DialogueManager : MonoBehaviour
     //
     private void ShowChoices(DialogueChoice[] choices)
     {
+
+        canInput = false;  // 혹시 모를 입력 방지용
         choicePanel.SetActive(true);
+
 
         int countChoices = Mathf.Min(choices.Length, choiceButtons.Length, choiceButtonTexts.Length);
 
