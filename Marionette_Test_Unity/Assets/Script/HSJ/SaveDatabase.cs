@@ -15,7 +15,7 @@ public class SaveDatabase : MonoBehaviour
     /// <summary> 저장시 인덱스 </summary>
     public int savePlayIndex { get; private set; }
     private Dictionary<string, UnityAction> sceneChangeEvent = new();
-    private Dictionary<string, Dictionary<int, List<DialogueData>>> dialogs;
+    private Dictionary<int, DialogueData[]> dialogs;
 
 
     #region 씬 이동 이벤트
@@ -76,66 +76,58 @@ public class SaveDatabase : MonoBehaviour
 
 
     #region 대화
-    public List<DialogueData> GetDialogs_NeedID(string key, int id)
+    public DialogueData[] GetDialogs_NeedID(int id)
     {
-        if(dialogs == null || dialogs.ContainsKey(key) == false)
+        if(dialogs == null)
         {
-            string text = TextLoad(key);
+            string text = TextLoad("dialog");
             if (text == null)
                 return null;
 
-            var dic = JsonConvert.DeserializeObject<Dictionary<int, List<DialogueData>>>(text);
+            var dic = JsonConvert.DeserializeObject<Dictionary<int, DialogueData[]>>(text);
 
-            if (dialogs == null)
-                dialogs = new();
-
-            dialogs.Add(key, dic);
-
-            if(dic.ContainsKey(id) == false)
-                return null;
-            else
-                return dic[id];
+            dialogs = dic;
         }
+
+        if (dialogs.ContainsKey(id))
+            return dialogs[id];
+
         else
-        {
-            if(dialogs[key].ContainsKey(id))
-                return dialogs[key][id];
-
-            else
-                return null;
-            
-        }
+            return null;
     }
 
-    public Dictionary<int, List<DialogueData>> GetDialogs_NeedKey(string key)
+    public void AddDialogs_NeedID(int id, DialogueData[] data)
     {
-        if (dialogs == null || dialogs.ContainsKey(key) == false)
+        if(dialogs == null)
+            dialogs = new();
+
+        if (dialogs.ContainsKey(id) == false)
+            dialogs.Add(id, data);
+        else
+            dialogs[id] = data;
+    }
+
+    public void SetDialogs(Dictionary<int, DialogueData[]> dialogs)
+    {
+        if(this.dialogs != null)
         {
-            string text = TextLoad(key);
-            if (text == null)
-                return null;
-
-            var dic = JsonConvert.DeserializeObject<Dictionary<int, List<DialogueData>>>(text);
-
-            if (dialogs == null)
-                dialogs = new();
-
-            dialogs.Add(key, dic);
-
-            return dialogs[key];
+            foreach(var dialog in dialogs)
+            {
+                if (this.dialogs.ContainsKey(dialog.Key) == false)
+                    dialogs.Add(dialog.Key, dialog.Value);
+                else
+                    dialogs[dialog.Key] = dialog.Value;
+            }
         }
         else
         {
-            if (dialogs.ContainsKey(key))
-                return dialogs[key];
-
-            else
-                return null;
-
+            this.dialogs = dialogs;
         }
+
+        TextSave("dialog", JsonConvert.SerializeObject(this.dialogs));
     }
 
-    public Dictionary<string, Dictionary<int, List<DialogueData>>> GetDialogs() => dialogs;
+    public Dictionary<int, DialogueData[]> GetDialogs() => dialogs;
     #endregion
 
 
