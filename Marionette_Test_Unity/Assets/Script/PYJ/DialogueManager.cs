@@ -24,6 +24,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GoogleSheetLoader sheetLoader;  // 에디터에서 할당 필요
     [SerializeField] private GameObject cutsceneImageObject; // UI Image or SpriteRenderer
     [SerializeField] private SpriteRenderer[] characterRenderers;
+    [SerializeField] private TextMeshProUGUI dialogueText;
 
     [SerializeField] private DialogEffectManager effectManager;
     [SerializeField] private DialogSoundManager soundManager;
@@ -143,19 +144,27 @@ public class DialogueManager : MonoBehaviour
     //
     public void ShowDialogue(int id, int index)
     {
+        Debug.Log($"[ShowDialogue] 호출됨 - id={id}, index={index}");
+
+        var key = (id, index);
+        if (!dialogueDictByIDAndIndex.ContainsKey(key))
+        {
+            Debug.LogWarning($"대사 데이터 없음: ID={id}, index={index}");
+            return;
+        }
+
         currentID = id;
         currentIndex = index;
 
-        if (dialogueDictByIDAndIndex.TryGetValue((currentID, currentIndex), out var dialogueData))
-        {
-            // 대사 정보를 로딩하거나 필요한 경우 외부에서 NextDialogue 호출
-            Debug.Log($"대사 로드 완료: ID={id}, Index={index}");
-        }
-        else
-        {
-            Debug.LogWarning($"대사 인덱스 {index} 없음. 대사키 목록: [{string.Join(",", dialogueDictByIDAndIndex.Keys)}]");
-        }
+        var currentData = dialogueDictByIDAndIndex[key];
+        Debug.Log($"[ShowDialogue] 대사 내용: {currentData.dialogue}");
+
+        isTyping = true;
+
+        StartCoroutine(TypeText(currentData.dialogue, currentData.index));
+
     }
+
 
 
 
@@ -228,29 +237,15 @@ public class DialogueManager : MonoBehaviour
 
         if (dialogueDictByIDAndIndex == null)
         {
-            Debug.LogError("dialogueDictByIDAndIndex가 초기화되지 않았습니다!");
             OnOff(false);
             return;
         }
 
         if (!dialogueDictByIDAndIndex.TryGetValue((currentID, currentIndex), out var currentDialogue) || currentDialogue == null)
         {
-            Debug.LogWarning($"대사 없음: ID={currentID}, index={currentIndex}");
-            Debug.LogWarning($"현재 딕셔너리 키 목록: [{string.Join(", ", dialogueDictByIDAndIndex.Keys)}]");
             OnOff(false);
             return;
         }
-        Debug.Log($"NextDialogue 호출: currentID={currentID}, currentIndex={currentIndex}, nextDialogueID={nextDialogueID}");
-
-        if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
-        {
-            Debug.Log($"선택지 있음: {currentDialogue.choices.Length}개");
-        }
-        else
-        {
-            Debug.Log($"선택지 없음, nextID = {currentDialogue.nextID}");
-        }
-
 
 
 
@@ -401,9 +396,6 @@ public class DialogueManager : MonoBehaviour
                 nextDialogueID = -1;
             }
         }
-
-
-
 
 
     }
@@ -660,13 +652,12 @@ public class DialogueManager : MonoBehaviour
         if (nextID > 0)
         {
             currentID = nextID;
-            currentIndex = nextIndex > 0 ? nextIndex : 1;  // nextIndex가 유효하면 사용
-            nextDialogueID = -1;  // 선택지 후 자동 다음 진행 없음
+            currentIndex = nextIndex > 0 ? nextIndex : 1;
+            nextDialogueID = -1;
             Debug.Log($"선택지 선택: currentID={currentID}, currentIndex={currentIndex}");
         }
         else
         {
-            // nextID가 0 이하일 때 기존 로직
             if (nextIndex == -1)
             {
                 currentIndex += 1;
@@ -680,13 +671,11 @@ public class DialogueManager : MonoBehaviour
                 currentIndex += 1;
             }
             nextDialogueID = currentID;
-
             Debug.Log($"nextID가 0 이하, currentID 유지, currentIndex 증가: {currentIndex}");
         }
 
-        NextDialogue();
+        NextDialogue();  // 여기에선 ShowDialogue 호출하지 말고 NextDialogue만 호출
     }
-
 
 
 
@@ -711,10 +700,10 @@ public class DialogueManager : MonoBehaviour
 
         for (int i = 0; i < countChoices; i++)
         {
+            Debug.Log($"선택지[{i}] 텍스트='{choices[i].choiceText}', nextID={choices[i].nextID}, nextIndex={choices[i].nextIndex}");
+
             int localNextID = choices[i].nextID;
             int localNextIndex = choices[i].nextIndex;
-
-            Debug.Log($"선택지[{i}] 텍스트='{choices[i].choiceText}', nextID={localNextID}, nextIndex={localNextIndex}");
 
             choiceButtons[i].gameObject.SetActive(true);
             choiceButtonTexts[i].text = choices[i].choiceText;

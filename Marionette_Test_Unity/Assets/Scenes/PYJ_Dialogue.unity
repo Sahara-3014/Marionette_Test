@@ -862,6 +862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 734cd9c0a67e39b44aca7d1890c52ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueManager: {fileID: 819268241}
   apiKey: AIzaSyCYF6AGzi8Fe0HhVew-t0LOngxs0IOZIuc
   spreadsheetId: 1N2Z-yXGz8rUvUBwLfkeB9GYIOWhMrfs6lWok9lcNIjk
   fixedSheetSequence:
@@ -2184,6 +2185,7 @@ MonoBehaviour:
   - {fileID: 794999990}
   - {fileID: 1267087817}
   - {fileID: 687156289}
+  dialogueText: {fileID: 0}
   effectManager: {fileID: 496454053}
   soundManager: {fileID: 525618803}
   sprite_Heads:

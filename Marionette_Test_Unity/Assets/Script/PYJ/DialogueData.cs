@@ -34,7 +34,6 @@ public class DialogueChoice
 [System.Serializable]
 public class DialogueData
 {
-
     public int ID;
     public int effectIndex;
 
@@ -162,31 +161,17 @@ public class DialogueData
 
                 if (!string.IsNullOrEmpty(nextIDStr))
                 {
-                    if (nextIDStr.Contains("-"))
-                    {
-                        var parts = nextIDStr.Split('-');
-                        if (parts.Length == 2)
-                        {
-                            bool idOk = int.TryParse(parts[0], out parsedID);
-                            bool idxOk = int.TryParse(parts[1], out parsedIndex);
+                    if (!int.TryParse(nextIDStr, out parsedID))
+                        parsedID = -1;
 
-                            if (!idOk) parsedID = -1;
-                            if (!idxOk) parsedIndex = -1;
-                        }
-                    }
-                    else
-                    {
-                        bool idOk = int.TryParse(nextIDStr, out parsedID);
-                        if (!idOk) parsedID = -1;
-
-                        parsedIndex = -1; // 명시적으로 -1 처리
-                    }
+                    parsedIndex = -1; // 항상 -1 처리 (인덱스 안 씀)
                 }
+
 
                 Debug.Log($"선택지[{i}] 파싱 결과: nextID={parsedID}, nextIndex={parsedIndex}");
 
                 // ✔️ 여기를 바꿔야 함! parsedID != -1인 경우만 추가
-                if (parsedID != -1)
+                if (parsedID >= -1)  // 또는 if (true)
                 {
                     choiceList.Add(new DialogueChoice
                     {
