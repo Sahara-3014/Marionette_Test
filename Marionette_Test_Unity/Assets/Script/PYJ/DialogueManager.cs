@@ -66,8 +66,6 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
-    private Dictionary<int, DialogueData> dialogueDict;
     private int currentID = 1000;
     private int nextDialogueID = -1;  // 다음 대화 ID 저장용
     private int currentIndex = 1;    // 현재 대사 인덱스
@@ -103,19 +101,27 @@ public class DialogueManager : MonoBehaviour
     //
     public void SetDialogue(DialogueData[] newDialogue)
     {
+        if (newDialogue == null)
+        {
+            Debug.LogError("SetDialogue 호출 시 전달된 newDialogue가 null입니다!");
+            return;
+        }
+
         dialogue = newDialogue;
 
-        dialogueDictByIDAndIndex = new Dictionary<(int, int), DialogueData>();
-        dialogueDict = new Dictionary<int, DialogueData>(); // 추가
+        if (dialogueDictByIDAndIndex == null)
+            dialogueDictByIDAndIndex = new Dictionary<(int, int), DialogueData>();
+        else
+            dialogueDictByIDAndIndex.Clear();
 
         foreach (var d in dialogue)
         {
+            if (d == null)
+            {
+                Debug.LogWarning("대사 배열 내에 null 요소가 있습니다.");
+                continue;
+            }
             dialogueDictByIDAndIndex[(d.ID, d.index)] = d;
-
-            if (!dialogueDict.ContainsKey(d.index))
-                dialogueDict[d.index] = d;
-            else
-                Debug.LogWarning($"중복된 대사 인덱스 발견: {d.index}");
         }
 
         Debug.Log($"SetDialogue 완료 - 총 대사 개수: {dialogueDictByIDAndIndex.Count}");
@@ -126,6 +132,7 @@ public class DialogueManager : MonoBehaviour
             isDialogue = true;
         }
     }
+
 
 
 
@@ -275,22 +282,19 @@ public class DialogueManager : MonoBehaviour
         }
 
 
-        Debug.Log($"NextDialogue 호출 currentIndex = {currentIndex}");
-        if (dialogueDict.ContainsKey(currentIndex))
+        var key = (currentID, currentIndex);
+        if (dialogueDictByIDAndIndex.ContainsKey(key))
         {
-            var d = dialogueDict[currentIndex];
+            var d = dialogueDictByIDAndIndex[key];
             Debug.Log($"대사 index={currentIndex}, choices 존재 여부={d.choices != null && d.choices.Length > 0}");
         }
         else
         {
             Debug.LogWarning($"대사 index {currentIndex} 없음");
-        }
-        if (!dialogueDict.ContainsKey(currentIndex))
-        {
-            Debug.LogWarning($"대사 인덱스 {currentIndex} 없음. 대사키 목록: [{string.Join(",", dialogueDict.Keys.Select(k => k.ToString()))}]");
             OnOff(false);
             return;
         }
+
 
         Debug.Log($"현재 대사 index: {currentIndex}, 다음 index: {currentDialogue.nextID}");
 
@@ -402,12 +406,6 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
-
-
-    //
-    // 대사 텍스트를 타이핑 효과로 보여주는 코루틴
-    //
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         Debug.Log($"TypeText 호출: 대사 인덱스={dialogueIndex}, 텍스트={sentence}");
@@ -415,8 +413,15 @@ public class DialogueManager : MonoBehaviour
         canInput = false;
         txt_Dialogue.text = "";
 
-        // 선택지가 있는 경우엔 타이핑 전부터 입력 큐 체크 시작
-        bool hasChoice = dialogueDict[dialogueIndex].choices != null && dialogueDict[dialogueIndex].choices.Length > 0;
+        bool hasChoice = false;
+        DialogueData currentDialogue = null;
+        var key = (currentID, dialogueIndex);
+        if (dialogueDictByIDAndIndex.ContainsKey(key))
+        {
+            currentDialogue = dialogueDictByIDAndIndex[key];
+            hasChoice = currentDialogue.choices != null && currentDialogue.choices.Length > 0;
+        }
+
         if (hasChoice)
             waitingForChoiceDisplay = true;
 
@@ -431,12 +436,12 @@ public class DialogueManager : MonoBehaviour
 
         isTyping = false;
 
-        if (hasChoice)
+        if (hasChoice && currentDialogue != null)
         {
             yield return new WaitForSeconds(0.1f);  // 선택지 뜨기 전 살짝 대기
             waitingForChoiceDisplay = false;
 
-            ShowChoices(dialogueDict[dialogueIndex].choices);
+            ShowChoices(currentDialogue.choices);
 
             // 선택지는 자동 진행 안 함
             canInput = true;
@@ -446,8 +451,6 @@ public class DialogueManager : MonoBehaviour
             canInput = true;
         }
     }
-
-
 
 
 
