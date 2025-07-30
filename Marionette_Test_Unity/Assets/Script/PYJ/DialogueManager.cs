@@ -377,7 +377,7 @@ public class DialogueManager : MonoBehaviour
         {
             isDialogue = true;
             nextDialogueID = -1;  // 선택지가 있으니 자동 진행용 ID는 -1로
-            ShowChoices(currentDialogue.choices); // **이 부분이 꼭 호출되어야 선택지가 뜹니다!**
+            
         }
         else
         {
@@ -436,20 +436,28 @@ public class DialogueManager : MonoBehaviour
 
         isTyping = false;
 
-        if (hasChoice && currentDialogue != null)
+        if (hasChoice && currentDialogue != null && !choicePanel.activeSelf)
         {
-            yield return new WaitForSeconds(0.1f);  // 선택지 뜨기 전 살짝 대기
+            yield return new WaitForSeconds(0.1f);
             waitingForChoiceDisplay = false;
 
             ShowChoices(currentDialogue.choices);
-
-            // 선택지는 자동 진행 안 함
-            canInput = true;
+            // 선택지 뜰 땐 canInput = false 상태 유지
         }
         else
         {
             canInput = true;
         }
+
+        isTyping = false;
+
+        // 스페이스 눌러서 타이핑만 스킵한 경우엔 이후 입력을 기다리지 않음
+        if (inputQueuedBeforeChoice)
+        {
+            inputQueuedBeforeChoice = false;
+            yield break;
+        }
+
     }
 
 
@@ -488,32 +496,51 @@ public class DialogueManager : MonoBehaviour
     {
         if (isPaused) return;
 
-        // 선택지 패널이 열려 있으면 입력 무시
-        if (choicePanel.activeInHierarchy)
-            return;
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (waitingForChoiceDisplay)
-            {
-                // 선택지 나오기 전 입력이면 → 대사만 다 보여주고 멈춘다
-                inputQueuedBeforeChoice = true;
-                Debug.Log("선택지 뜨기 전 입력 감지 → 대사만 출력하고 멈춤");
-                return;  // 추가: 대사만 보여주고 다음 대사로 안 넘김
-            }
-
+            // 타이핑 중이면 무조건 스킵
             if (isTyping)
             {
                 if (!isProcessingInput)
                     StartCoroutine(ProcessInputWithCooldown());
+                return;
             }
-            else if (canInput)
+
+            // 타이핑 완료 후, 선택지가 나오기 전 대기 상태일 때
+            if (waitingForChoiceDisplay)
+            {
+                // 대사 강제 출력
+                if (typingCoroutine != null)
+                    StopCoroutine(typingCoroutine);
+
+                txt_Dialogue.text = dialogueDictByIDAndIndex[(currentID, currentIndex)].dialogue;
+                isTyping = false;
+                canInput = false; // 여기서는 바로 입력 가능으로 하지 말고 선택지 보여주는 쪽으로 넘겨야 함
+
+                waitingForChoiceDisplay = false;  // 대사 전체 출력했으니 대기 해제
+
+                ShowChoices(dialogueDictByIDAndIndex[(currentID, currentIndex)].choices);
+                return;
+            }
+
+
+            // 선택지 패널이 열려 있으면 입력 무시
+            if (choicePanel.activeInHierarchy)
+            {
+                // 선택지가 완전히 뜬 상태면 여기서 입력 무시
+                return;
+            }
+
+            // 타이핑 완료, 입력 가능 상태면 다음 대사 진행
+            if (canInput)
             {
                 if (!isProcessingInput)
                     StartCoroutine(ProcessInputWithCooldown());
             }
         }
     }
+
+
 
 
 
@@ -542,12 +569,24 @@ public class DialogueManager : MonoBehaviour
     public void SkipDialogue()
     {
         if (isPaused) return;
-        if (choicePanel.activeInHierarchy) return; // 선택지 열려있으면 무시
+
+        // 선택지 패널이 열려 있어도, 선택지 뜨기 전 대기 상태면 대사 강제 출력 허용
+        if (choicePanel.activeInHierarchy && !waitingForChoiceDisplay) return;
+
         if (waitingForChoiceDisplay)
         {
-            inputQueuedBeforeChoice = true;
+            Debug.Log("SkipDialogue 중이지만 waitingForChoiceDisplay가 true → 텍스트는 강제 출력");
+
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
+
+            txt_Dialogue.text = dialogueDictByIDAndIndex[(currentID, currentIndex)].dialogue;
+            isTyping = false;
+            canInput = true;
+
             return;
         }
+
 
         if (isTyping)
         {
