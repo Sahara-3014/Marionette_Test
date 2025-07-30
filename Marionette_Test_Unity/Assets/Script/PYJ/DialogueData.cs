@@ -151,37 +151,58 @@ public class DialogueData
         for (int i = 0; i < 3; i++)
         {
             string choiceText = GetText(node, 17 + i * 2);
-            string nextID = GetText(node, 18 + i * 2);
+            string nextIDStr = GetText(node, 18 + i * 2);
+
+            Debug.Log($"선택지[{i}] 텍스트: '{choiceText}', nextID 문자열: '{nextIDStr}'");
 
             if (!string.IsNullOrEmpty(choiceText))
             {
-                int parsedID = 0;
-                int parsedIndex = 0;
+                int parsedID = -1;
+                int parsedIndex = -1;
 
-                // "1001-1" 같은 포맷을 지원하는 경우
-                if (nextIDText.Contains("-"))
+                if (!string.IsNullOrEmpty(nextIDStr))
                 {
-                    var parts = nextIDText.Split('-');
-                    if (parts.Length == 2)
+                    if (nextIDStr.Contains("-"))
                     {
-                        int.TryParse(parts[0], out parsedID);
-                        int.TryParse(parts[1], out parsedIndex);
+                        var parts = nextIDStr.Split('-');
+                        if (parts.Length == 2)
+                        {
+                            bool idOk = int.TryParse(parts[0], out parsedID);
+                            bool idxOk = int.TryParse(parts[1], out parsedIndex);
+
+                            if (!idOk) parsedID = -1;
+                            if (!idxOk) parsedIndex = -1;
+                        }
                     }
+                    else
+                    {
+                        bool idOk = int.TryParse(nextIDStr, out parsedID);
+                        if (!idOk) parsedID = -1;
+
+                        parsedIndex = -1; // 명시적으로 -1 처리
+                    }
+                }
+
+                Debug.Log($"선택지[{i}] 파싱 결과: nextID={parsedID}, nextIndex={parsedIndex}");
+
+                // ✔️ 여기를 바꿔야 함! parsedID != -1인 경우만 추가
+                if (parsedID != -1)
+                {
+                    choiceList.Add(new DialogueChoice
+                    {
+                        choiceText = choiceText,
+                        nextID = parsedID,
+                        nextIndex = parsedIndex
+                    });
                 }
                 else
                 {
-                    // 숫자만 있을 경우
-                    int.TryParse(nextIDText, out parsedID);
+                    Debug.LogWarning($"선택지[{i}]의 nextID 값이 잘못되었습니다: '{nextIDStr}' → 추가 안됨");
                 }
-
-                choiceList.Add(new DialogueChoice
-                {
-                    choiceText = choiceText,
-                    nextID = parsedID,
-                    nextIndex = parsedIndex
-                });
             }
         }
+
+
 
 
         choices = choiceList.ToArray();

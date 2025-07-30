@@ -657,11 +657,19 @@ public class DialogueManager : MonoBehaviour
     {
         choicePanel.SetActive(false);
 
-        if (nextID <= 0)  // -1 또는 0 등 ID가 없는 경우
+        if (nextID > 0)
         {
+            currentID = nextID;
+            currentIndex = nextIndex > 0 ? nextIndex : 1;  // nextIndex가 유효하면 사용
+            nextDialogueID = -1;  // 선택지 후 자동 다음 진행 없음
+            Debug.Log($"선택지 선택: currentID={currentID}, currentIndex={currentIndex}");
+        }
+        else
+        {
+            // nextID가 0 이하일 때 기존 로직
             if (nextIndex == -1)
             {
-                currentIndex = currentIndex + 1;
+                currentIndex += 1;
             }
             else if (nextIndex > 0)
             {
@@ -669,17 +677,16 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                currentIndex = currentIndex + 1;  // 혹시 모를 예외 처리
+                currentIndex += 1;
             }
-            // ID 유지
             nextDialogueID = currentID;
 
-            Debug.Log($"nextID가 0 이하이므로 currentID 유지, currentIndex 증가: {currentIndex}");
+            Debug.Log($"nextID가 0 이하, currentID 유지, currentIndex 증가: {currentIndex}");
         }
-
 
         NextDialogue();
     }
+
 
 
 
@@ -707,6 +714,8 @@ public class DialogueManager : MonoBehaviour
             int localNextID = choices[i].nextID;
             int localNextIndex = choices[i].nextIndex;
 
+            Debug.Log($"선택지[{i}] 텍스트='{choices[i].choiceText}', nextID={localNextID}, nextIndex={localNextIndex}");
+
             choiceButtons[i].gameObject.SetActive(true);
             choiceButtonTexts[i].text = choices[i].choiceText;
 
@@ -714,8 +723,12 @@ public class DialogueManager : MonoBehaviour
 
             int capturedNextID = localNextID;
             int capturedNextIndex = localNextIndex;
-            choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(capturedNextID, capturedNextIndex));
+            choiceButtons[i].onClick.AddListener(() => {
+                Debug.Log($"선택지 클릭: nextID={capturedNextID}, nextIndex={capturedNextIndex}");
+                OnChoiceSelected(capturedNextID, capturedNextIndex);
+            });
         }
+
 
 
 
