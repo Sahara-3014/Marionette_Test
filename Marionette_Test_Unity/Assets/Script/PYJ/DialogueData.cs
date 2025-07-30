@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using static DialogueManager;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 
 [System.Serializable]
@@ -22,8 +23,10 @@ public class CharacterStatus
 public class DialogueChoice
 {
     public string choiceText;
-    public string nextIndex; // 선택 후 이동할 대사 배열 내 인덱스
+    public int nextID;
+    public int nextIndex;
 }
+
 
 
 
@@ -31,10 +34,14 @@ public class DialogueChoice
 [System.Serializable]
 public class DialogueData
 {
+
+    public int ID;
     public int effectIndex;
 
     public string choiceText;
-    public string nextIndex;
+    // public string nextIndex;   // 이제 안 쓰므로 제거
+    public int nextID;  // string 대신 int로 변경 권장
+
     public int index;
 
     public DialogueChoice[] choices;
@@ -101,8 +108,18 @@ public class DialogueData
     // ========== 생성자: string[] 로부터 ========== //
     public DialogueData(JSONNode node)
     {
+        // string[] 생성자 안에 추가 (row[0]에서 읽기)
+        ID = int.TryParse(GetText(node, 0), out int idVal) ? idVal : 0;
         index = int.TryParse(GetText(node, 1), out int idx) ? idx : 0;          // INDEX
-        nextIndex = GetText(node, 2);                                          // NEXTINDEX
+                                                                                // 기존
+                                                                                // nextIndex = GetText(node, 2);
+
+        // 수정 후
+        string nextIDText = GetText(node, 2);
+        if (!int.TryParse(nextIDText, out int parsedNextID))
+            parsedNextID = -1;
+        nextID = parsedNextID;
+        // NEXTINDEX
         speaker = GetText(node, 3);                                            // SPEAKER
 
         // 캐릭터1 관련
@@ -134,12 +151,39 @@ public class DialogueData
         for (int i = 0; i < 3; i++)
         {
             string choiceText = GetText(node, 17 + i * 2);
-            string choiceNext = GetText(node, 18 + i * 2);
+            string nextID = GetText(node, 18 + i * 2);
+
             if (!string.IsNullOrEmpty(choiceText))
             {
-                choiceList.Add(new DialogueChoice { choiceText = choiceText, nextIndex = choiceNext });
+                int parsedID = 0;
+                int parsedIndex = 0;
+
+                // "1001-1" 같은 포맷을 지원하는 경우
+                if (nextIDText.Contains("-"))
+                {
+                    var parts = nextIDText.Split('-');
+                    if (parts.Length == 2)
+                    {
+                        int.TryParse(parts[0], out parsedID);
+                        int.TryParse(parts[1], out parsedIndex);
+                    }
+                }
+                else
+                {
+                    // 숫자만 있을 경우
+                    int.TryParse(nextIDText, out parsedID);
+                }
+
+                choiceList.Add(new DialogueChoice
+                {
+                    choiceText = choiceText,
+                    nextID = parsedID,
+                    nextIndex = parsedIndex
+                });
             }
         }
+
+
         choices = choiceList.ToArray();
 
         // 효과음 및 BGM
@@ -150,7 +194,6 @@ public class DialogueData
         // 컷씬
         cutscene = GetText(node, 26);
         string cutsceneText = GetText(node, 26);
-        Debug.Log("Cutscene text at column 26: " + cutsceneText);
         cutscene = cutsceneText;
 
 
@@ -234,7 +277,7 @@ public class DialogueData
     public DialogueData(string[] row)
     {
         index = (row.Length > 0 && int.TryParse(row[0], out int idx)) ? idx : 0;
-        nextIndex = (row.Length > 1) ? row[1].Trim() : "";
+        //nextId = (row.Length > 1) ? row[1].Trim() : "";
         // CSV 각 칼럼을 인덱스로 직접 파싱
         // 예: background = row.Length > 4 ? row[4].Trim() : "";
         background = (row.Length > 4) ? row[4].Trim() : "";

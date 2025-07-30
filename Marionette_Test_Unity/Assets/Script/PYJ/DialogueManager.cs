@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
+    private Dictionary<(int ID, int index), DialogueData> dialogueDictByIDAndIndex;
 
 
     [System.Serializable]
@@ -66,12 +67,15 @@ public class DialogueManager : MonoBehaviour
 
 
     private Dictionary<int, DialogueData> dialogueDict;
+    private int currentID = 1000;
+    private int nextDialogueID = -1;  // 다음 대화 ID 저장용
     private int currentIndex = 1;    // 현재 대사 인덱스
-    private int nextDialogueIndex = -1;  // 다음 대사 인덱스 저장용
     private bool canInput = false;
     private int lastEffectIndex = -1;
     private bool inputQueuedBeforeChoice = false; // 선택지 전 입력 저장용
     private bool waitingForChoiceDisplay = false; // 선택지 뜨기 전 상태
+
+
 
     //
     // 캐릭터 이름과 상태 매핑
@@ -100,18 +104,28 @@ public class DialogueManager : MonoBehaviour
     {
         dialogue = newDialogue;
 
-        dialogueDict = new Dictionary<int, DialogueData>();
+        dialogueDictByIDAndIndex = new Dictionary<(int, int), DialogueData>();
+        dialogueDict = new Dictionary<int, DialogueData>(); // 추가
+
         foreach (var d in dialogue)
         {
-            dialogueDict[d.index] = d;
+            dialogueDictByIDAndIndex[(d.ID, d.index)] = d;
+
+            if (!dialogueDict.ContainsKey(d.index))
+                dialogueDict[d.index] = d;
+            else
+                Debug.LogWarning($"중복된 대사 인덱스 발견: {d.index}");
         }
 
-        if (!isDialogue) // 대화 중이 아니면 초기화
+        Debug.Log($"SetDialogue 완료 - 총 대사 개수: {dialogueDictByIDAndIndex.Count}");
+
+        if (!isDialogue)
         {
             currentIndex = 1;
             isDialogue = true;
         }
     }
+
 
 
     private bool isDialogue = false;
@@ -127,18 +141,26 @@ public class DialogueManager : MonoBehaviour
     //
     //대사 보여주는 함수
     //
-    public void ShowDialogue()
+    public void ShowDialogue(int id, int index)
     {
-        if (!dialogueDict.ContainsKey(1))
-        {
-            Debug.LogError("초기 인덱스 1번 대사가 존재하지 않습니다!");
-            return;
-        }
+        currentID = id;
+        currentIndex = index;
 
-        OnOff(true);
-        currentIndex = 1;
-        NextDialogue();
+        if (dialogueDictByIDAndIndex.TryGetValue((currentID, currentIndex), out var dialogueData))
+        {
+            // 대사 정보를 로딩하거나 필요한 경우 외부에서 NextDialogue 호출
+            Debug.Log($"대사 로드 완료: ID={id}, Index={index}");
+        }
+        else
+        {
+            Debug.LogWarning($"대사 인덱스 {index} 없음. 대사키 목록: [{string.Join(",", dialogueDictByIDAndIndex.Keys)}]");
+        }
     }
+
+
+
+
+
 
 
     //
@@ -198,27 +220,63 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-    private void NextDialogue()
+    public void NextDialogue()
     {
-        // 이전 이펙트 정지
+        Debug.Log($"NextDialogue 호출 - currentID: {currentID}, currentIndex: {currentIndex}");
+
+        OnOff(true);
+
+        if (dialogueDictByIDAndIndex == null)
+        {
+            Debug.LogError("dialogueDictByIDAndIndex가 초기화되지 않았습니다!");
+            OnOff(false);
+            return;
+        }
+
+        if (!dialogueDictByIDAndIndex.TryGetValue((currentID, currentIndex), out var currentDialogue) || currentDialogue == null)
+        {
+            Debug.LogWarning($"대사 없음: ID={currentID}, index={currentIndex}");
+            Debug.LogWarning($"현재 딕셔너리 키 목록: [{string.Join(", ", dialogueDictByIDAndIndex.Keys)}]");
+            OnOff(false);
+            return;
+        }
+        Debug.Log($"NextDialogue 호출: currentID={currentID}, currentIndex={currentIndex}, nextDialogueID={nextDialogueID}");
+
+        if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
+        {
+            Debug.Log($"선택지 있음: {currentDialogue.choices.Length}개");
+        }
+        else
+        {
+            Debug.Log($"선택지 없음, nextID = {currentDialogue.nextID}");
+        }
+
+
+
+
+
         if (lastEffectIndex >= 0)
         {
             EffectManager.Instance.StopEffect(lastEffectIndex, true);
         }
 
         // 현재 대사의 이펙트 재생
-        if (dialogueDict.ContainsKey(currentIndex))
+        if (dialogueDictByIDAndIndex.TryGetValue((currentID, currentIndex), out var dd))
         {
-            int currentEffectIdx = dialogueDict[currentIndex].screenEffectIndex;
+            int currentEffectIdx = dd.screenEffectIndex;
             if (currentEffectIdx >= 0)
             {
                 EffectManager.Instance.PlayEffect(currentEffectIdx);
-                lastEffectIndex = currentEffectIdx; // 다음번 정지를 위해 기억
+                lastEffectIndex = currentEffectIdx;
             }
             else
             {
                 lastEffectIndex = -1;
             }
+        }
+        else
+        {
+            lastEffectIndex = -1;
         }
 
 
@@ -239,8 +297,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        var currentDialogue = dialogueDict[currentIndex];
-        Debug.Log($"현재 대사 index: {currentIndex}, 다음 index: {currentDialogue.nextIndex}");
+        Debug.Log($"현재 대사 index: {currentIndex}, 다음 index: {currentDialogue.nextID}");
 
         // 캐릭터 등장 위치 추적
         bool[] posUsed = new bool[sprite_Heads.Length];
@@ -313,75 +370,44 @@ public class DialogueManager : MonoBehaviour
         typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue, currentIndex));
 
 
-        string nextIndexStr = currentDialogue.nextIndex?.Trim() ?? "";
-        int nextIndexNum;
-        bool isNumeric = int.TryParse(nextIndexStr, out nextIndexNum);
+        int nextIDNum = currentDialogue.nextID;  // 이미 int라면 바로 사용 가능
 
-        if (currentDialogue.choices == null || currentDialogue.choices.Length == 0)
+
+        // 선택지가 있으면 nextDialogueID는 -1 (직접 선택지에서 분기 처리)
+        if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
         {
-            if (isNumeric)
-            {
-                if (nextIndexNum == 0)
-                {
-                    OnOff(false);
-                    return;
-                }
-                if (!dialogueDict.ContainsKey(nextIndexNum))
-                {
-                    Debug.LogWarning($"대사 인덱스 {nextIndexNum} 없음.");
-                    OnOff(false);
-                    return;
-                }
-                if (nextIndexNum == currentIndex)
-                {
-                    Debug.LogWarning("다음 대사 인덱스가 현재 대사 인덱스와 같습니다! 자동으로 다음 인덱스 (currentIndex+1)로 진행합니다.");
-                    nextIndexNum = currentIndex + 1;
-
-                    if (!dialogueDict.ContainsKey(nextIndexNum))
-                    {
-                        Debug.LogWarning($"자동 진행할 다음 대사 인덱스 {nextIndexNum}가 존재하지 않습니다. 대사를 종료합니다.");
-                        nextDialogueIndex = nextIndexNum; // 할당 먼저
-                        OnOff(false);
-                        return;
-                    }
-                }
-                nextDialogueIndex = nextIndexNum;
-
-                isDialogue = true;
-            }
-
-
+            isDialogue = true;
+            nextDialogueID = -1;  // 선택지가 있으니 자동 진행용 ID는 -1로
+            ShowChoices(currentDialogue.choices); // **이 부분이 꼭 호출되어야 선택지가 뜹니다!**
         }
         else
         {
             isDialogue = false;
+
+            int? nextIDNullable = currentDialogue.nextID;
+
+            if (currentDialogue.nextID > 0)
+            {
+                nextDialogueID = currentDialogue.nextID;
+
+                if (nextDialogueID == currentID)
+                {
+                    Debug.LogWarning("nextDialogueID가 currentID와 같음. 다음 대화 ID를 변경하세요.");
+                    nextDialogueID = -1;
+                }
+            }
+            else
+            {
+                nextDialogueID = -1;
+            }
         }
 
-        if (nextDialogueIndex == currentIndex)
-        {
-            Debug.LogWarning("nextDialogueIndex가 currentIndex와 같음. 다음 대사 인덱스를 변경하세요.");
-            // 또는 자동으로 +1 하거나 처리 필요
-        }
 
 
 
 
     }
 
-
-    private void StartDialogueSheet(string sheetName)
-    {
-        Debug.Log($"StartDialogueSheet called with sheetName: {sheetName}");
-
-        if (sheetLoader == null)
-        {
-            Debug.LogError("GoogleSheetLoader가 할당되어 있지 않습니다!");
-            return;
-        }
-
-        // GoogleSheetLoader에게 해당 시트명으로 대사 로드 요청
-        sheetLoader.LoadDialoguesFromSheet(sheetName);
-    }
 
 
 
@@ -392,6 +418,7 @@ public class DialogueManager : MonoBehaviour
     //
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
+        Debug.Log($"TypeText 호출: 대사 인덱스={dialogueIndex}, 텍스트={sentence}");
         isTyping = true;
         canInput = false;
         txt_Dialogue.text = "";
@@ -520,18 +547,9 @@ public class DialogueManager : MonoBehaviour
     public void SkipDialogue()
     {
         if (isPaused) return;
-
-        // 선택지 활성화 되어 있으면 건너뛰기 무시
-        if (choicePanel.activeInHierarchy)
-        {
-            Debug.Log("선택지 열려있음, 건너뛰기 무시");
-            return;
-        }
-
-        // 🔐 선택지 뜨기 전 상태일 때: 다음 대사로 안 넘어가고 멈춘다!
+        if (choicePanel.activeInHierarchy) return; // 선택지 열려있으면 무시
         if (waitingForChoiceDisplay)
         {
-            Debug.Log("선택지 뜨기 전 입력 감지 → 대사 다 보여주고 멈춤");
             inputQueuedBeforeChoice = true;
             return;
         }
@@ -540,37 +558,36 @@ public class DialogueManager : MonoBehaviour
         {
             if (typingCoroutine != null)
                 StopCoroutine(typingCoroutine);
-
-            txt_Dialogue.text = dialogueDict[currentIndex].dialogue;
-
+            txt_Dialogue.text = dialogueDictByIDAndIndex[(currentID, currentIndex)].dialogue;
             isTyping = false;
             canInput = true;
-
             return;
         }
 
         if (canInput)
         {
-            Debug.Log($"SkipDialogue: nextDialogueIndex={nextDialogueIndex}, currentIndex={currentIndex}");
             canInput = false;
 
-            if (nextDialogueIndex > 0 && nextDialogueIndex != currentIndex)
+            if (nextDialogueID > 0)
             {
-                currentIndex = nextDialogueIndex;
+                // 선택지 분기 등으로 다음 ID가 지정된 경우
+                currentID = nextDialogueID;
+                currentIndex = 1;
+                nextDialogueID = -1;
                 NextDialogue();
             }
             else
             {
-                int tryNext = currentIndex + 1;
-                if (dialogueDict.ContainsKey(tryNext))
+                // 다음 인덱스 자동 진행
+                int tryNextIndex = currentIndex + 1;
+                if (dialogueDictByIDAndIndex.ContainsKey((currentID, tryNextIndex)))
                 {
-                    Debug.LogWarning("nextDialogueIndex가 현재와 같거나 없어서 자동으로 다음 인덱스로 진행합니다.");
-                    currentIndex = tryNext;
+                    currentIndex = tryNextIndex;
                     NextDialogue();
                 }
                 else
                 {
-                    Debug.Log("더 이상 진행할 대사가 없어 대사 종료");
+                    // 더 이상 대사 없음
                     OnOff(false);
                 }
             }
@@ -636,17 +653,38 @@ public class DialogueManager : MonoBehaviour
     //
     // 선택지 선택 시 호출되는 함수
     //
-    public void OnChoiceSelected(int nextIndex)
+    public void OnChoiceSelected(int nextID, int nextIndex)
     {
         choicePanel.SetActive(false);
-        currentIndex = nextIndex;
-        isDialogue = true;
 
-        canInput = false;   // 여기 추가
-        isTyping = false;   // 여기 추가
+        if (nextID <= 0)  // -1 또는 0 등 ID가 없는 경우
+        {
+            if (nextIndex == -1)
+            {
+                currentIndex = currentIndex + 1;
+            }
+            else if (nextIndex > 0)
+            {
+                currentIndex = nextIndex;
+            }
+            else
+            {
+                currentIndex = currentIndex + 1;  // 혹시 모를 예외 처리
+            }
+            // ID 유지
+            nextDialogueID = currentID;
+
+            Debug.Log($"nextID가 0 이하이므로 currentID 유지, currentIndex 증가: {currentIndex}");
+        }
+
 
         NextDialogue();
     }
+
+
+
+
+
 
 
 
@@ -666,31 +704,26 @@ public class DialogueManager : MonoBehaviour
 
         for (int i = 0; i < countChoices; i++)
         {
+            int localNextID = choices[i].nextID;
+            int localNextIndex = choices[i].nextIndex;
+
             choiceButtons[i].gameObject.SetActive(true);
             choiceButtonTexts[i].text = choices[i].choiceText;
 
-            // nextIndex string → int 변환
-            string nextIndexStr = choices[i].nextIndex;
-            int nextIndex;
-            if (!int.TryParse(nextIndexStr, out nextIndex))
-            {
-                Debug.LogWarning($"nextIndex '{nextIndexStr}'를 int로 변환하지 못했습니다. 기본값 -1로 설정합니다.");
-                nextIndex = -1;
-            }
-
             choiceButtons[i].onClick.RemoveAllListeners();
-            choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(nextIndex));
+
+            int capturedNextID = localNextID;
+            int capturedNextIndex = localNextIndex;
+            choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(capturedNextID, capturedNextIndex));
         }
+
+
 
         for (int i = countChoices; i < choiceButtons.Length; i++)
         {
             choiceButtons[i].gameObject.SetActive(false);
         }
     }
-
-
-
-
 
 
 }
