@@ -307,29 +307,37 @@ public struct LocalPlayerData
 [Serializable]
 public class CharAttributeData
 {
-    /// <summary> 신뢰도 MAX </summary>
-    public float maxTrust;
     /// <summary> 신뢰도 </summary>
-    public float nowTrust;
-    /// <summary> 의심도 MAX </summary>
-    public float maxSuspicion;
+    public Dictionary<string, int> trust = new();
     /// <summary> 의심도 </summary>
-    public float nowSuspicion;
-    /// <summary> 정신력 MAX </summary>
-    public float maxMental_Strength;
+    public Dictionary<string, GaugeFloat> suspicion = new();
     /// <summary> 정신력 </summary>
-    public float nowMental_Strength;
+    public GaugeFloat mental_Strength = new();
+    /// <summary> 호감도 </summary>
+    public Dictionary<string, int> likeability = new();
+}
 
-    public CharAttributeData(float maxTrust, float nowTrust,
-        float maxSuspicion, float nowSuspicion,
-        float maxMental_Strength, float nowMental_Strength)
+public struct GaugeFloat
+{
+    public float value;
+    public float maxValue;
+
+    public GaugeFloat(float value, float maxValue)
     {
-        this.maxTrust = maxTrust;
-        this.nowTrust = nowTrust;
-        this.maxSuspicion = maxSuspicion;
-        this.nowSuspicion = nowSuspicion;
-        this.maxMental_Strength = maxMental_Strength;
-        this.nowMental_Strength = nowMental_Strength;
+        this.value = value;
+        this.maxValue = maxValue;
+    }
+}
+
+public struct GaugeInt
+{
+    public int value;
+    public int maxValue;
+
+    public GaugeInt(int value, int maxValue)
+    {
+        this.value = value;
+        this.maxValue = maxValue;
     }
 }
 
