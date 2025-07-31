@@ -16,8 +16,9 @@ public enum EffectType
     CameraShake,
     FadeToBlack,
     FadeFromBlack,
-    FadeOutTOFadeIn
-
+    FadeOutTOFadeIn,
+    ScreenNoiseGlitch,
+    Blood
 }
 
 public enum PostProcessingEffectType
@@ -26,7 +27,8 @@ public enum PostProcessingEffectType
     FireColorGrade,
     MentalBreakdown,
     Flashback,
-    RedFlash
+    RedFlash,
+    Vignette
 }
 
 [System.Serializable]
@@ -106,18 +108,15 @@ public class EffectManager : MonoBehaviour
     #region 공개 함수
     public void PlayDirectionSet(DirectionSetSO set)
     {
-        if (set == null)
-        {
-            Debug.LogWarning("[EffectManager] 비어있는 연출 세트를 재생할 수 없습니다.");
-            return;
-        }
-        foreach (var pType in set.particlesToPlay) PlayEffect(pType);
+        if (set == null) return;
+        foreach (var pType in set.particlesToPlay) PlayEffect(pType, set); 
         foreach (var ppType in set.postProcessingsToEnable) EnablePP(ppType, set.fadeDuration);
     }
+
     public void StopDirectionSet(DirectionSetSO set, bool stopParticlesImmediately = false)
     {
         if (set == null) return;
-        foreach (var pType in set.particlesToPlay) StopEffect(pType, stopParticlesImmediately);
+        foreach (var pType in set.particlesToPlay) StopEffect(pType, set); 
         foreach (var ppType in set.postProcessingsToEnable) DisablePP(ppType, set.fadeDuration);
     }
     public Coroutine PlaySequence(EffectSequenceSO so)
@@ -278,11 +277,19 @@ public class EffectManager : MonoBehaviour
         foreach (var v in volumeList) { if (v.effectType != PostProcessingEffectType.None) volumePrefabs[v.effectType] = v.prefab; }
     }
 
-    private void PlayEffect(EffectType effectType)
+    private void PlayEffect(EffectType effectType, DirectionSetSO ownerSet)
     {
         if (effectPrefabs.TryGetValue(effectType, out GameObject prefab))
         {
             GameObject instance = Instantiate(prefab);
+
+            if (ownerSet.useFadeIn)
+            {
+                if (instance.TryGetComponent<IFadeableEffect>(out var fadeable))
+                {
+                    fadeable.StartFadeIn(ownerSet.fadeDuration);
+                }
+            }
 
             if (!activeEffectInstances.ContainsKey(effectType))
             {
@@ -292,42 +299,36 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    private void StopEffect(EffectType effectType, bool stopImmediately)
+    private void StopEffect(EffectType effectType, DirectionSetSO ownerSet)
     {
-        if (activeEffectInstances.TryGetValue(effectType, out List<GameObject> instances))
+        if (!activeEffectInstances.ContainsKey(effectType))
+            return;
+
+        List<GameObject> instances = activeEffectInstances[effectType];
+        List<GameObject> instancesCopy = new List<GameObject>(instances);
+
+        foreach (GameObject instance in instancesCopy)
         {
-            foreach (var instance in new List<GameObject>(instances))
+            if (instance == null) continue;
+
+            if (ownerSet.useFadeOut && instance.TryGetComponent<IFadeableEffect>(out var fadeable))
             {
-                if (instance == null) continue;
-
-                if (stopImmediately)
-                {
-                    Destroy(instance);
-                }
-                else
-                {
-                    ParticleSystem[] pss = instance.GetComponentsInChildren<ParticleSystem>();
-                    if (pss.Length > 0)
-                    {
-                        foreach (var ps in pss) ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-                    }
-
-                    FadePlayer fadePlayer = instance.GetComponent<FadePlayer>();
-                    if (fadePlayer != null)
-                    {
-                        // fadePlayer.PlayFade(fadeOutDuration, transparentColor);
-                    }
-
-                    EffectInfo info = instance.GetComponent<EffectInfo>();
-                    float destroyDelay = (info != null) ? info.MaxDuration : 3.0f;
-
-                    Destroy(instance, destroyDelay);
-                }
+                fadeable.StartFadeOut(ownerSet.fadeDuration);
             }
-
-            instances.Clear();
+            else
+            {
+                ParticleSystem[] pss = instance.GetComponentsInChildren<ParticleSystem>();
+                if (pss.Length > 0)
+                {
+                    foreach (var ps in pss) ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                }
+                float destroyDelay = instance.GetComponent<EffectInfo>()?.MaxDuration ?? 3.0f;
+                Destroy(instance, destroyDelay);
+            }
         }
+        instances.Clear();
     }
+
 
     private void EnablePP(PostProcessingEffectType effectType, float duration)
     {
@@ -384,7 +385,5 @@ public class EffectManager : MonoBehaviour
         if (volume != null) volume.weight = targetWeight;
         if (destroyOnEnd && volume != null) Destroy(volume.gameObject);
     }
-
-
     #endregion
 }
