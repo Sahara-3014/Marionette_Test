@@ -17,25 +17,35 @@ public class Item : MonoBehaviour
     private string ItemDescription;
 
     private InventoryManager inventoryManager;
+    private bool interactionRange;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         inventoryManager = GameObject.Find("UI").GetComponent<InventoryManager>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (Input.GetButtonDown("Interaction") && collision.gameObject.tag == "Interaction")
+        if (Input.GetButtonDown("Interaction") && interactionRange)
         {
             inventoryManager.AddItem(itemName, quantity, sprite, ItemDescription);
             Destroy(gameObject);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Interaction")
+        {
+            interactionRange = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Interaction")
+        {
+            interactionRange = false;
+        }
+    }
+
 }

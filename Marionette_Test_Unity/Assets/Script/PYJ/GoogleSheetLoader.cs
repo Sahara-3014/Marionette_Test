@@ -6,6 +6,8 @@ using SimpleJSON;
 
 public class GoogleSheetLoader : MonoBehaviour
 {
+    public DialogueManager dialogueManager;
+
     public string apiKey = "AIzaSyCYF6AGzi8Fe0HhVew-t0LOngxs0IOZIuc";
     public string spreadsheetId = "1N2Z-yXGz8rUvUBwLfkeB9GYIOWhMrfs6lWok9lcNIjk";
     public List<string> fixedSheetSequence = new List<string> { "INTRO", "START", "CHAPTER1" };
@@ -41,6 +43,7 @@ public class GoogleSheetLoader : MonoBehaviour
             else
             {
                 Debug.Log("대화 종료 또는 분기 종료: 다음 시트 없음");
+                // 필요시 대화 종료 처리 추가
             }
         }
     }
@@ -53,7 +56,7 @@ public class GoogleSheetLoader : MonoBehaviour
 
     IEnumerator LoadGoogleSheet(string sheetName)
     {
-        string range = $"{sheetName}!A1:Z100";
+        string range = $"{sheetName}!A1:AI100";
         string url = $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
 
         UnityWebRequest www = UnityWebRequest.Get(url);
@@ -65,45 +68,37 @@ public class GoogleSheetLoader : MonoBehaviour
             yield break;
         }
 
+        var json = JSON.Parse(www.downloadHandler.text);
+        var values = json["values"];
+
+        if (values == null || values.Count < 3)
+        {
+            Debug.LogWarning($"시트 '{sheetName}' 데이터가 충분하지 않습니다.");
+            yield break;
+        }
+
         List<DialogueData> dialogueList = new List<DialogueData>();
 
-
-        if (www.downloadHandler.text.StartsWith("{") == false)
+        for (int i = 2; i < values.Count; i++)
         {
-            string csv = www.downloadHandler.text;
-            string[] column = csv.Split('\n');
-            Debug.Log(nameof(column) + $" - CSV 길이: {column.Length}");
-            for (int i = 0; i < column.Length; i++)
-            {
-                string[] row = column[i].Split(',');
-                Debug.Log(nameof(row) + $"[{i}] 길이: {row.Length} - 내용: {column[i]}");
+            var row = values[i];
+            DialogueData d = new DialogueData(row);
 
-                DialogueData d = new DialogueData(row);  // ← row를 직접 처리하는 생성자가 정의되어 있어야 함
-                dialogueList.Add(d);
-            }
+            Debug.Log($"로드된 대사: ID={d.ID}, index={d.index}, 대사='{d.dialogue}'");
+
+            dialogueList.Add(d);
         }
-        else
-        {
-            var json = JSON.Parse(www.downloadHandler.text);
-            var values = json["values"];
-
-            for (int i = 2; i < values.Count; i++) // 0:헤더, 1:설명 등 스킵
-            {
-                var row = values[i];
-
-                DialogueData d = new DialogueData(row);  // ← row를 직접 처리하는 생성자가 정의되어 있어야 함
-                dialogueList.Add(d);
-            }
-        }
-
-
 
         dialogueSystem.SetDialogue(dialogueList.ToArray());
-        dialogueSystem.ShowDialogue();
 
+        // ShowDialogue 및 NextDialogue 호출을 코루틴 끝에 넣거나 약간 지연해서 호출
+        yield return null; // 한 프레임 대기
+
+        dialogueSystem.ShowDialogue(1000, 1);
+
+        // NextDialogue는 ShowDialogue 내부 또는 UI가 준비된 후 호출하는 게 좋음
+        dialogueSystem.NextDialogue();
     }
-
-
     public AudioClip LoadAudioClipByName(string clipName)
     {
         if (string.IsNullOrEmpty(clipName)) return null;

@@ -60,6 +60,8 @@ MonoBehaviour:
     prefab: {fileID: 5708344413116662463, guid: 60bf016a5ae1eb14e8109988fda72ef7, type: 3}
   - effectType: 7
     prefab: {fileID: 5708344413116662463, guid: 849484dea7da8e74c9e6d8962d218388, type: 3}
+  - effectType: 8
+    prefab: {fileID: 8106076804652936775, guid: 8ac0af3a15fc7dd4f9365729518968b2, type: 3}
   volumeList:
   - effectType: 1
     prefab: {fileID: 8302285329884898372, guid: c789c00993cb2df46bd828423bd26f2d, type: 3}
@@ -67,12 +69,15 @@ MonoBehaviour:
     prefab: {fileID: 4415787781934425053, guid: e700b37b09f5b504183efe86be4000a6, type: 3}
   - effectType: 4
     prefab: {fileID: 6082959601557219063, guid: 66dc6c23e7054f34a8892d91613afc36, type: 3}
+  - effectType: 5
+    prefab: {fileID: 6082959601557219063, guid: 545471ed53fb43f4d9cbc131c634674e, type: 3}
   directionSetList:
   - {fileID: 11400000, guid: 1cafa395a355a16499c8c3a041671e57, type: 2}
   - {fileID: 11400000, guid: 90b6388541ecb514daa92b6cf1a99804, type: 2}
   - {fileID: 11400000, guid: 8a95e51af77b6db42a9426b7419ef161, type: 2}
   - {fileID: 11400000, guid: 1b6875e8afe683f44a76ea1251f794da, type: 2}
   - {fileID: 11400000, guid: 21d4be923f1023843abc35dac0ff5371, type: 2}
+  - {fileID: 11400000, guid: 0e98fe55f2a6b9d4a82afe1314404cc4, type: 2}
   sequenceList:
   - {fileID: 11400000, guid: 73d1562268778704797a1a22894eeca6, type: 2}
   - {fileID: 11400000, guid: fbf780685ba086546b5a78e8a995ff4f, type: 2}
