@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "DS_NewDirectionSet", menuName = "Marionet Test/Direction Set")]
@@ -12,4 +12,11 @@ public class DirectionSetSO : ScriptableObject
     [Header("효과 전환 시간")]
     [Range(0f, 5f)]
     public float fadeDuration = 1.0f;
+
+    [Tooltip("체크하면 이펙트가 서서히 나타납니다 (페이드 인)")]
+    public bool useFadeIn = true;
+
+    [Tooltip("체크하면 이펙트가 서서히 사라집니다 (페이드 아웃)")]
+    public bool useFadeOut = true;
+    
 }

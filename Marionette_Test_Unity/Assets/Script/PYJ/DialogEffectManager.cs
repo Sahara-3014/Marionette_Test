@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DialogEffectManager : MonoBehaviour
 {
+
     public Color otherColor = Color.red;        // OtherColorEnable용
     public Color darkenColor = new Color(0.5f, 0.5f, 0.5f, 1f); // AllColorEnable용
     public float fadeDuration = 0.5f;
@@ -135,7 +137,6 @@ public class DialogEffectManager : MonoBehaviour
     }
 
 
-
     private IEnumerator VerticalShakeScreen(SpriteRenderer target)
     {
         Vector3 originalPos = target.transform.localPosition;
@@ -207,7 +208,6 @@ public class DialogEffectManager : MonoBehaviour
         }
         yield break;
     }
-
 
 
 
@@ -415,6 +415,17 @@ public class DialogEffectManager : MonoBehaviour
         target.color = Color.white;
         yield break;
     }
+    private List<GameObject> activeEffects = new List<GameObject>();
 
+    // 모든 이펙트 정리
+    public void ClearEffects()
+    {
+        foreach (var effect in activeEffects)
+        {
+            if (effect != null)
+                Destroy(effect);
+        }
+        activeEffects.Clear();
+    }
 
 }
