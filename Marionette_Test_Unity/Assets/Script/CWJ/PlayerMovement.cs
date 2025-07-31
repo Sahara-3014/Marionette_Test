@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public CharacterController2D controller;
+    public CharacterController controller;
 
     public float runSpeed = 40f;
     float horizontalMove = 0f;

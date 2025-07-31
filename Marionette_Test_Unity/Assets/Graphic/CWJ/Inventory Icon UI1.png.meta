@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -121,7 +121,7 @@ TextureImporter:
         width: 158
         height: 376
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -138,12 +138,12 @@ TextureImporter:
       name: Inventory Icon UI1_2
       rect:
         serializedVersion: 2
-        x: 3322
-        y: 110
-        width: 356
-        height: 370
+        x: 2742
+        y: 78
+        width: 353
+        height: 547
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -152,6 +152,28 @@ TextureImporter:
       bones: []
       spriteID: 93ac8c39ffe13d045b081480ed228c30
       internalID: 555449189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Inventory Icon UI1_3
+      rect:
+        serializedVersion: 2
+        x: 3322
+        y: 110
+        width: 356
+        height: 370
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fffed10aa8037b84bb7ba53467740628
+      internalID: -1358860432
       vertices: []
       indices: 
       edges: []
@@ -173,6 +195,7 @@ TextureImporter:
       Inventory Icon UI1_0: -4623119676586761486
       Inventory Icon UI1_1: -22628869
       Inventory Icon UI1_2: 555449189
+      Inventory Icon UI1_3: -1358860432
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

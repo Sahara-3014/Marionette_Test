@@ -55,7 +55,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         {
             OnLeftClick();
         }
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
             OnRightClick();
         }
@@ -77,6 +77,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
 
     }
+    
 
 
 
