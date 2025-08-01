@@ -16,6 +16,7 @@ public class SaveDatabase : MonoBehaviour
     public int savePlayIndex { get; private set; }
     private Dictionary<string, UnityAction> sceneChangeEvent = new();
     private Dictionary<int, DialogueData[]> dialogs;
+    private Dictionary<int, InteractiveDebate_DialogueData[]> interactiveDebateDialogs;
 
 
     #region 씬 이동 이벤트
@@ -322,7 +323,7 @@ public struct GaugeFloat
     public float value;
     public float maxValue;
 
-    public GaugeFloat(float value, float maxValue)
+    public GaugeFloat(float value = 50f, float maxValue = 100f)
     {
         this.value = value;
         this.maxValue = maxValue;
@@ -334,7 +335,7 @@ public struct GaugeInt
     public int value;
     public int maxValue;
 
-    public GaugeInt(int value, int maxValue)
+    public GaugeInt(int value = 50, int maxValue = 100)
     {
         this.value = value;
         this.maxValue = maxValue;
