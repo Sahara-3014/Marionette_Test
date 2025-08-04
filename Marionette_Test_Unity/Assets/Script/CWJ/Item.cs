@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,11 +18,13 @@ public class Item : MonoBehaviour
     private string ItemDescription;
 
     private InventoryManager inventoryManager;
-    private bool interactionRange;
+    private InteractionIcon interactionIcon;
+    public bool interactionRange;
 
     void Start()
     {
         inventoryManager = GameObject.Find("UI").GetComponent<InventoryManager>();
+        interactionIcon = GameObject.Find("Interaction Icon").GetComponent<InteractionIcon>();
     }
 
     void Update()
@@ -38,6 +41,9 @@ public class Item : MonoBehaviour
         if(collision.gameObject.tag == "Interaction")
         {
             interactionRange = true;
+            interactionIcon.iconPos = this.transform.position;
+            interactionIcon.iconEnable = true;
+            UnityEngine.Debug.Log("interactionIcon.transform.position = " + this.transform.position);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -45,6 +51,7 @@ public class Item : MonoBehaviour
         if (collision.gameObject.tag == "Interaction")
         {
             interactionRange = false;
+            interactionIcon.iconEnable = false;
         }
     }
 
