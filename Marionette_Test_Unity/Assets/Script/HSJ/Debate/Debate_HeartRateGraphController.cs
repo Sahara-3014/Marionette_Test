@@ -125,7 +125,7 @@ public class Debate_HeartRateGraphController : MonoBehaviour
             float y = (dataPoints[i] * (graphHeight / 2f)) + yOffset; // y값을 그래프 높이에 맞게 스케일링
 
             positions[i] = new Vector3(x - graphWidth / 2f, y + graphHeight/2f, 0);
-            Debug.Log(positions[i].ToString());
+            //Debug.Log(positions[i].ToString());
         }
 
         

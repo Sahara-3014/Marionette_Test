@@ -77,11 +77,11 @@ public class SaveDatabase : MonoBehaviour
 
 
     #region 대화
-    public DialogueData[] GetDialogs_NeedID(int id)
+    public DialogueData[] Get_Dialogs_NeedID(int id)
     {
         if(dialogs == null)
         {
-            string text = TextLoad("dialog");
+            string text = TextLoad("Dialog");
             if (text == null)
                 return null;
 
@@ -97,7 +97,7 @@ public class SaveDatabase : MonoBehaviour
             return null;
     }
 
-    public void AddDialogs_NeedID(int id, DialogueData[] data)
+    public void Add_Dialogs_NeedID(int id, DialogueData[] data)
     {
         if(dialogs == null)
             dialogs = new();
@@ -108,7 +108,7 @@ public class SaveDatabase : MonoBehaviour
             dialogs[id] = data;
     }
 
-    public void SetDialogs(Dictionary<int, DialogueData[]> dialogs)
+    public void Set_Dialogs(Dictionary<int, DialogueData[]> dialogs)
     {
         if(this.dialogs != null)
         {
@@ -125,13 +125,64 @@ public class SaveDatabase : MonoBehaviour
             this.dialogs = dialogs;
         }
 
-        TextSave("dialog", JsonConvert.SerializeObject(this.dialogs));
+        TextSave("Dialog.json", JsonConvert.SerializeObject(this.dialogs));
     }
 
     public Dictionary<int, DialogueData[]> GetDialogs() => dialogs;
     #endregion
 
+    #region 논쟁(대화+선택지)
+    public InteractiveDebate_DialogueData[] Get_DebateDialogs_NeedID(int id)
+    {
+        if (interactiveDebateDialogs == null)
+        {
+            string text = TextLoad("Dialog_InteractiveDebate");
+            if (text == null)
+                return null;
 
+            var dic = JsonConvert.DeserializeObject<Dictionary<int, InteractiveDebate_DialogueData[]>>(text);
+
+            interactiveDebateDialogs = dic;
+        }
+
+        if (interactiveDebateDialogs.ContainsKey(id))
+            return interactiveDebateDialogs[id];
+
+        else
+            return null;
+    }
+
+    public void Add_InteractiveDebateDialogs_NeedID(int id, InteractiveDebate_DialogueData[] data)
+    {
+        if (interactiveDebateDialogs == null)
+            interactiveDebateDialogs = new();
+
+        if (interactiveDebateDialogs.ContainsKey(id) == false)
+            interactiveDebateDialogs.Add(id, data);
+        else
+            interactiveDebateDialogs[id] = data;
+    }
+
+    public void Set_InteractiveDebateDialogs(Dictionary<int, InteractiveDebate_DialogueData[]> dialogs)
+    {
+        if (this.interactiveDebateDialogs != null)
+        {
+            foreach (var dialog in dialogs)
+            {
+                if (this.interactiveDebateDialogs.ContainsKey(dialog.Key) == false)
+                    dialogs.Add(dialog.Key, dialog.Value);
+                else
+                    dialogs[dialog.Key] = dialog.Value;
+            }
+        }
+        else
+        {
+            this.interactiveDebateDialogs = dialogs;
+        }
+
+        TextSave("Dialog_InteractiveDebate.json", JsonConvert.SerializeObject(this.interactiveDebateDialogs));
+    }
+    #endregion
 
 
     #region SaveData 관련 변수 메서드화
@@ -192,6 +243,67 @@ public class SaveDatabase : MonoBehaviour
 
     public Dictionary<int, int> SaveData_GetItems() => saveData.localPlayerData.itmes;
     public void SaveData_SetItems(Dictionary<int, int> items) => saveData.localPlayerData.itmes = items;
+    
+    public Dictionary<string, CharAttributeData> SaveData_GetCharsData() => saveData.charsData;
+    public CharAttributeData SaveData_GetCharData(string key)
+    {
+        if (saveData.charsData == null || saveData.charsData.ContainsKey(key) == false)
+            return null;
+        return saveData.charsData[key];
+    }
+    public GaugeInt SaveData_GetCharData_GetGauge(string key, string gauge)
+    {
+        if (saveData.charsData == null || saveData.charsData.ContainsKey(key) == false)
+            return new();
+        CharAttributeData charData = saveData.charsData[key];
+        switch (gauge)
+        {
+            case "TRUST":
+                return charData.trust;
+            case "SUSPICTION":
+                return charData.suspicion;
+            case "MENTAL":
+                return charData.mental_Strength;
+            case "LIKE":
+                return charData.likeability;
+            default:
+                return new();
+        }
+    }
+    public void SaveData_SetCharData(string key, CharAttributeData data)
+    {
+        if (saveData.charsData == null)
+            saveData.charsData = new Dictionary<string, CharAttributeData>();
+        if (saveData.charsData.ContainsKey(key) == false)
+            saveData.charsData.Add(key, data);
+        else
+            saveData.charsData[key] = data;
+    }
+    public void SaveData_SetCharData_SetGauge(string key, string gauge, int value)
+    {
+        if (saveData.charsData == null)
+            saveData.charsData = new Dictionary<string, CharAttributeData>();
+        if (saveData.charsData.ContainsKey(key) == false)
+            saveData.charsData.Add(key, new CharAttributeData());
+        CharAttributeData charData = saveData.charsData[key];
+        switch (gauge)
+        {
+            case "TRUST":
+                charData.trust.value = (int)value;
+                break;
+            case "SUSPICTION":
+                charData.suspicion.value = (int)value;
+                break;
+            case "MENTAL":
+                charData.mental_Strength.value = (int)value;
+                break;
+            case "LIKE":
+                charData.likeability.value = (int)value;
+                break;
+        }
+        saveData.charsData[key] = charData;
+    }
+
     #endregion
 
 
@@ -308,14 +420,21 @@ public struct LocalPlayerData
 [Serializable]
 public class CharAttributeData
 {
+    public enum CharAttributeType
+    {
+        TRUST = 1,       // 신뢰도
+        SUSPICION = 3,   // 의심도
+        MENTAL = 0,      // 정신력
+        LIKE = 2         // 호감도
+    }
     /// <summary> 신뢰도 </summary>
-    public Dictionary<string, int> trust = new();
+    public GaugeInt trust = new();
     /// <summary> 의심도 </summary>
-    public Dictionary<string, GaugeFloat> suspicion = new();
+    public GaugeInt suspicion = new();
     /// <summary> 정신력 </summary>
-    public GaugeFloat mental_Strength = new();
+    public GaugeInt mental_Strength = new();
     /// <summary> 호감도 </summary>
-    public Dictionary<string, int> likeability = new();
+    public GaugeInt likeability = new();
 }
 
 public struct GaugeFloat
@@ -323,7 +442,7 @@ public struct GaugeFloat
     public float value;
     public float maxValue;
 
-    public GaugeFloat(float value = 50f, float maxValue = 100f)
+    public GaugeFloat(float value = 10f, float maxValue = 100f)
     {
         this.value = value;
         this.maxValue = maxValue;
@@ -335,7 +454,7 @@ public struct GaugeInt
     public int value;
     public int maxValue;
 
-    public GaugeInt(int value = 50, int maxValue = 100)
+    public GaugeInt(int value = 10, int maxValue = 100)
     {
         this.value = value;
         this.maxValue = maxValue;

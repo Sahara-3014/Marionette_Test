@@ -1,7 +1,13 @@
+using DG.Tweening;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class InteractiveDebate_UIManager : MonoBehaviour
 {
@@ -9,6 +15,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     DayCycleSystem dayCycleSystem;
 
     [Header("Default UI Values")]
+    public SpriteRenderer BG;
     [SerializeField] TextMeshProUGUI timerLabel;
     [SerializeField] InventoryManager inventoryManager;
     [SerializeField] Transform inventoryViewer;
@@ -18,7 +25,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
 
     [Space(10)]
     [Header("Target's Values")]
-    [SerializeField] SpriteRenderer target;
+    [SerializeField] Image target;
     [SerializeField] TextMeshProUGUI targetNameLabel;
     [SerializeField] Transform targetLogViewer;
     [SerializeField] GameObject targetTextPrefab;
@@ -28,7 +35,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
 
     [Space(10)]
     [Header("Debate Answer's Values")]
-    [SerializeField] SpriteRenderer[] answers;
+    public Image[] answers;
     [SerializeField] Transform logViewer;
     [SerializeField] GameObject textPrefab;
 
@@ -36,6 +43,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     [Header("Choice Values")]
     [SerializeField] GameObject choicePanel;
     [SerializeField] List<Button> choiceBtns;
+
+    [HideInInspector]
+    public UnityAction skipAction = null;
 
 
     private void Start()
@@ -57,6 +67,18 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         Loaded_DataSet();
     }
 
+    private void Update()
+    {
+        //인풋처리
+        #if UNITY_ANDROID
+
+
+        #elif UNITY_STANDALONE_WIN
+
+
+        #endif
+    }
+
     /// <summary> Load했을때 이전 데이터 뿌려주기 </summary>
     void Loaded_DataSet()
     {
@@ -70,7 +92,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     {
         int dialog_id = database.SaveData_GetNowDialogID();
         int dialog_index = database.SaveData_GetNowDialogIndex();
-        DialogueData[] data = database.GetDialogs_NeedID(dialog_id);
+        DialogueData[] data = database.Get_Dialogs_NeedID(dialog_id);
         for (int i = 0; i < dialog_index; i++)
         {
             GameObject textObj;
@@ -88,19 +110,59 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     public void Add_TargetText(string text)
     {
         GameObject textObj = Instantiate(targetTextPrefab, targetLogViewer);
-        textObj.GetComponent<TextMeshProUGUI>().text = text;
+        var tmp = textObj.GetComponent<TextMeshProUGUI>();
+        TextTypingEffect(tmp, text);
     }
 
-    public void Add_OtherAnswerText(string text)
+    public void Add_OtherAnswerText(string name, string text)
     {
         GameObject textObj = Instantiate(textPrefab, logViewer);
-        textObj.GetComponent<TextMeshProUGUI>().text = text;
+        var tmp = textObj.GetComponent<TextMeshProUGUI>();
+        tmp.text = $": {name}";
+        TextTypingEffect(tmp, text, isReverse: true);
+    }
+
+    async void TextTypingEffect(TextMeshProUGUI tmp, string text, float lettersDelay = .2f, bool isReverse = false)
+    {
+        skipAction = () => tmp.text = text;
+        TimeSpan delay = TimeSpan.FromSeconds(lettersDelay);
+        for(int i=0;i<text.Length;i++)
+        {
+            if(isReverse)
+                tmp.text = text.Substring(i, 1) + tmp.text;
+            else
+                tmp.text += text.Substring(i, 1);
+            await Task.Delay(delay);
+        }
+        skipAction = null;
     }
 
     public void ChangeTarget(string targetName)
     {
         //target.sprite = database.GetTargetSprite(targetName);
         targetNameLabel.text = targetName;
+    }
+
+    /// <summary> 타겟의 감정 게이지 </summary>
+    /// <param name="gaugeType"></param>
+    public void ChangeAbilityGauge(CharAttributeData.CharAttributeType attributeType)
+    {
+        float max = targetAbilityGauges[(int)attributeType].parent.gameObject.GetComponent<RectTransform>().rect.width;
+        max -= targetAbilityGauges[(int)attributeType].localPosition.x * 2f;
+        try 
+        { 
+            float value = database.SaveData_GetCharData_GetGauge(attributeType.ToString(), InteractiveDebate_DialogManager.instance.debateData.TARGET_NAME).value;
+
+            targetAbilityGauges[(int)attributeType].DOKill();
+            Vector2 delta = targetAbilityGauges[(int)attributeType].sizeDelta;
+            delta.x = (value / 100) * max/100f;
+            targetAbilityGauges[(int)attributeType].DOSizeDelta(delta, .5f);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"ChangeAbilityGauge Error: {e.Message}");
+            return;
+        }
     }
 
 
@@ -129,7 +191,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         if (dayCycleSystem == null) return;
         int days = dayCycleSystem.GetDays();
         float times = dayCycleSystem.GetTimes();
-        timerLabel.text = $"D-{7-days}\n<color=yellow>{times:0.00}</color>";
+        timerLabel.text = $"D-{7-days}\n<color=yellow>{times:0:00}</color>";
     }
 
     /// <summary> 선택지 UI 셋팅 </summary>
