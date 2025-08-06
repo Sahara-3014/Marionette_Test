@@ -1,3 +1,4 @@
+using SimpleJSON;
 using System;
 using UnityEngine;
 
@@ -55,6 +56,7 @@ public class InteractiveDebate_DialogueData
     public DialogSoundPlayType soundPlayType = DialogSoundPlayType.PlayOnShot;
     
     private string[] row;
+    private JSONNode node;
 
     #region General
     /// <summary> 그룹 </summary>
@@ -99,7 +101,7 @@ public class InteractiveDebate_DialogueData
     #region Target's Values
     public string TARGET_NAME { get; protected set; }
     public string TARGET_EMOTION { get; protected set; }
-    public string TARGET_EFFECT { get; protected set; }
+    public Dialog_CharEffect TARGET_EFFECT { get; protected set; }
     public string TARGET_INTERACT { get; protected set; }
     #endregion
 
@@ -137,29 +139,42 @@ public class InteractiveDebate_DialogueData
 
     #endregion
 
+    public InteractiveDebate_DialogueData(JSONNode nod)
+    {
+        this.node = nod;
+        SetProperty();
+    }
+
     public InteractiveDebate_DialogueData(string[] row)
     {
+        //for(int i=0;i<row.Length; i++) 
+        //    Debug.Log($"{i} : {row[i]}");
+
         this.row = row;
+        SetProperty();
+    }
+
+    void SetProperty()
+    {
         this.ID = int.Parse(GetText(0));
         this.INDEX = int.Parse(GetText(1));
 
-        if(int.TryParse(GetText(2), out int nextId))
-            this.NEXT_ID = nextId;
-        else this.NEXT_ID = -100; // 예외 발생시 기본값 0으로 설정
-        
+        if (!int.TryParse(GetText(2), out int nextId))
+            this.NEXT_ID = -100; // 예외 발생시 기본값 0으로 설정
+
 
         this.TARGET_NAME = GetText(3);
         this.TARGET_EMOTION = GetText(4);
-        this.TARGET_EFFECT = GetText(6);
-        this.TARGET_INTERACT = GetText(5); // 상호작용은 TARGET_EFFECT와 동일하게 처리
+        this.TARGET_INTERACT = GetText(5);
+        this.TARGET_EFFECT = (Dialog_CharEffect)int.Parse(GetText(6) == "" ? "1" : GetText(6));
 
         this.SPEAKER = GetText(7);
         this.DIALOGUE = GetText(8);
 
         this.BGM = new(type: SEType.BGM, clip: GetText(9) == "" ? null : LoadAudioClipByName(GetText(9)));
-        this.BGM_EFFECT = (DialogSoundPlayType) int.Parse(GetText(10) == "" ? "0" : GetText(10) );
+        this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(10) == "" ? "0" : GetText(10));
 
-        this.BGM_EFFECT = (DialogSoundPlayType) int.Parse(GetText(11) == "" ? "0" : GetText(11));
+        this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(11) == "" ? "0" : GetText(11));
         this.CG = GetText(12) != "" ? Resources.Load<Sprite>($"CG/{GetText(12)}") : null;
         this.BG = GetText(13);
         this.SE1 = new(type: SEType.SE, clip: GetText(144) == "" ? null : LoadAudioClipByName(GetText(14)));
@@ -168,13 +183,13 @@ public class InteractiveDebate_DialogueData
 
         this.CH1_NAME = GetText(17);
         this.CH1_EMOTION = GetText(18);
-        this.CH1_EFFECT = (Dialog_CharEffect) int.Parse(GetText(19) == "" ? "0" : GetText(19));
+        this.CH1_EFFECT = (Dialog_CharEffect)int.Parse(GetText(19) == "" ? "1" : GetText(19));
         this.CH2_NAME = GetText(20);
         this.CH2_EMOTION = GetText(21);
-        this.CH2_EFFECT = (Dialog_CharEffect)int.Parse(GetText(22) == "" ? "0" : GetText(22));
+        this.CH2_EFFECT = (Dialog_CharEffect)int.Parse(GetText(22) == "" ? "1" : GetText(22));
         this.CH3_NAME = GetText(23);
         this.CH3_EMOTION = GetText(24);
-        this.CH3_EFFECT = (Dialog_CharEffect)int.Parse(GetText(25) == "" ? "0" : GetText(25));
+        this.CH3_EFFECT = (Dialog_CharEffect)int.Parse(GetText(25) == "" ? "1" : GetText(25));
 
         this.SE2 = new(type: SEType.SE, clip: GetText(26) == "" ? null : LoadAudioClipByName(GetText(26)));
         this.SE2_EFFECT = int.Parse(GetText(27) == "" ? "0" : GetText(27));
@@ -188,10 +203,9 @@ public class InteractiveDebate_DialogueData
         this.CHOICE3_TEXT = GetText(34);
     }
 
-    private int GetNextIndex(int index) => index += 1;
-
     protected string GetText(int index) => 
-        (row.Length > index && row[index] != null) ? row[index].Trim() : "";
+        node == null ? (row.Length > index && row[index] != null) ? row[index].Trim() : ""
+        : (node.Count > index && node[index] != null) ? node[index].Value.Trim() : "";
 
     protected AudioClip LoadAudioClipByName(string clipName) =>
          Resources.Load<AudioClip>($"Audio/{clipName}");

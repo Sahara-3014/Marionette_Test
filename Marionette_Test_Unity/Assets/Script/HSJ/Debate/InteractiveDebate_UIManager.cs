@@ -21,11 +21,14 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     [SerializeField] Transform inventoryViewer;
     [SerializeField] ItemSlot itemSlotPrefab;
     List<GameObject> itemSlots = new();
+    int selectItemIndex = -1;
+    bool isUploading = false;
+    [SerializeField] RectTransform uploadGauge;
     [SerializeField] InteractiveDebate_DialogManager dialogManager;
 
     [Space(10)]
     [Header("Target's Values")]
-    [SerializeField] Image target;
+    public Image target;
     [SerializeField] TextMeshProUGUI targetNameLabel;
     [SerializeField] Transform targetLogViewer;
     [SerializeField] GameObject targetTextPrefab;
@@ -107,34 +110,43 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         }
     }
 
-    public void Add_TargetText(string text)
+    public void Add_TargetText(string text, UnityAction callback = null)
     {
         GameObject textObj = Instantiate(targetTextPrefab, targetLogViewer);
         var tmp = textObj.GetComponent<TextMeshProUGUI>();
-        TextTypingEffect(tmp, text);
+        TextTypingEffect(tmp, text, callback: callback);
+
+        ScrollRect scroll = targetLogViewer.parent.parent.GetComponent<ScrollRect>();
+        scroll.verticalScrollbarSpacing = 1f; // 스크롤을 맨 아래로 이동
     }
 
-    public void Add_OtherAnswerText(string name, string text)
+    public void Add_OtherAnswerText(string name, string text, UnityAction callback = null)
     {
         GameObject textObj = Instantiate(textPrefab, logViewer);
         var tmp = textObj.GetComponent<TextMeshProUGUI>();
-        tmp.text = $": {name}";
-        TextTypingEffect(tmp, text, isReverse: true);
+        tmp.text = $" : {name}";
+        TextTypingEffect(tmp, text, isReverse: true, callback: callback);
+
+        ScrollRect scroll = logViewer.parent.parent.GetComponent<ScrollRect>();
+        Debug.Log(scroll == null);
+        scroll.verticalNormalizedPosition = 0; // 스크롤을 맨 아래로 이동
     }
 
-    async void TextTypingEffect(TextMeshProUGUI tmp, string text, float lettersDelay = .2f, bool isReverse = false)
+    async void TextTypingEffect(TextMeshProUGUI tmp, string text, float lettersDelay = .02f, bool isReverse = false, UnityAction callback = null)
     {
-        skipAction = () => tmp.text = text;
+        string txt = tmp.text;
+        skipAction = () => tmp.text = isReverse ? text + txt : text;
         TimeSpan delay = TimeSpan.FromSeconds(lettersDelay);
-        for(int i=0;i<text.Length;i++)
+        for(int i=0;i<=text.Length;i++)
         {
             if(isReverse)
-                tmp.text = text.Substring(i, 1) + tmp.text;
+                tmp.text = text.Substring(0, i) + txt;
             else
                 tmp.text += text.Substring(i, 1);
             await Task.Delay(delay);
         }
         skipAction = null;
+        callback?.Invoke();
     }
 
     public void ChangeTarget(string targetName)
@@ -185,6 +197,34 @@ public class InteractiveDebate_UIManager : MonoBehaviour
 
     }
 
+    /// <summary>  </summary>
+    public void SelectItemSlot(int itemIndex)
+    {
+        this.selectItemIndex = itemIndex;
+    }
+
+    /// <summary> 선택한 아이템 </summary>
+    public void SelectItemUpload()
+    {
+        if(isUploading) return;
+
+        isUploading = true;
+
+        uploadGauge.sizeDelta = new Vector2(0f, uploadGauge.sizeDelta.y);
+
+        float max = uploadGauge.parent.gameObject.GetComponent<RectTransform>().rect.width;
+        max -= uploadGauge.localPosition.x * 2f;
+
+        Vector2 delta = uploadGauge.sizeDelta;
+        delta.x = 0f;
+        uploadGauge.DOSizeDelta(delta, 2f).OnComplete(()=>
+        {
+            isUploading = false;
+            //uploadGauge.sizeDelta = new Vector2(0f, uploadGauge.sizeDelta.y);
+        });
+
+    }
+
     /// <summary> 타이머 텍스트 </summary>
     public void RefreshTimer()
     {
@@ -195,29 +235,46 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     }
 
     /// <summary> 선택지 UI 셋팅 </summary>
-    public void OpenChoicePanel(Dictionary<int, string> Choices)
+    public void OpenChoicePanel(List<(int, string)> choices)
     {
+        Debug.Log($"OpenChoicePanel {choices.Count}");
         choicePanel.SetActive(true);
-        while(choiceBtns.Count < Choices.Count)
+        while(choiceBtns.Count < choices.Count)
         {
             Button newBtn = Instantiate(choiceBtns[0], choiceBtns[0].transform.parent);
             choiceBtns.Add(newBtn);
         }
-
+        Debug.Log("OpenChoicePanel foreach");
         int _index = 0;
-        foreach (KeyValuePair<int, string> keyValuePair in Choices)
+        foreach (var (key, value) in choices)
         {
+            Debug.Log($"OpenChoicePanel foreach {_index}");
             choiceBtns[_index].gameObject.SetActive(true);
-            choiceBtns[_index].GetComponentInChildren<TextMeshProUGUI>().text = keyValuePair.Value;
+            Debug.Log($"OpenChoicePanel foreach {choiceBtns[_index].gameObject.activeSelf}");
+            choiceBtns[_index].GetComponentInChildren<TextMeshProUGUI>().text = value;
+            Debug.Log($"OpenChoicePanel foreach {choiceBtns[_index].GetComponentInChildren<TextMeshProUGUI>().text}");
             choiceBtns[_index].onClick.RemoveAllListeners();
+            Debug.Log($"OpenChoicePanel foreach Remove");
             // 버튼 누르면 선택창 닫고 대화 시작
             choiceBtns[_index].onClick.AddListener(() =>
             {
                 CloseChoicePanel();
-                dialogManager.SetDialogs(keyValuePair.Key, true, true);
+                if (key == -1)
+                {
+                    dialogManager.currentIndex++;
+                    dialogManager.Play();
+                }
+                else
+                    dialogManager.SetDialogs(key, true, true);
             });
+            Debug.Log($"OpenChoicePanel foreach onClick");
             _index++;
         }
+    }
+
+    public bool IsChoicePanelOpened()
+    {
+        return choicePanel.activeSelf;
     }
 
     /// <summary> 선택창 닫기 </summary>

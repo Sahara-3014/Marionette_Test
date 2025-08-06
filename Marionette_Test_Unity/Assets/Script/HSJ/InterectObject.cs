@@ -18,13 +18,8 @@ public class InterectObject : MonoBehaviour
     [Tooltip("해당 오브젝트를 눌렀을때 이펙트 전용 이벤트")]
     [SerializeField] protected UnityEvent playBtnPressEffect;
 
-    private void OnValidate()
+    public virtual void OnValidate()
     {
-        if (onBtnPress == null)
-        {
-            onBtnPress = new();
-            onBtnPress.AddListener(OnBtnPress);
-        }
         if (onBtnUp == null)
         {
             onBtnUp = new();

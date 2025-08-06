@@ -17,7 +17,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
 
     InteractiveDebate_DialogueData[] dialogs;
     DialogueData[] data; // 임시
-    int currentIndex = 0;
+    public int currentIndex = 0;
 
     //대화 관련 변수들
     /// <summary> null이면 Play메서드 실행 </summary>
@@ -44,6 +44,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
     {
         effectManager = EffectManager.Instance;
         database = SaveDatabase.Instance;
+        uiManager = GetComponent<InteractiveDebate_UIManager>();
         instance = this;
         currentIndex = 0;
 
@@ -57,7 +58,11 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         if (dialogEffectManager == null)
             dialogEffectManager = GetComponent<DialogEffectManager>();
     }
-
+    
+    public void SetDialogs_ID(int id)
+    {
+        SetDialogs(id, isIndexInit: true, isPlaying: true);
+    }
 
 
     public void SetDialogs(int id, bool isIndexInit = false, bool isPlaying = false)
@@ -76,12 +81,15 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
 
     public void Play()
     {
+        Debug.Log("Play");
         if (onNextProductionAcion != null)
         {
             onNextProductionAcion.Invoke();
             return;
         }
-
+        if (uiManager.IsChoicePanelOpened())
+            return;
+        Debug.Log("Play_Next");
         debateData = dialogs[currentIndex];
 
         onNextProductionAcion = Step1;
@@ -91,6 +99,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
     /// <summary> BGM 재생 </summary>
     void Step1()
     {
+        Debug.Log("Step1");
         onNextProductionAcion = Step2;
 
         // 1. TODO bgm재생
@@ -122,7 +131,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
 
         if (debateData.BGM != null)
         {
-            bool isBGMEqual = bgmAudio.clip.name == debateData.BGM.clip.name;
+            bool isBGMEqual = (bgmAudio.clip == null ? "" : bgmAudio.clip.name) == (debateData.BGM == null ? "" : debateData.BGM.clip == null ? "" : debateData.BGM.clip.name);
             switch (debateData.BGM_EFFECT)
             {
                 // 1
@@ -183,6 +192,8 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
             }
             bgmAudio.clip = debateData.BGM.clip;
 
+            if (nextProductionCoroutine == null)
+                nextProductionCoroutine = new Coroutine[4];
             nextProductionCoroutine[0] = StartCoroutine(NextAction(action: onNextProductionAcion, delay: 1f));
         }
         else
@@ -195,69 +206,73 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
     }
 
     /// <summary> SE1 재생 / 배경연출 재생 </summary>
-    void Step2()
+    async void Step2()
     {
+        Debug.Log("Step2");
         onNextProductionAcion = Step3;
         if(nextProductionCoroutine != null && nextProductionCoroutine[0] != null)
             StopCoroutine(nextProductionCoroutine[0]);
         nextProductionCoroutine = null;
 
         // TODO 배경연출 재생
-        nextProductionCoroutine[0] = dialogEffectManager.StartCoroutine(dialogEffectManager.RunScreenEffect(debateData.screenEffect, uiManager.BG));
+        if (nextProductionCoroutine == null)
+            nextProductionCoroutine = new Coroutine[4];
+
+        Debug.Log("debateData.screenEffect: " + debateData.screenEffect+$"{uiManager.BG == null}");
+
+        bool isComplete = false;
+        nextProductionCoroutine[0] = StartCoroutine(uiEffectManager.RunScreenEffect(debateData.screenEffect, uiManager.BG, ()=> isComplete = true));
+
+        Debug.Log($"debateData: {nextProductionCoroutine[0] == null}");
 
         // TODO se1재생
         SEPlayEffect(se1Audio, debateData.SE1, debateData.SE1_EFFECT);
+        // TODO 기다리고 바로 실행하기
+        while(!isComplete)
+        {
+            await Task.Yield();
+        }
+
+        onNextProductionAcion.Invoke();
     }
 
     /// <summary> SE2 재생 / 캐릭터 연출 재생 </summary>
-    void Step3()
+    async void Step3()
     {
+        Debug.Log("Step3");
         onNextProductionAcion = Step4;
         if(nextProductionCoroutine != null && nextProductionCoroutine[0] != null)
             StopCoroutine(nextProductionCoroutine[0]);
-        nextProductionCoroutine[0] = null;
+        nextProductionCoroutine = null;
 
+        if (nextProductionCoroutine == null)
+            nextProductionCoroutine = new Coroutine[4];
+
+        int count = 0;
+        int maxCount = 4;
         // TODO 캐릭터연출 재생 <- 타입에 따라서 프레임에 먹일 이펙트/캐릭터에 먹일 이펙트 분리해야함
-        if (debateData.CH1_EFFECT != Dialog_CharEffect.None)
-            nextProductionCoroutine[1] = uiEffectManager.StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answers[0]));
-        if (debateData.CH2_EFFECT != Dialog_CharEffect.None)
-            nextProductionCoroutine[2] = uiEffectManager.StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH2_EFFECT, uiManager.answers[1]));
-        if (debateData.CH3_EFFECT != Dialog_CharEffect.None)
-            nextProductionCoroutine[3] = uiEffectManager.StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH3_EFFECT, uiManager.answers[2]));
+        nextProductionCoroutine[0] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.TARGET_EFFECT, uiManager.target, ()=> count++));
+        nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answers[0], ()=> count++));
+        nextProductionCoroutine[2] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH2_EFFECT, uiManager.answers[1], () => count++));
+        nextProductionCoroutine[3] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH3_EFFECT, uiManager.answers[2], () => count++));
 
         // TODO se2재생
         SEPlayEffect(se2Audio, debateData.SE2, debateData.SE2_EFFECT);
+        // TODO 기다리고 바로 실행하기
+        while(count < maxCount)
+        {
+            Debug.Log("Step3 Waiting");
+            await Task.Yield();
+        }
+        onNextProductionAcion.Invoke();
     }
 
     /// <summary> 대사 출력 / 다음 대사 넘어가기 </summary>
     void Step4()
     {
+        Debug.Log("Step4");
         // TOOD 다음 대사로 넘어가기
-        onNextProductionAcion = () =>
-        {
-            if(debateData.CHOICE1_ID != -1 && debateData.CHOICE1_ID != 0)
-            {
-                Dictionary<int, string> choices = new();
-                if(debateData.CHOICE1_ID != -1 && debateData.CHOICE1_ID != 0)
-                    choices.Add(debateData.CHOICE1_ID, debateData.CHOICE1_TEXT);
-                if (debateData.CHOICE2_ID != -1 && debateData.CHOICE2_ID != 0)
-                    choices.Add(debateData.CHOICE2_ID, debateData.CHOICE2_TEXT);
-                if (debateData.CHOICE3_ID != -1 && debateData.CHOICE3_ID != 0)
-                    choices.Add(debateData.CHOICE3_ID, debateData.CHOICE3_TEXT);
-
-                uiManager.OpenChoicePanel(choices);
-            }
-            else if(debateData.NEXT_ID != -1 && debateData.NEXT_ID != 0)
-            {
-                SetDialogs(debateData.NEXT_ID, isIndexInit: true, isPlaying: true);
-            }
-            else
-            {
-                currentIndex += 1;
-                onNextProductionAcion = null;
-                onSkipToOriAction = null;
-            }
-        };
+        onNextProductionAcion = Step5;
         if(nextProductionCoroutine != null)
         {
             if (nextProductionCoroutine[1] != null)
@@ -268,49 +283,78 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
                 StopCoroutine(nextProductionCoroutine[3]);
             nextProductionCoroutine = null;
         }
-        
 
         // TODO 대사 출력
-        if(debateData.DIALOGUE != null)
+        if (debateData.DIALOGUE != null)
         {
             if(debateData.TARGET_NAME == debateData.SPEAKER)
-                uiManager.Add_TargetText(debateData.DIALOGUE);
+                uiManager.Add_TargetText(debateData.DIALOGUE, ()=>onNextProductionAcion.Invoke());
             else
-                uiManager.Add_OtherAnswerText($"{debateData.SPEAKER}", $"{debateData.DIALOGUE}");
+                uiManager.Add_OtherAnswerText($"{debateData.SPEAKER}", $"{debateData.DIALOGUE}", () => onNextProductionAcion.Invoke());
             onSkipToOriAction = uiManager.skipAction;
-            if (debateData.TARGET_INTERACT != null)
-            {
-                string[] interact = debateData.TARGET_INTERACT.Split('/');
-                switch (interact[0])
-                {
-                    case "TRUST":
-                        database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interact[0],
-                            database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interact[0]).value + int.Parse(interact[1]));
-                        uiManager.ChangeAbilityGauge(CharAttributeData.CharAttributeType.TRUST);
-                        break;
-                    case "SUSPICTION":
-                        database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interact[0],
-                            database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interact[0]).value + int.Parse(interact[1]));
-                        uiManager.ChangeAbilityGauge(CharAttributeData.CharAttributeType.SUSPICION);
-                        break;
-                    case "MENTAL":
-                        database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interact[0], database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interact[0]).value + int.Parse(interact[1]));
-                        uiManager.ChangeAbilityGauge(CharAttributeData.CharAttributeType.MENTAL);
-                        break;
-                    case "LIKE":
-                        database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interact[0], database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interact[0]).value + int.Parse(interact[1]));
-                        uiManager.ChangeAbilityGauge(CharAttributeData.CharAttributeType.LIKE);
-                        break;
-                    default:
-                        Debug.LogWarning($"Unknown interact type: {interact[0]}");
-                        break;
-                }
-            }
         }
         else
         {
             onNextProductionAcion.Invoke();
             onNextProductionAcion = null;
+        }
+    }
+
+    void Step5()
+    {
+        onNextProductionAcion = null;
+        onSkipToOriAction = null;
+
+        if (debateData.TARGET_INTERACT != null)
+        {
+            Debug.Log("Last");
+
+            string[] interact = debateData.TARGET_INTERACT.Split('/');
+            switch (interact[0])
+            {
+                case "TRUST":
+                    database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interact[0],
+                        database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interact[0]).value + int.Parse(interact[1]));
+                    uiManager.ChangeAbilityGauge(CharAttributeData.CharAttributeType.TRUST);
+                    break;
+                case "SUSPICTION":
+                    database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interact[0],
+                        database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interact[0]).value + int.Parse(interact[1]));
+                    uiManager.ChangeAbilityGauge(CharAttributeData.CharAttributeType.SUSPICION);
+                    break;
+                case "MENTAL":
+                    database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interact[0], database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interact[0]).value + int.Parse(interact[1]));
+                    uiManager.ChangeAbilityGauge(CharAttributeData.CharAttributeType.MENTAL);
+                    break;
+                case "LIKE":
+                    database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interact[0], database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interact[0]).value + int.Parse(interact[1]));
+                    uiManager.ChangeAbilityGauge(CharAttributeData.CharAttributeType.LIKE);
+                    break;
+                default:
+                    Debug.LogWarning($"Unknown interact type: {interact[0]}");
+                    break;
+            }
+        }
+
+
+        if (debateData.CHOICE1_ID != 0)
+        {
+            List<(int, string)> choices = new();
+            choices.Add((debateData.CHOICE1_ID, debateData.CHOICE1_TEXT));
+            if (debateData.CHOICE2_ID != 0)
+                choices.Add((debateData.CHOICE2_ID, debateData.CHOICE2_TEXT));
+            if (debateData.CHOICE3_ID != 0)
+                choices.Add((debateData.CHOICE3_ID, debateData.CHOICE3_TEXT));
+
+            uiManager.OpenChoicePanel(choices);
+        }
+        else if (debateData.NEXT_ID != -1 && debateData.NEXT_ID != 0)
+        {
+            SetDialogs(debateData.NEXT_ID, isIndexInit: true, isPlaying: true);
+        }
+        else
+        {
+            currentIndex += 1;
         }
     }
 
@@ -346,7 +390,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
 
         if (se != null)
         {
-            bool isNameEqual = audio.clip.name == se.clip.name;
+            bool isNameEqual = (audio.clip == null ? "" : audio.clip.name) == (se == null ? "" : se.clip == null ? "" : se.clip.name);
             switch (effect)
             {
                 // 0
