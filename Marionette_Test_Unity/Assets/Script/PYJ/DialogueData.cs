@@ -272,7 +272,7 @@ public class DialogueData
     }
 
     // 헬퍼 함수
-    private Dialog_CharPos ParseCharPos(string posStr)
+    protected Dialog_CharPos ParseCharPos(string posStr)
     {
         if (Enum.TryParse(posStr, out Dialog_CharPos pos))
             return pos;
@@ -333,13 +333,13 @@ public class DialogueData
     }
 
 
-    private AudioClip LoadAudioClipByName(string clipName)
+    protected AudioClip LoadAudioClipByName(string clipName)
     {
         return Resources.Load<AudioClip>($"Audio/{clipName}");
     }
 
 
-    private string GetText(JSONNode node, int index)
+    protected string GetText(JSONNode node, int index)
     {
         return (node.Count > index && node[index] != null) ? node[index].Value.Trim() : "";
     }
