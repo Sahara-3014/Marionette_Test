@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 
-public class InteractiveDebate_DialogManager : MonoBehaviour
+public class InteractiveDebate_DialogManager_OLD : MonoBehaviour
 {
-    public static InteractiveDebate_DialogManager instance;
+    public static InteractiveDebate_DialogManager_OLD instance;
 
     //Default Values
     SaveDatabase database;
@@ -36,26 +36,16 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
     [SerializeField] AudioSource se2Audio;
     [SerializeField] DialogEffectManager dialogEffectManager;
     [SerializeField] DialogEffectManager_UI uiEffectManager;
-    InteractiveDebate_UIManager uiManager;
+    InteractiveDebate_UIManager_OLD uiManager;
 
-    private void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
+
 
     private void Start()
     {
         effectManager = EffectManager.Instance;
         database = SaveDatabase.Instance;
-        uiManager = GetComponent<InteractiveDebate_UIManager>();
+        uiManager = GetComponent<InteractiveDebate_UIManager_OLD>();
+        instance = this;
         currentIndex = 0;
 
         if(bgmAudio == null)
@@ -259,13 +249,12 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
             nextProductionCoroutine = new Coroutine[4];
 
         int count = 0;
-        int maxCount = 0;
+        int maxCount = 4;
         // TODO 캐릭터연출 재생 <- 타입에 따라서 프레임에 먹일 이펙트/캐릭터에 먹일 이펙트 분리해야함
         nextProductionCoroutine[0] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.TARGET_EFFECT, uiManager.target, ()=> count++));
-        maxCount += 1;
-        //nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answers[0], ()=> count++));
-        //nextProductionCoroutine[2] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH2_EFFECT, uiManager.answers[1], () => count++));
-        //nextProductionCoroutine[3] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH3_EFFECT, uiManager.answers[2], () => count++));
+        nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answers[0], ()=> count++));
+        nextProductionCoroutine[2] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH2_EFFECT, uiManager.answers[1], () => count++));
+        nextProductionCoroutine[3] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH3_EFFECT, uiManager.answers[2], () => count++));
 
         // TODO se2재생
         SEPlayEffect(se2Audio, debateData.SE2, debateData.SE2_EFFECT);
@@ -298,14 +287,10 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         // TODO 대사 출력
         if (debateData.DIALOGUE != null)
         {
-            //if(debateData.TARGET_NAME == debateData.SPEAKER)
-            //    uiManager.Add_TargetText(debateData.DIALOGUE, ()=>onNextProductionAcion.Invoke());
-            //else
-            //    uiManager.Add_OtherAnswerText($"{debateData.SPEAKER}", $"{debateData.DIALOGUE}", () => onNextProductionAcion.Invoke());
-
-            //TODO 다이얼로그 출력
-            //uiManager.Add_DialogueText(debateData.SPEAKER, debateData.DIALOGUE, debateData.TARGET_NAME, debateData.TARGET_EMOTION,
-                //() => onNextProductionAcion.Invoke(), debateData.TARGET_INTERACT);
+            if(debateData.TARGET_NAME == debateData.SPEAKER)
+                uiManager.Add_TargetText(debateData.DIALOGUE, ()=>onNextProductionAcion.Invoke());
+            else
+                uiManager.Add_OtherAnswerText($"{debateData.SPEAKER}", $"{debateData.DIALOGUE}", () => onNextProductionAcion.Invoke());
             onSkipToOriAction = uiManager.skipAction;
         }
         else

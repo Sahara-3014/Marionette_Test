@@ -1,25 +1,27 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SaveLoadPanel : MonoBehaviour
 {
     public static SaveLoadPanel instance;
-    SaveDatabase database;
+    [SerializeField] SaveDatabase database;
     [SerializeField] TextMeshProUGUI titleLabel;
     [SerializeField] Button[] btns;
+    public UnityAction onLoadAction;
 
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
@@ -31,33 +33,49 @@ public class SaveLoadPanel : MonoBehaviour
 
     public void Open(bool isSavePanel)
     {
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
+        if(database == null)
+            database = SaveDatabase.Instance;
         titleLabel.text = isSavePanel ? "Save File" : "Load File";
 
         for (int i = 0; i < btns.Length; i++)
         {
-            var data = database.Load(i, false);
+            Debug.Log(database == null);
+            var data = i == 0 ? database.AutoLoad() : database.Load(i, false);
 
             TextMeshProUGUI tmp = btns[i].GetComponentInChildren<TextMeshProUGUI>();
-            DateTime date = DateTime.Parse(data.saveDate);
-            if (i == 0)
+
+            DateTime date;
+            if (i == 0 && data.index != -1)
+            {
+                date = DateTime.Parse(data.saveDate);
                 tmp.text = $"AutoFile {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} {data.dayNum} Days";
+            }
+            else if(i== 0 && data.index == -1)
+                tmp.text = "AutoFile Empty";
             else if (data.index == -1)
                 tmp.text = $"File {i} Empty";
             else
+            {
+                date = DateTime.Parse(data.saveDate);
                 tmp.text = $"File {i} {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} {data.dayNum} Days";
+            }
 
             btns[i].onClick.RemoveAllListeners();
-            if(isSavePanel)
-                btns[i].onClick.AddListener(() => Save(i));
-            else
-                btns[i].onClick.AddListener(() => Load(i));
-        }
+            if(i != 0 && isSavePanel)
+                btns[i].onClick.AddListener(() => { Save(i); gameObject.SetActive(false); });
+            else if(!isSavePanel)
+                btns[i].onClick.AddListener(() => { Load(i);  gameObject.SetActive(false); });
+                }
     }
 
     public void Save(int index)
     {
         database.Save(index);
-        btns[index].GetComponentInChildren<TextMeshProUGUI>().text = $"File {index} Saved";
+        var data = database.SaveData_Get();
+        var date = DateTime.Parse(data.saveDate);
+        btns[index].GetComponentInChildren<TextMeshProUGUI>().text = $"File {index} {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} {data.dayNum} Days";
     }
 
     public void Load(int index)
@@ -65,7 +83,6 @@ public class SaveLoadPanel : MonoBehaviour
         var data = database.Load(index, false);
         if (data.index == -1)
             return;
-
-        database.Load(index);
+        onLoadAction?.Invoke();
     }
 }

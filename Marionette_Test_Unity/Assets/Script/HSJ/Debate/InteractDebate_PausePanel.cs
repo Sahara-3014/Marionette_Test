@@ -18,17 +18,21 @@ public class InteractDebate_PausePanel : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
     private void Start()
     {
         saveLoadPanel = SaveLoadPanel.instance;
+        if(saveLoadPanel.onLoadAction == null)
+            saveLoadPanel.onLoadAction = () => InteractiveDebate_UIManager.instance.Loaded_DataSet();
+        else
+            saveLoadPanel.onLoadAction += () => InteractiveDebate_UIManager.instance.Loaded_DataSet();
         // TODO Setting Manager : Value Setting
     }
 
@@ -38,6 +42,11 @@ public class InteractDebate_PausePanel : MonoBehaviour
 
         // TODO sfx setting
 
+    }
+
+    private void OnDisable()
+    {
+        saveLoadPanel.onLoadAction -= () => InteractiveDebate_UIManager.instance.Loaded_DataSet();
     }
 
     public void ChangeSlider(bool isBGM)
