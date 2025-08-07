@@ -316,6 +316,13 @@ public class SaveDatabase : MonoBehaviour
         _callback?.Invoke();
     }
 
+    public void AutoLoad(UnityAction _callback = null)
+    {
+        saveData.saveDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        PlayerPrefs.SetString($"SaveData_Auto", JsonConvert.SerializeObject(saveData));
+        _callback?.Invoke();
+    }
+
     public void Save(int _index, UnityAction _callback = null)
     {
         savePlayIndex = _index;
@@ -325,17 +332,23 @@ public class SaveDatabase : MonoBehaviour
         _callback?.Invoke();
     }
 
-    public void Load(int _index, UnityAction<SaveData> _callback = null)
+    public SaveData Load(int _index, bool isSet = true)
     {
         savePlayIndex = _index;
         string data = PlayerPrefs.GetString($"SaveData_{_index}", null);
         if (data != null)
         {
-            saveData = JsonConvert.DeserializeObject<SaveData>(data);
-            _callback?.Invoke(saveData);
+            var _data = JsonConvert.DeserializeObject<SaveData>(data);
+            if(isSet)
+            {
+                saveData = _data;
+                return saveData;
+            }
+            else
+                return _data;
         }
         else
-            _callback?.Invoke(new SaveData { index = -1 });
+           return new SaveData { index = -1 };
     }
 
     /// <summary> Resources 폴더에 저장 </summary>

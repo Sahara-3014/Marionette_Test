@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class InterectObject_Test : MonoBehaviour
+public class InteractObject_Test : MonoBehaviour
 {
-    InterectObject interect;
+    InteractObject interect;
     [SerializeField] Sprite[] cursor;
 
     private void Start()
     {
-        interect = GetComponent<InterectObject>();
+        interect = GetComponent<InteractObject>();
         interect.Rigister_CursorHoverEvent(() => CursorChange(true));
         interect.Rigister_CursorExitEvent(() => CursorChange(false));
 

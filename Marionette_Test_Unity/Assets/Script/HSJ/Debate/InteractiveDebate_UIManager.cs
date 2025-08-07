@@ -65,6 +65,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
             Destroy(child.gameObject);
 
         CloseChoicePanel();
+        Vector2 delta = uploadGauge.sizeDelta;
+        delta.x = 0f;
+        uploadGauge.sizeDelta = delta;
 
         // 데이터 셋팅
         Loaded_DataSet();

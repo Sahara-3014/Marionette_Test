@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(EventTrigger))]
-public class InterectObject : MonoBehaviour
+public class InteractObject : MonoBehaviour
 {
     [Tooltip("해당 오브젝트를 눌렀을때 작동하는 이벤트")]
     [SerializeField] protected UnityEvent onBtnPress;

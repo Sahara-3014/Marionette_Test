@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(BoxCollider))]
-public class InteractiveDebate_ScrollTMPObject : InterectObject
+public class InteractiveDebate_ScrollTMPObject : InteractObject
 {
     [SerializeField] Color diableColor = Color.gray;
     public bool isSelected { get; protected set; } = false;
