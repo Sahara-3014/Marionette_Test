@@ -92,14 +92,33 @@ public class GoogleSheetLoader : MonoBehaviour
 
         dialogueSystem.SetDialogue(dialogueList.ToArray());
 
-        // ShowDialogue 및 NextDialogue 호출을 코루틴 끝에 넣거나 약간 지연해서 호출
         yield return null; // 한 프레임 대기
 
-        dialogueSystem.ShowDialogue(1000, 1);
+        // 시트 이름에 따른 시작 ID 가져오기
+        int startID = GetStartIDFromSheetName(sheetName);
 
-        // NextDialogue는 ShowDialogue 내부 또는 UI가 준비된 후 호출하는 게 좋음
+        // 시작 ID, 인덱스 1부터 대사 보여주기
+        dialogueSystem.ShowDialogue(startID, 1);
+
+        // NextDialogue 호출해서 대사 진행
         dialogueSystem.NextDialogue();
+
     }
+
+    private int GetStartIDFromSheetName(string sheetName)
+    {
+        switch (sheetName)
+        {
+            case "INTRO": return 1000;
+            case "START": return 2000;
+            case "CHAPTER1": return 3000;
+            // 필요하면 추가
+            default: return 1000; // 기본값
+        }
+    }
+
+
+
     public AudioClip LoadAudioClipByName(string clipName)
     {
         if (string.IsNullOrEmpty(clipName)) return null;

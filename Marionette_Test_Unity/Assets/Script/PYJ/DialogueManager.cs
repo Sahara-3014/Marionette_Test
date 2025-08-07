@@ -63,6 +63,13 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Button[] choiceButtons;          // 선택지 버튼들
     [SerializeField] private TextMeshProUGUI[] choiceButtonTexts; // 버튼 텍스트
 
+    private Dictionary<string, int> sheetIDStartDict = new Dictionary<string, int>()
+{
+    {"INTRO", 1000},
+    {"START", 2000},
+    {"CHAPTER1", 3000},
+    // 필요한 만큼 추가
+};
 
 
 
@@ -370,8 +377,6 @@ public class DialogueManager : MonoBehaviour
 
 
         int nextIDNum = currentDialogue.nextID;  // 이미 int라면 바로 사용 가능
-
-
         // 선택지가 있으면 nextDialogueID는 -1 (직접 선택지에서 분기 처리)
         if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
         {
@@ -621,13 +626,22 @@ public class DialogueManager : MonoBehaviour
                 }
                 else
                 {
-                    // 더 이상 대사 없음
-                    OnOff(false);
+                    string nextSheetName = GetNextSheetName(currentID);
+                    OnDialogueEnded(nextSheetName);
+                    return;
+
                 }
             }
         }
+
     }
 
+    private string GetNextSheetName(int currentID)
+    {
+        if (currentID >= 1000 && currentID < 2000) return "START";
+        if (currentID >= 2000 && currentID < 3000) return "CHAPTER1";
+        return null; // 더 이상 시트 없음
+    }
 
 
 
@@ -769,5 +783,15 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-
+    public void OnDialogueEnded(string nextSheetName)
+    {
+        if (sheetLoader != null && !string.IsNullOrEmpty(nextSheetName))
+        {
+            sheetLoader.LoadNextSheet(nextSheetName);
+        }
+        else
+        {
+            OnOff(false); // 대화 종료 처리
+        }
+    }
 }
