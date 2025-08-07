@@ -57,7 +57,7 @@ public class GoogleSheetLoader : MonoBehaviour
 
     IEnumerator LoadGoogleSheet(string sheetName)
     {
-        string range = $"{sheetName}!A3:AI100";
+        string range = $"{sheetName}!A1:AI100";
         string url = $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
 
         UnityWebRequest www = UnityWebRequest.Get(url);
