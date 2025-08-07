@@ -8,8 +8,8 @@ public class RaycastInput : MonoBehaviour
     [SerializeField] private bool isDebug = false; // 디버그 모드 여부
     [field:SerializeField] List<RaycastHit> hits = new(); // RaycastHit 배열
     private Vector3 mousePosition;
-    InterectObject mousePressObject = null;
-    InterectObject mouseHoverObject = null;
+    InteractObject mousePressObject = null;
+    InteractObject mouseHoverObject = null;
 
     // Update is called once per frame
     private void Update()
@@ -45,11 +45,11 @@ public class RaycastInput : MonoBehaviour
             {
                 if (hits.Contains(_hits[i]) == false)
                 {
-                    if (_hits[i].collider.gameObject.GetComponent<InterectObject>() == null)
+                    if (_hits[i].collider.gameObject.GetComponent<InteractObject>() == null)
                         continue;
-                    if(mouseHoverObject != null && mouseHoverObject != _hits[i].collider.gameObject.GetComponent<InterectObject>())
+                    if(mouseHoverObject != null && mouseHoverObject != _hits[i].collider.gameObject.GetComponent<InteractObject>())
                         mouseHoverObject.OnCursorExit();
-                    mouseHoverObject = _hits[i].collider.gameObject.GetComponent<InterectObject>();
+                    mouseHoverObject = _hits[i].collider.gameObject.GetComponent<InteractObject>();
                     mouseHoverObject.OnCursorHover();
                     break;
                 }
@@ -59,10 +59,10 @@ public class RaycastInput : MonoBehaviour
             {
                 if (_hits.Contains(hits[i]) == false)
                 {
-                    if (hits[i].collider.gameObject.GetComponent<InterectObject>() == null)
+                    if (hits[i].collider.gameObject.GetComponent<InteractObject>() == null)
                         continue;
-                    hits[i].collider.gameObject.GetComponent<InterectObject>()?.OnCursorExit();
-                    if(mouseHoverObject == hits[i].collider.gameObject.GetComponent<InterectObject>())
+                    hits[i].collider.gameObject.GetComponent<InteractObject>()?.OnCursorExit();
+                    if(mouseHoverObject == hits[i].collider.gameObject.GetComponent<InteractObject>())
                         mouseHoverObject = null;
                     break;
                 }
@@ -91,9 +91,9 @@ public class RaycastInput : MonoBehaviour
         {
             if (_index >= index)
                 break;
-            if (hits[i].collider.gameObject.GetComponent<InterectObject>() != null)
+            if (hits[i].collider.gameObject.GetComponent<InteractObject>() != null)
             {
-                var obj = hits[i].collider.gameObject.GetComponent<InterectObject>();
+                var obj = hits[i].collider.gameObject.GetComponent<InteractObject>();
                 obj.OnBtnPress();
                 mousePressObject = obj;
                 _index += 1;
