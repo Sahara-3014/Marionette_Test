@@ -117,9 +117,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1682
-        width: 479
-        height: 478
+        y: 1683
+        width: 478
+        height: 477
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,11 +134,55 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: InventoryUI1_1
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 1681
+        width: 480
+        height: 479
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72467e2cc65e30b49b66a1dc4f559846
+      internalID: -1159565282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventoryUI1_2
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 1676
+        width: 483
+        height: 484
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45538c2edec4aee438df57cd62fafe6a
+      internalID: -32689224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: d56d3a7f56b15ea49bfce5cdb22cb63b
     internalID: 0
     vertices: []
     indices: 
@@ -149,6 +193,11 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       InventoryUI1_0: 7748435413197043997
+      InventoryUI1_1: -1159565282
+      InventoryUI1_2: -32689224
+      InventoryUI1_3: 1545525359
+      InventoryUI1_4: -65490114
+      InventoryUI1_5: -225609740
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
