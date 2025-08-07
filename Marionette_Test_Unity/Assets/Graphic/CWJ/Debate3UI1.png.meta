@@ -272,7 +272,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Debate3UI1_0: -8621341235889913601
+      Debate3UI1_1: -463682555057910326
+      Debate3UI1_2: -664315640196735951
+      Debate3UI1_3: -857523802567832399
+      Debate3UI1_4: -7812295419947432674
+      Debate3UI1_5: 7476155855826561078
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
