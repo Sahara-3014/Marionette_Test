@@ -59,9 +59,10 @@ public class SaveDatabase : MonoBehaviour
     }
 
     public void ChangeScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
-    {
-        SceneManager.LoadScene(sceneName, mode);
-    }
+    => SceneManager.LoadScene(sceneName, mode);
+
+    public void ChangeScene(int sceneIndex, LoadSceneMode mode = LoadSceneMode.Single)
+    => SceneManager.LoadScene(sceneIndex, mode);
 
     public void AddSceneChangeEvent(string sceneName, UnityAction action)
     {
