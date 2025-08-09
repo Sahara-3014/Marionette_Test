@@ -58,9 +58,9 @@ public class InteractDebate_PausePanel : MonoBehaviour
         label.text = $"{cal.ToString()} %"; 
     }
 
-    public void OpenSaveLoadPanel(bool isSavePanel)
+    public void OpenSaveLoadPanel(SaveLoadPanel.SaveTpye saveTpye)
     {
         saveLoadPanel.gameObject.SetActive(true);
-        saveLoadPanel.Open(isSavePanel);
+        saveLoadPanel.Open(saveTpye);
     }
 }
