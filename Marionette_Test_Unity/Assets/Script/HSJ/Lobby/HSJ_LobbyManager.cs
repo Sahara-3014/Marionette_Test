@@ -1,5 +1,7 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class HSJ_LobbyManager : MonoBehaviour
@@ -15,15 +17,54 @@ public class HSJ_LobbyManager : MonoBehaviour
     private void Start()
     {
         if(saveLoadPanel.onLoadAction == null)
+        {
             saveLoadPanel.onLoadAction = SceneLoad;
+            saveLoadPanel.onNewAction = SceneLoad;
+        }
         else
+        {
             saveLoadPanel.onLoadAction += SceneLoad;
+            saveLoadPanel.onNewAction += SceneLoad;
+        }
         setting = SoundSettingValue.instance;
+
+        Transform effect = EffectManager.Instance.gameObject.transform;
+        DontDestroyOnLoad(effect.parent.gameObject);
+    }
+
+    private void OnDisable()
+    {
+        saveLoadPanel.onLoadAction -= SceneLoad;
+        saveLoadPanel.onNewAction -= SceneLoad;
     }
 
     public void SceneLoad()
     {
-        SaveDatabase.Instance.ChangeScene(sceneName);
+        float delay = 3f;
+        SaveDatabase.Instance.AddSceneChangeEvent(sceneName , () =>
+        {
+            var so = EffectManager.Instance.sequenceList[0].steps[1].directionSet;
+            EffectManager.Instance.PlayDirectionSet(so);
+            SaveDatabase.Instance.StartCoroutine(SaveDatabase.Instance.AfterAction(() =>
+            {
+                var so = EffectManager.Instance.sequenceList[0].steps[1].directionSet;
+                EffectManager.Instance.StopDirectionSet(so);
+            }, delay));
+        });
+
+        saveLoadPanel.BtnsDisable();
+
+        var so = EffectManager.Instance.sequenceList[0].steps[2].directionSet;
+        EffectManager.Instance.PlayDirectionSet(so);
+        
+        //EffectManager.Instance.PlayEffect(idx);
+        SaveDatabase.Instance.StartCoroutine(SaveDatabase.Instance.AfterAction(() =>
+        {
+            var so = EffectManager.Instance.sequenceList[0].steps[2].directionSet;
+            SaveDatabase.Instance.ChangeScene(sceneName);
+            //EffectManager.Instance.StopEffect(idx);
+            EffectManager.Instance.StopDirectionSet(so);
+        }, delay));
     }
 
     public void ChangeSoundSlider(bool isBGM)
@@ -41,9 +82,9 @@ public class HSJ_LobbyManager : MonoBehaviour
         label.text = $"{value}%";
     }
 
-    public void OpenSavePanel(bool isSave)
+    public void OpenSavePanel(bool isNew)
     {
-        saveLoadPanel.Open(isSave);
+        saveLoadPanel.Open(isNew ? SaveLoadPanel.SaveTpye.New : SaveLoadPanel.SaveTpye.Load);
         panels[0].SetActive(false);
     }
 

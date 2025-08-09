@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using static CharAttributeData;
+using System.Collections;
 
 public class SaveDatabase : MonoBehaviour
 {
@@ -258,15 +258,15 @@ public class SaveDatabase : MonoBehaviour
             return null;
         return saveData.charsData[key];
     }
-    public GaugeInt SaveData_GetCharData_GetGauge(string key, CharAttributeType gauge)
+    public GaugeInt SaveData_GetCharData_GetGauge(string key, CharAttributeData.CharAttributeType gauge)
     {
         if (saveData.charsData == null || saveData.charsData.ContainsKey(key) == false)
             return new();
         CharAttributeData charData = saveData.charsData[key];
 
-        if(gauge == CharAttributeType.TRUST || gauge == CharAttributeType.SUSPICION)
+        if(gauge == CharAttributeData.CharAttributeType.TRUST || gauge == CharAttributeData.CharAttributeType.SUSPICION)
             return charData.trust;
-        else if(gauge == CharAttributeType.MENTAL || gauge == CharAttributeType.LIKE)
+        else if(gauge == CharAttributeData.CharAttributeType.MENTAL || gauge == CharAttributeData.CharAttributeType.LIKE)
             return charData.mental;
         else
             return new GaugeInt(); // 기본값 반환
@@ -280,7 +280,7 @@ public class SaveDatabase : MonoBehaviour
         else
             saveData.charsData[key] = data;
     }
-    public void SaveData_SetCharData_SetGauge(string key, CharAttributeType gauge, int value)
+    public void SaveData_SetCharData_SetGauge(string key, CharAttributeData.CharAttributeType gauge, int value)
     {
         if (saveData.charsData == null)
             saveData.charsData = new Dictionary<string, CharAttributeData>();
@@ -288,9 +288,9 @@ public class SaveDatabase : MonoBehaviour
             saveData.charsData.Add(key, new CharAttributeData());
         CharAttributeData charData = saveData.charsData[key];
 
-        if (gauge == CharAttributeType.TRUST || gauge == CharAttributeType.SUSPICION)
+        if (gauge == CharAttributeData.CharAttributeType.TRUST || gauge == CharAttributeData.CharAttributeType.SUSPICION)
             charData.trust.value = value;
-        else if (gauge == CharAttributeType.MENTAL || gauge == CharAttributeType.LIKE)
+        else if (gauge == CharAttributeData.CharAttributeType.MENTAL || gauge == CharAttributeData.CharAttributeType.LIKE)
             charData.mental.value = value;
 
         saveData.charsData[key] = charData;
@@ -320,7 +320,6 @@ public class SaveDatabase : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogError($"AutoLoad Error: {e.Message}");
                 return new SaveData { index = -1 }; // 자동 저장이 잘못된 경우
             }
 
@@ -359,7 +358,6 @@ public class SaveDatabase : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogError($"Load Error: {e.Message}");
                 return new SaveData { index = -1 }; // 잘못된 저장 데이터
             }
         }
@@ -384,6 +382,12 @@ public class SaveDatabase : MonoBehaviour
          return Resources.Load<TextAsset>(key)?.text;
     }
     #endregion
+
+    public IEnumerator AfterAction(UnityAction action, float delay = 0f)
+    {
+        yield return new WaitForSeconds(delay);
+        action?.Invoke();
+    }
 }
 
 
