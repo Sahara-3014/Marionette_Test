@@ -15,7 +15,6 @@ public class SaveLoadPanel : MonoBehaviour
     [SerializeField] Button backBtn;
     public UnityAction onLoadAction;
     public UnityAction onNewAction;
-    public string sceneName = "HSJ_Lobby";
 
     void Awake()
     {
@@ -119,10 +118,5 @@ public class SaveLoadPanel : MonoBehaviour
         }
         if (backBtn != null)
             backBtn.interactable = true;
-    }
-
-    public void SceneMove()
-    {
-        SaveDatabase.Instance.ChangeScene(sceneName);
     }
 }

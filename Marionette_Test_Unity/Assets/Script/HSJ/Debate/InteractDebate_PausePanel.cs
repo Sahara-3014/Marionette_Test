@@ -10,6 +10,7 @@ public class InteractDebate_PausePanel : MonoBehaviour
     [SerializeField] Slider sfx;
     [SerializeField] TextMeshProUGUI sfxLabel;
     SaveLoadPanel saveLoadPanel;
+    public string sceneName = "HSJ_Lobby";
 
     // Req Setting Manager
 
@@ -62,5 +63,15 @@ public class InteractDebate_PausePanel : MonoBehaviour
     {
         saveLoadPanel.gameObject.SetActive(true);
         saveLoadPanel.Open(saveTpye);
+    }
+
+    public void SceneMove()
+    {
+        SaveDatabase.Instance.ChangeScene(sceneName);
+    }
+
+    public void OpenSaveLoad(bool isSave)
+    {
+        saveLoadPanel.Open(isSave ? SaveLoadPanel.SaveTpye.Save : SaveLoadPanel.SaveTpye.Load);
     }
 }
