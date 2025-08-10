@@ -24,8 +24,6 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
     UnityAction onNextProductionAcion = null;
     /// <summary> null이면 Play메서드 실행 </summary>
     Coroutine[] nextProductionCoroutine = null;
-    /// <summary> 스킵시 원래 액션으로 돌아가기 위한 변수 </summary>
-    UnityAction onSkipToOriAction = null;
     
     public InteractiveDebate_DialogueData debateData { get; protected set; }
 
@@ -97,8 +95,8 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
             onNextProductionAcion.Invoke();
             return;
         }
-        if (uiManager.IsChoicePanelOpened())
-            return;
+        //if (uiManager.IsChoicePanelOpened())
+        //    return;
         Debug.Log("Play_Next");
         debateData = dialogs[currentIndex];
 
@@ -258,23 +256,16 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         if (nextProductionCoroutine == null)
             nextProductionCoroutine = new Coroutine[4];
 
-        int count = 0;
-        int maxCount = 0;
         // TODO 캐릭터연출 재생 <- 타입에 따라서 프레임에 먹일 이펙트/캐릭터에 먹일 이펙트 분리해야함
-        nextProductionCoroutine[0] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.TARGET_EFFECT, uiManager.target, ()=> count++));
-        maxCount += 1;
-        //nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answers[0], ()=> count++));
-        //nextProductionCoroutine[2] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH2_EFFECT, uiManager.answers[1], () => count++));
-        //nextProductionCoroutine[3] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH3_EFFECT, uiManager.answers[2], () => count++));
+        nextProductionCoroutine[0] = StartCoroutine(dialogEffectManager.RunCharacterEffect(debateData.TARGET_EFFECT, uiManager.target));
+        nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answer));
 
         // TODO se2재생
         SEPlayEffect(se2Audio, debateData.SE2, debateData.SE2_EFFECT);
+
         // TODO 기다리고 바로 실행하기
-        while(count < maxCount)
-        {
-            Debug.Log("Step3 Waiting");
-            await Task.Yield();
-        }
+        Debug.Log("Step3 Waiting");
+        await Task.Delay(Mathf.FloorToInt(uiEffectManager.duration*1000));
         onNextProductionAcion.Invoke();
     }
 
@@ -283,7 +274,20 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
     {
         Debug.Log("Step4");
         // TOOD 다음 대사로 넘어가기
-        onNextProductionAcion = Step5;
+        onNextProductionAcion = ()=>
+        {
+            if(uiManager.skipAction != null)
+            {
+                uiManager.skipAction.Invoke();
+                uiManager.skipAction = null;
+            }
+            else
+            {
+                Step5();
+            }
+        };
+
+        //이전 스텝 변수 초기화
         if(nextProductionCoroutine != null)
         {
             if (nextProductionCoroutine[1] != null)
@@ -298,27 +302,14 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         // TODO 대사 출력
         if (debateData.DIALOGUE != null)
         {
-            //if(debateData.TARGET_NAME == debateData.SPEAKER)
-            //    uiManager.Add_TargetText(debateData.DIALOGUE, ()=>onNextProductionAcion.Invoke());
-            //else
-            //    uiManager.Add_OtherAnswerText($"{debateData.SPEAKER}", $"{debateData.DIALOGUE}", () => onNextProductionAcion.Invoke());
-
-            //TODO 다이얼로그 출력
-            //uiManager.Add_DialogueText(debateData.SPEAKER, debateData.DIALOGUE, debateData.TARGET_NAME, debateData.TARGET_EMOTION,
-                //() => onNextProductionAcion.Invoke(), debateData.TARGET_INTERACT);
-            onSkipToOriAction = uiManager.skipAction;
-        }
-        else
-        {
-            onNextProductionAcion.Invoke();
-            onNextProductionAcion = null;
+            uiManager.AddDialog(name: debateData.SPEAKER, text: debateData.DIALOGUE);
         }
     }
 
+    /// <summary> 감정 게이지 보여주기 </summary>
     void Step5()
     {
         onNextProductionAcion = null;
-        onSkipToOriAction = null;
 
         if (debateData.TARGET_INTERACT != null)
         {
@@ -335,6 +326,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         }
 
 
+        // 선택지 보여주기
         if (debateData.CHOICE1_ID != 0)
         {
             List<(int, string)> choices = new();
@@ -344,13 +336,16 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
             if (debateData.CHOICE3_ID != 0)
                 choices.Add((debateData.CHOICE3_ID, debateData.CHOICE3_TEXT));
 
-            uiManager.OpenChoicePanel(choices);
+            //uiManager.OpenChoicePanel(choices);
         }
+        // 다음 id가 설정되어있는경우 다음꺼 보여주기
         else if (debateData.NEXT_ID != -1 && debateData.NEXT_ID != 0)
         {
             SetDialogs(debateData.NEXT_ID, isIndexInit: true, isPlaying: true);
         }
-        else
+        // 다음대사 실행하기
+        // TODO 다음대사 없고 할당이 안되어있으면 에러날듯
+        else if(dialogs.Length <= currentIndex + 1)
         {
             currentIndex += 1;
         }

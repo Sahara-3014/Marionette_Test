@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using DanielLochner.Assets.SimpleScrollSnap;
+using UnityEngine.EventSystems;
 
 public class InteractiveDebate_UIManager : MonoBehaviour
 {
@@ -19,19 +21,15 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     public SpriteRenderer BG;
     [SerializeField] TextMeshProUGUI timerLabel;
     [SerializeField] InventoryManager inventoryManager;
-    int selectItemIndex = -1;
-
-    [Space(10)]
-    public Image target;
-    [SerializeField] TextMeshProUGUI targetNameLabel;
-    [SerializeField] TextMeshProUGUI dialogLabel;
+    public SpriteRenderer target;
+    public Image answer;
     [SerializeField] RectTransform[] targetAbilityGauges;
-    public Image answers;
 
     [Space(10)]
-    [Header("Choice Values")]
+    [SerializeField] SimpleScrollSnap scrollSnap;
     [SerializeField] GameObject choicePanel;
-    [SerializeField] List<Button> choiceBtns;
+    [SerializeField] List<InteractiveDebate_ChoiceBtn> choiceBtns;
+    [SerializeField] GameObject dialogPrefab;
 
     [HideInInspector]
     public UnityAction skipAction = null;
@@ -57,6 +55,10 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         dayCycleSystem = DayCycleSystem.Instance;
 
         CloseChoicePanel();
+        while(scrollSnap.Content.childCount > 0)
+        {
+            scrollSnap.Remove(0);
+        }
 
         // 데이터 셋팅
         Loaded_DataSet();
@@ -88,20 +90,39 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         int dialog_index = database.SaveData_GetNowDialogIndex();
         DialogueData[] data = database.Get_Dialogs_NeedID(dialog_id);
 
-        //dialogLabel
+        for(int i=0;i<dialog_index;i++)
+        {
+            AddDialog(data[i].speaker, data[i].dialogue);
+            skipAction?.Invoke();
+        }
     }
 
-    async void TextTypingEffect(TextMeshProUGUI tmp, string text, float lettersDelay = .02f, bool isReverse = false, UnityAction callback = null)
+    public void AddDialog(string name, string text, UnityAction callback = null)
     {
-        string txt = tmp.text;
-        skipAction = () => tmp.text = isReverse ? text + txt : text;
+        // 대화 프리팹 생성
+        GameObject dialogObj = Instantiate(dialogPrefab, scrollSnap.Content);
+        TextMeshProUGUI nameLabel = dialogObj.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI dialogLabel = dialogObj.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        
+        nameLabel.text = name;
+        dialogLabel.text = string.Empty; // 초기화
+        TextTypingEffect(dialogLabel, text, callback: () => callback?.Invoke());
+
+        scrollSnap.GoToPanel(scrollSnap.Content.childCount - 1);
+    }
+
+    async void TextTypingEffect(TextMeshProUGUI tmp, string text, float lettersDelay = .02f, UnityAction callback = null)
+    {
+        skipAction = () =>
+        {
+            CancelInvoke(nameof(TextTypingEffect)); // 텍스트 타이핑 중지
+            tmp.text = text;
+            skipAction = null; // 스킵 액션 초기화
+        };
         TimeSpan delay = TimeSpan.FromSeconds(lettersDelay);
         for(int i=0;i<=text.Length;i++)
         {
-            if(isReverse)
-                tmp.text = text.Substring(0, i) + txt;
-            else
-                tmp.text += text.Substring(i, 1);
+            tmp.text += text.Substring(i, 1);
             await Task.Delay(delay);
         }
         skipAction = null;
@@ -143,9 +164,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     {
         Debug.Log($"OpenChoicePanel {choices.Count}");
         choicePanel.SetActive(true);
-        while(choiceBtns.Count < choices.Count)
+        while (choiceBtns.Count < choices.Count)
         {
-            Button newBtn = Instantiate(choiceBtns[0], choiceBtns[0].transform.parent);
+            var newBtn = Instantiate(choiceBtns[0], choiceBtns[0].transform.parent);
             choiceBtns.Add(newBtn);
         }
         Debug.Log("OpenChoicePanel foreach");
@@ -157,10 +178,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
             Debug.Log($"OpenChoicePanel foreach {choiceBtns[_index].gameObject.activeSelf}");
             choiceBtns[_index].GetComponentInChildren<TextMeshProUGUI>().text = value;
             Debug.Log($"OpenChoicePanel foreach {choiceBtns[_index].GetComponentInChildren<TextMeshProUGUI>().text}");
-            choiceBtns[_index].onClick.RemoveAllListeners();
             Debug.Log($"OpenChoicePanel foreach Remove");
             // 버튼 누르면 선택창 닫고 대화 시작
-            choiceBtns[_index].onClick.AddListener(() =>
+            choiceBtns[_index].onPressAction = () =>
             {
                 CloseChoicePanel();
                 if (key == -1)
@@ -170,7 +190,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
                 }
                 else
                     dialogManager.SetDialogs(key, true, true);
-            });
+            };
             Debug.Log($"OpenChoicePanel foreach onClick");
             _index++;
         }
@@ -185,7 +205,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     public void CloseChoicePanel()
     {
         choicePanel.SetActive(false);
-        foreach (Button btn in choiceBtns)
+        foreach (var btn in choiceBtns)
         {
             btn.gameObject.SetActive(false);
         }
