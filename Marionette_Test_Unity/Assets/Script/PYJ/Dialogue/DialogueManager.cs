@@ -148,16 +148,8 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private DialogueData[] dialogue;
 
     private Coroutine typingCoroutine;
-
-
-
-
-    //
-    //대사 보여주는 함수
-    //
     public void ShowDialogue(int id, int index)
     {
-        Debug.Log($"[ShowDialogue] 호출됨 - id={id}, index={index}");
 
         var key = (id, index);
         if (!dialogueDictByIDAndIndex.ContainsKey(key))
@@ -166,23 +158,48 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        currentID = id;
-        currentIndex = index;
-
         var currentData = dialogueDictByIDAndIndex[key];
-        Debug.Log($"[ShowDialogue] 대사 내용: {currentData.dialogue}");
+        Debug.Log($"commands: '{currentData.commands}'");
+        // 명령어 처리 (한 번만)
+        if (!string.IsNullOrEmpty(currentData.commands))
+        {
+            string[] commands = currentData.commands.Split(new char[] { ' ', ',', ';' }, System.StringSplitOptions.RemoveEmptyEntries);
+            foreach (var cmd in commands)
+            {
+                switch (cmd)
+                {
+                    case "BGM_SLOW":
+                        soundManager.SetBGMSpeed(0.5f);
+                        break;
+                    case "BGM_OFF":
+                        soundManager.StopBGM();
+                        break;
+                    case "BGM_ON":
+                        soundManager.SetBGMSpeed(1f);
+                        soundManager.PlayBGM();
+                        break;
+                }
+            }
+        }
 
-        isTyping = true;
+        // 1) BGM 교체 필요시 실행
+        if (currentData.bgm != null && currentData.bgm.clip != null)
+        {
+            if (soundManager.bgmSource.clip != currentData.bgm.clip)
+            {
+                soundManager.PlayBGM(currentData.bgm);
+            }
+        
+        }
 
-        StartCoroutine(TypeText(currentData.dialogue, currentData.index));
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+        }
 
+        typingCoroutine = StartCoroutine(TypeText(currentData.dialogue, index));
     }
-
-
-
-
-
-
 
 
     //
@@ -372,9 +389,8 @@ public class DialogueManager : MonoBehaviour
         if (currentDialogue.se2 != null)
             soundManager.PlayDialogSE(currentDialogue.se2);
 
-        typingCoroutine = StartCoroutine(TypeText(currentDialogue.dialogue, currentIndex));
 
-
+        ShowDialogue(currentID, currentIndex);
         int nextIDNum = currentDialogue.nextID;  // 이미 int라면 바로 사용 가능
         // 선택지가 있으면 nextDialogueID는 -1 (직접 선택지에서 분기 처리)
         if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
@@ -404,15 +420,12 @@ public class DialogueManager : MonoBehaviour
                 nextDialogueID = -1;
             }
         }
-
-
     }
-
-
 
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
-        Debug.Log($"TypeText 호출: 대사 인덱스={dialogueIndex}, 텍스트={sentence}");
+        Debug.Log($"[TypeText] 받은 문장: '{sentence}'");
+
         isTyping = true;
         canInput = false;
         txt_Dialogue.text = "";
@@ -455,15 +468,12 @@ public class DialogueManager : MonoBehaviour
 
         isTyping = false;
 
-        // 스페이스 눌러서 타이핑만 스킵한 경우엔 이후 입력을 기다리지 않음
         if (inputQueuedBeforeChoice)
         {
             inputQueuedBeforeChoice = false;
             yield break;
         }
-
     }
-
 
 
     private void OnOff(bool flag)
@@ -613,6 +623,8 @@ public class DialogueManager : MonoBehaviour
                 currentIndex = 1;
                 nextDialogueID = -1;
                 NextDialogue();
+                int nextIndex = currentIndex + 1; // 필요하면 nextIndex를 데이터에 맞게 조정하세요
+                ShowDialogue(nextDialogueID, nextIndex);
             }
             else
             {
@@ -729,13 +741,8 @@ public class DialogueManager : MonoBehaviour
             Debug.Log($"nextID가 0 이하, currentID 유지, currentIndex 증가: {currentIndex}");
         }
 
-        NextDialogue();  // 여기에선 ShowDialogue 호출하지 말고 NextDialogue만 호출
+        NextDialogue(); 
     }
-
-
-
-
-
 
 
 

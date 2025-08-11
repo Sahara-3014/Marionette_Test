@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using SimpleJSON;
 using System.Linq;
 
+
 public class GoogleSheetLoader : MonoBehaviour
 {
     public static GoogleSheetLoader Instance { get; private set; }
@@ -89,7 +90,6 @@ public class GoogleSheetLoader : MonoBehaviour
         }
 
         List<DialogueData> dialogueList = new List<DialogueData>();
-
         for (int i = 2; i < values.Count; i++)
         {
             var row = values[i];
@@ -97,10 +97,15 @@ public class GoogleSheetLoader : MonoBehaviour
 
             Debug.Log($"로드된 대사: ID={d.ID}, index={d.index}, 대사='{d.dialogue}'");
 
+            int bgmColumnIndex = 23;      // DialogueData 생성자 기준 BGM 열 (예: 23)
+            int commandsColumnIndex = 24; // commands 열 (예: 24)
+
+            string bgmCommand = row[bgmColumnIndex].Value.Trim();
+            string extraCommand = row[commandsColumnIndex].Value.Trim();
             dialogueList.Add(d);
         }
 
-        // --- 여기에 추가된 부분 시작 ---
+
 
         // ID별 그룹화 후 index 정렬하여 Dictionary 생성
         var dict = dialogueList

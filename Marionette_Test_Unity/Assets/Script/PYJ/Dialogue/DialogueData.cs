@@ -71,6 +71,7 @@ public class DialogueData
     public DialogSE se1;
     public DialogSE se2;
     public DialogSE bgm;
+    public string commands;  // 명령어 저장용
 
     public Dialog_CharPos charPos1;
     public Dialog_CharPos charPos2;
@@ -189,17 +190,18 @@ public class DialogueData
 
 
 
-
+        //
         choices = choiceList.ToArray();
 
         // 효과음 및 BGM
         string bgmName = GetText(node, 23);
-        string sfx1Name = GetText(node, 24);
-        string sfx2Name = GetText(node, 25);
+        commands = GetText(node, 24);
+        string sfx1Name = GetText(node, 25);
+        string sfx2Name = GetText(node, 26);
 
         // 컷씬
-        cutscene = GetText(node, 26);
-        string cutsceneText = GetText(node, 26);
+        cutscene = GetText(node, 27);
+        string cutsceneText = GetText(node, 27);
         cutscene = cutsceneText;
 
 

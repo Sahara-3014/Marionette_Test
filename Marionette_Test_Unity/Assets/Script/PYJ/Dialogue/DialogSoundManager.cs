@@ -37,6 +37,7 @@ public class DialogSoundManager : MonoBehaviour
                 break;
         }
     }
+    private string currentBGMName = ""; // 현재 재생 중인 BGM 이름 저장
 
     public void PlayBGM(DialogSE bgm)
     {
@@ -46,12 +47,26 @@ public class DialogSoundManager : MonoBehaviour
             return;
         }
 
-        if (bgm == null || bgm.clip == null)
+        if (bgm == null)
+        {
+            Debug.LogWarning("[PlayBGM] DialogSE가 null입니다.");
+            return;
+        }
+
+        if (bgm.clip == null)
         {
             Debug.LogWarning("[PlayBGM] 재생할 BGM이 없거나 AudioClip이 null입니다.");
             return;
         }
 
+        // 이미 같은 BGM이 재생 중이면 건너뜀
+        if (bgm.clip.name == currentBGMName && bgmSource.isPlaying)
+        {
+            Debug.Log($"[PlayBGM] '{bgm.clip.name}' 이미 재생 중, 다시 재생하지 않음");
+            return;
+        }
+
+        currentBGMName = bgm.clip.name;
         bgmSource.clip = bgm.clip;
         bgmSource.volume = bgm.volume;
         bgmSource.loop = (bgm.loopCount == 0);
@@ -59,6 +74,8 @@ public class DialogSoundManager : MonoBehaviour
 
         Debug.Log($"[PlayBGM] BGM '{bgm.clip.name}' 재생 시작 (볼륨: {bgm.volume})");
     }
+
+
 
 
     public void PlaySE(DialogSE se)
@@ -114,4 +131,44 @@ public class DialogSoundManager : MonoBehaviour
             playedCount++;
         }
     }
+
+    public void SetBGMSpeed(float speed)
+    {
+        if (bgmSource.clip == null) return;
+        bgmSource.pitch = speed;
+        Debug.Log($"[SetBGMSpeed] BGM 속도 변경: {speed}");
+    }
+
+
+    public void StopBGM()
+    {
+        if (bgmSource.isPlaying)
+        {
+            bgmSource.Stop();
+            Debug.Log("[StopBGM] BGM 재생 중지");
+        }
+    }
+
+
+    public void PlayBGM()
+    {
+        if (bgmSource.clip == null) return;
+        if (!bgmSource.isPlaying)
+            bgmSource.Play();
+        Debug.Log("[StopBGM] BGM 다시 시작");
+    }
+
+    public AudioClip LoadAudioClipByName(string clipName)
+    {
+        if (string.IsNullOrEmpty(clipName)) return null;
+        AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
+        if (clip == null)
+            Debug.LogWarning($"AudioClip '{clipName}'를 Resources/Audio 폴더에서 찾을 수 없습니다.");
+        return clip;
+    }
+    void Start()
+    {
+        bgmSource.pitch = 1f;  // 초기화 코드가 없으면 다른 값이 남아있을 수 있음
+    }
+
 }
