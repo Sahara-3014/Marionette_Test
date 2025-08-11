@@ -197,14 +197,25 @@ public class DialogueManager : MonoBehaviour
         }
 
         // 1) BGM 교체 필요시 실행
-        if (currentData.bgm != null && currentData.bgm.clip != null)
+        // 기존 명령어 처리 부분 아래, BGM 교체 처리 구간 대체
+
+        if (!string.IsNullOrEmpty(currentData.bgmName))
         {
-            if (soundManager.bgmSource.clip != currentData.bgm.clip)
+            AudioClip clip = DialogSoundManager.Instance.LoadAudioClipByName(currentData.bgmName);
+            if (clip != null)
             {
-                soundManager.PlayBGM(currentData.bgm);
+                if (DialogSoundManager.Instance.bgmSource.clip != clip)
+                {
+                    var bgmSE = new DialogSE(SEType.BGM, clip);
+                    DialogSoundManager.Instance.PlayBGM(bgmSE);
+                }
             }
-        
+            else
+            {
+                Debug.LogWarning($"BGM 클립을 못 찾음: {currentData.bgmName}");
+            }
         }
+
 
         if (typingCoroutine != null)
         {
@@ -213,6 +224,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         typingCoroutine = StartCoroutine(TypeText(currentData.dialogue, index));
+
     }
 
 
@@ -436,6 +448,7 @@ public class DialogueManager : MonoBehaviour
                     currentIndex = 1; // 보통 1부터 시작
 
                     ShowDialogue(currentID, currentIndex);
+                    sprite_BG.color = new Color(sprite_BG.color.r, sprite_BG.color.g, sprite_BG.color.b, 1f);
 
                     // UI와 진행 상태 초기화
                     isDialogue = false;
@@ -457,6 +470,7 @@ public class DialogueManager : MonoBehaviour
                 nextDialogueID = -1;
             }
         }
+        Debug.Log($"배경키: {bgKey}, sprite_BG.sprite: {sprite_BG.sprite}, sprite_BG.color: {sprite_BG.color}, sprite_BG.activeSelf: {sprite_BG.gameObject.activeSelf}");
 
     }
 
@@ -830,6 +844,16 @@ public class DialogueManager : MonoBehaviour
             choiceButtons[i].gameObject.SetActive(true);
             choiceButtonTexts[i].text = choices[i].choiceText;
 
+            // 클릭 가능 여부 설정 (추가)
+            if (choices[i].choiceText == "나는 인간이 아니다")
+            {
+                choiceButtons[i].interactable = false;  // 클릭 불가 처리
+            }
+            else
+            {
+                choiceButtons[i].interactable = true;   // 기본은 클릭 가능
+            }
+
             choiceButtons[i].onClick.RemoveAllListeners();
 
             int capturedNextID = localNextID;
@@ -840,6 +864,7 @@ public class DialogueManager : MonoBehaviour
                 OnChoiceSelected(capturedNextID, capturedNextIndex);
             });
         }
+
 
 
 
@@ -884,5 +909,31 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
+    }
+
+
+    public void ProcessCommand(string command)
+    {
+        if (string.IsNullOrEmpty(command))
+            return;
+
+        if (command.StartsWith("BGM:"))
+        {
+            string bgmName = command.Substring("BGM:".Length).Trim();
+            PlayBGMByName(bgmName);
+        }
+        // 다른 명령어 처리...
+    }
+
+    public void PlayBGMByName(string bgmName, float volume = 1f, int loopCount = 0)
+    {
+        AudioClip clip = DialogSoundManager.Instance.LoadAudioClipByName(bgmName);
+        if (clip == null)
+        {
+            Debug.LogWarning($"[DialogueManager] AudioClip '{bgmName}'를 찾을 수 없습니다.");
+            return;
+        }
+        DialogSE bgm = new DialogSE(SEType.BGM, clip, loopCount, volume);
+        DialogSoundManager.Instance.PlayDialogSE(bgm);
     }
 }

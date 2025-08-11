@@ -27,6 +27,8 @@ public class DialogEffectManager : MonoBehaviour
                 yield return StartCoroutine(RandomShakeScreen(bg));
                 break;
             case Dialog_ScreenEffect.None:
+                // 배경 이미지 투명도 기본값으로 복구
+                bg.color = new Color(1f, 1f, 1f, 1f);
                 yield break;
             case Dialog_ScreenEffect.ClearAll:
                 yield return StartCoroutine(ClearAll(bg));

@@ -34,11 +34,11 @@ public class DialogueChoice
 [System.Serializable]
 public class DialogueData
 {
+    public string bgmName;
     public int ID;
     public int effectIndex;
 
     public string choiceText;
-    // public string nextIndex;   // 이제 안 쓰므로 제거
     public int nextID;  // string 대신 int로 변경 권장
 
     public int index;
