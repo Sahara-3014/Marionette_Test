@@ -18,6 +18,7 @@ public class SaveDatabase : MonoBehaviour
     private Dictionary<string, UnityAction> sceneChangeEvent = new();
     private Dictionary<int, DialogueData[]> dialogs;
     private Dictionary<int, InteractiveDebate_DialogueData[]> interactiveDebateDialogs;
+    private Dictionary<int, ConfrontationDebate_DialogueData[]> confrontationDebateDialogs;
 
 
     #region 씬 이동 이벤트
@@ -188,6 +189,57 @@ public class SaveDatabase : MonoBehaviour
         }
 
         TextSave("Dialog_InteractiveDebate.json", JsonConvert.SerializeObject(this.interactiveDebateDialogs));
+    }
+
+    public ConfrontationDebate_DialogueData[] Get_ConfrontationDebateDialogs_NeedID(int id)
+    {
+        if (confrontationDebateDialogs == null)
+        {
+            string text = TextLoad("Dialog_InteractiveDebate");
+            if (text == null)
+                return null;
+
+            var dic = JsonConvert.DeserializeObject<Dictionary<int, ConfrontationDebate_DialogueData[]>>(text);
+
+            confrontationDebateDialogs = dic;
+        }
+
+        if (confrontationDebateDialogs.ContainsKey(id))
+            return confrontationDebateDialogs[id];
+
+        else
+            return null;
+    }
+
+    public void Add_ConfrontationDebateDialogs_NeedID(int id, ConfrontationDebate_DialogueData[] data)
+    {
+        if (confrontationDebateDialogs == null)
+            confrontationDebateDialogs = new();
+
+        if (confrontationDebateDialogs.ContainsKey(id) == false)
+            confrontationDebateDialogs.Add(id, data);
+        else
+            confrontationDebateDialogs[id] = data;
+    }
+
+    public void Set_ConfrontationDebateDialogs(Dictionary<int, ConfrontationDebate_DialogueData[]> dialogs)
+    {
+        if (this.confrontationDebateDialogs != null)
+        {
+            foreach (var dialog in dialogs)
+            {
+                if (this.confrontationDebateDialogs.ContainsKey(dialog.Key) == false)
+                    dialogs.Add(dialog.Key, dialog.Value);
+                else
+                    dialogs[dialog.Key] = dialog.Value;
+            }
+        }
+        else
+        {
+            this.confrontationDebateDialogs = dialogs;
+        }
+
+        TextSave("Dialog_ConfrontationDebate.json", JsonConvert.SerializeObject(this.confrontationDebateDialogs));
     }
     #endregion
 
