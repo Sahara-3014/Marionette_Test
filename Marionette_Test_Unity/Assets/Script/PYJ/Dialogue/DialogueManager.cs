@@ -409,6 +409,29 @@ public class DialogueManager : MonoBehaviour
             {
                 nextDialogueID = currentDialogue.nextID;
 
+                // 만약 nextSheet 값이 있으면 시트 전환
+                if(!string.IsNullOrEmpty(currentDialogue.nextSheet?.Trim()))
+{
+                    string nextSheetName = currentDialogue.nextSheet.Trim();
+                    Debug.Log($"다음 시트로 전환: {nextSheetName}");
+
+                    GoogleSheetLoader.Instance.LoadNextSheet(nextSheetName);
+
+                    // 대사 초기화
+                    currentID = GoogleSheetLoader.Instance.firstIDOfCurrentSheet;
+                    currentIndex = 1; // 보통 1부터 시작
+
+                    ShowDialogue(currentID, currentIndex);
+
+                    // UI와 진행 상태 초기화
+                    isDialogue = false;
+                    nextDialogueID = -1;
+                    return;
+
+                }
+
+
+
                 if (nextDialogueID == currentID)
                 {
                     Debug.LogWarning("nextDialogueID가 currentID와 같음. 다음 대화 ID를 변경하세요.");
@@ -420,6 +443,7 @@ public class DialogueManager : MonoBehaviour
                 nextDialogueID = -1;
             }
         }
+
     }
 
     private IEnumerator TypeText(string sentence, int dialogueIndex)
@@ -746,6 +770,28 @@ public class DialogueManager : MonoBehaviour
 
 
 
+    void Start()
+    {
+        GoogleSheetLoader.Instance.OnSheetLoaded += OnSheetLoadedHandler;
+    }
+
+    void OnDestroy()
+    {
+        if (GoogleSheetLoader.Instance != null)
+            GoogleSheetLoader.Instance.OnSheetLoaded -= OnSheetLoadedHandler;
+    }
+
+    private void OnSheetLoadedHandler()
+    {
+        // 새 시트 로드가 완료되면 호출됨
+        int firstID = GoogleSheetLoader.Instance.firstIDOfCurrentSheet;
+
+        currentID = firstID;
+        currentIndex = 1;
+
+        ShowDialogue(currentID, currentIndex);
+        NextDialogue();
+    }
 
 
     //

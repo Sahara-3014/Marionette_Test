@@ -10,11 +10,12 @@ public class GoogleSheetLoader : MonoBehaviour
 {
     public static GoogleSheetLoader Instance { get; private set; }
     public DialogueManager dialogueManager;
+    public event System.Action OnSheetLoaded;
 
     public string apiKey = "AIzaSyCYF6AGzi8Fe0HhVew-t0LOngxs0IOZIuc";
     public string spreadsheetId = "1N2Z-yXGz8rUvUBwLfkeB9GYIOWhMrfs6lWok9lcNIjk";
     public List<string> fixedSheetSequence = new List<string> { "INTRO", "START", "CHAPTER1" };
-
+    public int firstIDOfCurrentSheet;
     private int currentFixedIndex = 0;
     public bool usingBranching = false;
 
@@ -136,12 +137,8 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 시트 이름에 따른 시작 ID 가져오기
         int startID = dialogueList[0].ID;
-
-        // 시작 ID, 인덱스 1부터 대사 보여주기
-        dialogueSystem.ShowDialogue(startID, 1);
-
-        // 다음 대사 호출
-        dialogueSystem.NextDialogue();
+        firstIDOfCurrentSheet = startID;
+        OnSheetLoaded?.Invoke();
     }
 
 
@@ -246,4 +243,6 @@ public class GoogleSheetLoader : MonoBehaviour
         // 데이터 저장
         SaveDatabase.Instance.Set_InteractiveDebateDialogs(data);
     }
+
+
 }
