@@ -65,12 +65,10 @@ public class DialogSoundManager : MonoBehaviour
     {
         if (se == null)
         {
-            Debug.LogError("[PlaySE] DialogSE가 null입니다.");
             return;
         }
         if (se.clip == null)
         {
-            Debug.LogError("[PlaySE] DialogSE.clip이 null입니다.");
             return;
         }
         if (seSource1 == null || seSource2 == null)
