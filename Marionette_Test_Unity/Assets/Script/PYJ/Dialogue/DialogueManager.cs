@@ -169,8 +169,22 @@ public class DialogueManager : MonoBehaviour
                 switch (cmd)
                 {
                     case "BGM_SLOW":
+                        if (!soundManager.bgmSource.isPlaying)
+                        {
+                            // bgm이 안 켜져 있으면, 재생부터 시도
+                            if (soundManager.bgmSource.clip != null)
+                            {
+                                soundManager.PlayBGM();
+                            }
+                            else if (currentData.bgm != null && currentData.bgm.clip != null)
+                            {
+                                // 만약 clip도 없으면, 현재 데이터에 있는 bgm으로 PlayBGM 호출
+                                soundManager.PlayBGM(currentData.bgm);
+                            }
+                        }
                         soundManager.SetBGMSpeed(0.5f);
                         break;
+
                     case "BGM_OFF":
                         soundManager.StopBGM();
                         break;
