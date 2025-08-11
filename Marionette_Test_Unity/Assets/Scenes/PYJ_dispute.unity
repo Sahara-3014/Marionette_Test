@@ -1244,7 +1244,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD22C\uD45C \uC2DC\uC791 "
+  m_text: "\uCD5C\uC885 \uD22C\uD45C  "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6d672b48092fa574c8459d241024b89a, type: 2}
   m_sharedMaterial: {fileID: -7492047260369208157, guid: 6d672b48092fa574c8459d241024b89a, type: 2}
@@ -2149,6 +2149,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3376d1e4cf1931e418be7208414e6aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInfos:
+  - playerName: "\uC2DC\uBBFC1"
+    characterSprite: {fileID: 5280897896942094492, guid: 213348c7a5c8356419dd52476db942f8, type: 3}
   startButton: {fileID: 1000315098}
   playerVoteUIPrefab: {fileID: 1760614656617381639}
   playerVoteUIs: []
@@ -2157,22 +2160,22 @@ MonoBehaviour:
   confirmText: {fileID: 1343215959}
   resultDialog: {fileID: 2115838143}
   resultText: {fileID: 1617700275}
-  correctAnswer: "\uC2DC\uBBFC1"
+  correctAnswer: "\uBC30\uC218\uACBD"
   playerVoteListParent: {fileID: 1181986985}
   playerNames:
-  - "\uC2DC\uBBFC1"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
-  - "\uBC94\uC778"
+  - "\uBC30\uC218\uACBD"
+  - "\uC124\uC740\uBE44"
+  - "\uAD8C\uD558\uB8E8"
+  - "\uD55C\uC544\uC601"
+  - "\uBC31\uC774\uD6C4"
+  - "\uD558\uC11C\uD558"
+  - "\uAC15\uC138\uB839"
+  - "\uC720\uBB34\uAD6C"
+  - "\uCD5C\uBC94\uC2DD"
+  - "\uC815\uD574\uC628"
+  - "\uB098\uC728"
+  - "\uB3C4\uBBFC\uACB0"
+  - "\uC774\uC2DC\uC544"
 --- !u!4 &1881930258
 Transform:
   m_ObjectHideFlags: 0
@@ -2413,7 +2416,7 @@ MonoBehaviour:
   nameText: {fileID: 1146474210}
   voteCountText: {fileID: 1810714270}
   background: {fileID: 1704038404}
-  characterImage: {fileID: 0}
+  characterImage: {fileID: 1685207377}
 --- !u!1 &1760614656617381639
 GameObject:
   m_ObjectHideFlags: 0

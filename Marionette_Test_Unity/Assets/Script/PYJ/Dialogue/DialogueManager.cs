@@ -68,7 +68,6 @@ public class DialogueManager : MonoBehaviour
     {"INTRO", 1000},
     {"START", 2000},
     {"CHAPTER1", 3000},
-    // 필요한 만큼 추가
 };
 
 
@@ -100,7 +99,7 @@ public class DialogueManager : MonoBehaviour
             backgroundSpriteDict[bg.name] = bg;
         }
 
-        
+
     }
 
     //
@@ -382,7 +381,7 @@ public class DialogueManager : MonoBehaviour
         {
             isDialogue = true;
             nextDialogueID = -1;  // 선택지가 있으니 자동 진행용 ID는 -1로
-            
+
         }
         else
         {
@@ -768,7 +767,8 @@ public class DialogueManager : MonoBehaviour
 
             int capturedNextID = localNextID;
             int capturedNextIndex = localNextIndex;
-            choiceButtons[i].onClick.AddListener(() => {
+            choiceButtons[i].onClick.AddListener(() =>
+            {
                 Debug.Log($"선택지 클릭: nextID={capturedNextID}, nextIndex={capturedNextIndex}");
                 OnChoiceSelected(capturedNextID, capturedNextIndex);
             });
@@ -793,5 +793,29 @@ public class DialogueManager : MonoBehaviour
         {
             OnOff(false); // 대화 종료 처리
         }
+    }
+
+
+    public void RefreshDialogueDict()
+    {
+        dialogueDictByIDAndIndex = new Dictionary<(int, int), DialogueData>();
+
+        var dialogs = SaveDatabase.Instance.GetDialogs();
+
+        if (dialogs == null)
+        {
+            Debug.LogWarning("SaveDatabase.Instance.GetDialogs()가 null입니다.");
+            return;
+        }
+
+        foreach (var kvp in dialogs)
+        {
+            int id = kvp.Key;
+            foreach (var dialogueData in kvp.Value)
+            {
+                dialogueDictByIDAndIndex[(id, dialogueData.index)] = dialogueData;
+            }
+        }
+
     }
 }

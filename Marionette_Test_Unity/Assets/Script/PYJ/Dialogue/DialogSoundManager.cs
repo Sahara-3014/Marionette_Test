@@ -3,10 +3,23 @@ using System.Collections;
 
 public class DialogSoundManager : MonoBehaviour
 {
+    public static DialogSoundManager Instance;
+
     public AudioSource bgmSource;
     public AudioSource seSource1;
     public AudioSource seSource2;
-
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void PlayDialogSE(DialogSE dialogSE)
     {
 
@@ -50,6 +63,21 @@ public class DialogSoundManager : MonoBehaviour
 
     public void PlaySE(DialogSE se)
     {
+        if (se == null)
+        {
+            Debug.LogError("[PlaySE] DialogSE가 null입니다.");
+            return;
+        }
+        if (se.clip == null)
+        {
+            Debug.LogError("[PlaySE] DialogSE.clip이 null입니다.");
+            return;
+        }
+        if (seSource1 == null || seSource2 == null)
+        {
+            Debug.LogError($"[PlaySE] AudioSource 미할당! seSource1: {seSource1}, seSource2: {seSource2}");
+            return;
+        }
 
         AudioSource sourceToUse = null;
 
@@ -59,7 +87,7 @@ public class DialogSoundManager : MonoBehaviour
             sourceToUse = seSource2;
         else
         {
-            Debug.Log("[PlaySE] 둘 다 재생 중이어서 seSource1 강제로 사용");
+            Debug.Log("[PlaySE] 둘 다 재생 중, seSource1 강제 사용");
             seSource1.Stop();
             sourceToUse = seSource1;
         }
@@ -74,6 +102,7 @@ public class DialogSoundManager : MonoBehaviour
         if (se.loopCount > 0)
             StartCoroutine(PlaySELoop(sourceToUse, se.loopCount));
     }
+
 
     private IEnumerator PlaySELoop(AudioSource source, int loopCount)
     {

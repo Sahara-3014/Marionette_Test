@@ -6,6 +6,13 @@ using UnityEngine;
 
 public class VoteManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class PlayerInfo
+    {
+        public string playerName;
+        public Sprite characterSprite;
+    }
+    public List<PlayerInfo> playerInfos = new List<PlayerInfo>();
 
     public GameObject startButton; // 👈 인스펙터에서 연결할 버튼
 
@@ -86,9 +93,17 @@ public class VoteManager : MonoBehaviour
 
         foreach (string name in playerNames)
         {
+            // ✅ 이름에 맞는 스프라이트 찾기
+            Sprite foundSprite = null;
+            var info = playerInfos.FirstOrDefault(p => p.playerName == name);
+            if (info != null)
+                foundSprite = info.characterSprite;
+
             GameObject obj = Instantiate(playerVoteUIPrefab, playerVoteListParent);
             PlayerVoteUI ui = obj.GetComponent<PlayerVoteUI>();
-            ui.Setup(name, this);
+
+            // ✅ 스프라이트도 함께 넘기기
+            ui.Setup(name, this, foundSprite);
             playerVoteUIs.Add(ui);
         }
 
@@ -96,6 +111,7 @@ public class VoteManager : MonoBehaviour
 
         Debug.Log($"[투표 시작] 정답은: {correctAnswer}");
     }
+
 
 
 

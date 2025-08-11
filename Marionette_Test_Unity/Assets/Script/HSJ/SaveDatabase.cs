@@ -115,9 +115,9 @@ public class SaveDatabase : MonoBehaviour
             foreach(var dialog in dialogs)
             {
                 if (this.dialogs.ContainsKey(dialog.Key) == false)
-                    dialogs.Add(dialog.Key, dialog.Value);
+                    this.dialogs.Add(dialog.Key, dialog.Value);
                 else
-                    dialogs[dialog.Key] = dialog.Value;
+                    this.dialogs[dialog.Key] = dialog.Value;
             }
         }
         else

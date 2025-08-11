@@ -7,6 +7,7 @@ using System.Linq;
 
 public class GoogleSheetLoader : MonoBehaviour
 {
+    public static GoogleSheetLoader Instance { get; private set; }
     public DialogueManager dialogueManager;
 
     public string apiKey = "AIzaSyCYF6AGzi8Fe0HhVew-t0LOngxs0IOZIuc";
@@ -19,7 +20,16 @@ public class GoogleSheetLoader : MonoBehaviour
     private string currentSheet = "";
 
     public DialogueManager dialogueSystem; // 대화 시스템 참조
-
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // 중복 제거
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // 씬 전환 시 파괴되지 않음
+    }
     public void StartDialogue()
     {
         currentFixedIndex = 0;
@@ -90,33 +100,44 @@ public class GoogleSheetLoader : MonoBehaviour
             dialogueList.Add(d);
         }
 
-        dialogueSystem.SetDialogue(dialogueList.ToArray());
+        // --- 여기에 추가된 부분 시작 ---
 
-        yield return null; // 한 프레임 대기
+        // ID별 그룹화 후 index 정렬하여 Dictionary 생성
+        var dict = dialogueList
+            .GroupBy(d => d.ID)
+            .ToDictionary(g => g.Key, g => g.OrderBy(x => x.index).ToArray());
+
+        yield return null; // 기존 데이터 안전하게 가져오기 위해 한 프레임 대기
+
+        // 기존 저장된 대사 가져오기 (없으면 빈 딕셔너리)
+        var existingDialogs = SaveDatabase.Instance.GetDialogs() ?? new Dictionary<int, DialogueData[]>();
+
+        // 기존 딕셔너리 복사본 생성 (새로운 객체)
+        var combined = new Dictionary<int, DialogueData[]>(existingDialogs);
+
+        // 새로 로드한 대사로 덮어쓰기 (조건에 따라 변경 가능)
+        foreach (var kvp in dict)
+        {
+            combined[kvp.Key] = kvp.Value;
+        }
+
+        // 합쳐진 딕셔너리를 저장
+        SaveDatabase.Instance.Set_Dialogs(combined);
+
+        // 대화 시스템 딕셔너리 갱신
+        dialogueSystem.RefreshDialogueDict();
+
+        // --- 추가된 부분 끝 ---
 
         // 시트 이름에 따른 시작 ID 가져오기
-        int startID = GetStartIDFromSheetName(sheetName);
+        int startID = dialogueList[0].ID;
 
         // 시작 ID, 인덱스 1부터 대사 보여주기
         dialogueSystem.ShowDialogue(startID, 1);
 
-        // NextDialogue 호출해서 대사 진행
+        // 다음 대사 호출
         dialogueSystem.NextDialogue();
-
     }
-
-    private int GetStartIDFromSheetName(string sheetName)
-    {
-        switch (sheetName)
-        {
-            case "INTRO": return 1000;
-            case "START": return 2000;
-            case "CHAPTER1": return 3000;
-            // 필요하면 추가
-            default: return 1000; // 기본값
-        }
-    }
-
 
 
     public AudioClip LoadAudioClipByName(string clipName)
@@ -142,7 +163,6 @@ public class GoogleSheetLoader : MonoBehaviour
             url += "&range=A3:AI100"; // 데이터 범위 설정
         }
 
-
         // Google Sheets 데이터 불러오기
         UnityWebRequest www = UnityWebRequest.Get(url);
         var operation = www.SendWebRequest();
@@ -167,7 +187,6 @@ public class GoogleSheetLoader : MonoBehaviour
 
             // CSV 데이터를 줄 단위로 분리하고 InteractiveDebate_DialogueData 객체로 변환
             string[] lines = csvData.Split('\n');
-
 
             // 두번째 줄까지 헤더로 간주하고 건너뜀
             for (int i = 0; i < lines.Length; i++)
