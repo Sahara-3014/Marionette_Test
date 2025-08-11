@@ -8,6 +8,7 @@ public class DialogSoundManager : MonoBehaviour
     public AudioSource bgmSource;
     public AudioSource seSource1;
     public AudioSource seSource2;
+    public AudioSource choiceSeSource3; // 추가
     private void Awake()
     {
         if (Instance == null)
@@ -75,34 +76,25 @@ public class DialogSoundManager : MonoBehaviour
         Debug.Log($"[PlayBGM] BGM '{bgm.clip.name}' 재생 시작 (볼륨: {bgm.volume})");
     }
 
-
-
-
     public void PlaySE(DialogSE se)
     {
-        if (se == null)
+        if (se == null || se.clip == null) return;
+        if (seSource1 == null || seSource2 == null || choiceSeSource3 == null)
         {
-            return;
-        }
-        if (se.clip == null)
-        {
-            return;
-        }
-        if (seSource1 == null || seSource2 == null)
-        {
-            Debug.LogError($"[PlaySE] AudioSource 미할당! seSource1: {seSource1}, seSource2: {seSource2}");
+            Debug.LogError("[PlaySE] AudioSource 미할당");
             return;
         }
 
         AudioSource sourceToUse = null;
-
         if (!seSource1.isPlaying)
             sourceToUse = seSource1;
         else if (!seSource2.isPlaying)
             sourceToUse = seSource2;
+        else if (!choiceSeSource3.isPlaying)
+            sourceToUse = choiceSeSource3;
         else
         {
-            Debug.Log("[PlaySE] 둘 다 재생 중, seSource1 강제 사용");
+            // 모두 재생 중이면 첫 번째 강제 중지 후 사용
             seSource1.Stop();
             sourceToUse = seSource1;
         }

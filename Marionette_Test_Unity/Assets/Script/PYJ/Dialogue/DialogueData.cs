@@ -25,6 +25,7 @@ public class DialogueChoice
     public string choiceText;
     public int nextID;
     public int nextIndex;
+    public string choiceSoundEffectName;
 }
 
 
@@ -34,6 +35,7 @@ public class DialogueChoice
 [System.Serializable]
 public class DialogueData
 {
+    public string choiceSoundEffectName;
     public string bgmName;
     public int ID;
     public int effectIndex;
@@ -199,9 +201,13 @@ public class DialogueData
         string sfx1Name = GetText(node, 25);
         string sfx2Name = GetText(node, 26);
 
+
+        choiceSoundEffectName = GetText(node, 27);
+
+
         // 컷씬
-        cutscene = GetText(node, 27);
-        string cutsceneText = GetText(node, 27);
+        cutscene = GetText(node, 28);
+        string cutsceneText = GetText(node, 28);
         cutscene = cutsceneText;
 
 

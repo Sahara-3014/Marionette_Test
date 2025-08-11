@@ -474,6 +474,8 @@ public class DialogueManager : MonoBehaviour
 
     }
 
+
+
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         Debug.Log($"[TypeText] 받은 문장: '{sentence}'");
@@ -510,7 +512,8 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             waitingForChoiceDisplay = false;
 
-            ShowChoices(currentDialogue.choices);
+            ShowChoices(currentDialogue.choices, currentDialogue.choiceSoundEffectName);
+
             // 선택지 뜰 땐 canInput = false 상태 유지
         }
         else
@@ -585,7 +588,9 @@ public class DialogueManager : MonoBehaviour
 
                 waitingForChoiceDisplay = false;  // 대사 전체 출력했으니 대기 해제
 
-                ShowChoices(dialogueDictByIDAndIndex[(currentID, currentIndex)].choices);
+                var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
+                ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
+
                 return;
             }
 
@@ -626,6 +631,7 @@ public class DialogueManager : MonoBehaviour
 
         isProcessingInput = false;
     }
+
 
 
 
@@ -699,6 +705,7 @@ public class DialogueManager : MonoBehaviour
 
     }
 
+
     private string GetNextSheetName(int currentID)
     {
         if (currentID >= 1000 && currentID < 2000) return "START";
@@ -713,11 +720,20 @@ public class DialogueManager : MonoBehaviour
     //
     private bool isPaused = false;
 
+
+
+
+
     public void TogglePauseDialogue()
     {
         isPaused = !isPaused;
         Debug.Log(isPaused ? " 일시정지됨" : " 다시 재생됨");
     }
+
+
+
+
+
     private void ShowCutscene(string cutsceneName)
     {
         if (cutsceneImageObject == null)
@@ -820,17 +836,16 @@ public class DialogueManager : MonoBehaviour
         ShowDialogue(currentID, currentIndex);
         NextDialogue();
     }
+    // ShowChoices 함수에 인자 추가 (27번 열 효과음 이름)
 
 
-    //
-    // 선택지 보여주는 함수
-    //
-    private void ShowChoices(DialogueChoice[] choices)
+
+
+    private void ShowChoices(DialogueChoice[] choices, string choiceSoundEffectName)
     {
-
-        canInput = false;  // 혹시 모를 입력 방지용
+        Debug.Log("ShowChoices 호출됨, 선택지 개수: " + choices.Length);
+        canInput = false;  // 입력 잠금
         choicePanel.SetActive(true);
-
 
         int countChoices = Mathf.Min(choices.Length, choiceButtons.Length, choiceButtonTexts.Length);
 
@@ -844,36 +859,42 @@ public class DialogueManager : MonoBehaviour
             choiceButtons[i].gameObject.SetActive(true);
             choiceButtonTexts[i].text = choices[i].choiceText;
 
-            // 클릭 가능 여부 설정 (추가)
             if (choices[i].choiceText == "나는 인간이 아니다")
             {
-                choiceButtons[i].interactable = false;  // 클릭 불가 처리
+                choiceButtons[i].interactable = false;
             }
             else
             {
-                choiceButtons[i].interactable = true;   // 기본은 클릭 가능
+                choiceButtons[i].interactable = true;
             }
 
             choiceButtons[i].onClick.RemoveAllListeners();
 
             int capturedNextID = localNextID;
             int capturedNextIndex = localNextIndex;
+
             choiceButtons[i].onClick.AddListener(() =>
             {
-                Debug.Log($"선택지 클릭: nextID={capturedNextID}, nextIndex={capturedNextIndex}");
+                Debug.Log($"선택지 클릭: nextID={capturedNextID}, nextIndex={capturedNextIndex}, soundEffect={choiceSoundEffectName}");
+
+                var clip = DialogSoundManager.Instance.LoadAudioClipByName(choiceSoundEffectName);
+                if (clip != null)
+                {
+                    DialogSoundManager.Instance.PlaySE(new DialogSE(SEType.SE, clip));
+                }
+
                 OnChoiceSelected(capturedNextID, capturedNextIndex);
             });
+
+            Debug.Log($"리스너 등록 완료: 버튼 {i}");
         }
-
-
-
-
 
         for (int i = countChoices; i < choiceButtons.Length; i++)
         {
             choiceButtons[i].gameObject.SetActive(false);
         }
     }
+
 
     public void OnDialogueEnded(string nextSheetName)
     {
