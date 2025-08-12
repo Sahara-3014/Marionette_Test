@@ -836,6 +836,7 @@ MonoBehaviour:
   bgmSource: {fileID: 214542798}
   seSource1: {fileID: 1343957893}
   seSource2: {fileID: 950839803}
+  choiceSeSource3: {fileID: 1586749084}
 --- !u!4 &525618804
 Transform:
   m_ObjectHideFlags: 0
@@ -3383,7 +3384,7 @@ GameObject:
   - component: {fileID: 1586749083}
   - component: {fileID: 1586749084}
   m_Layer: 0
-  m_Name: Awkward
+  m_Name: Se3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

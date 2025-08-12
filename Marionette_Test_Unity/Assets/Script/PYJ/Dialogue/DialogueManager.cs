@@ -63,14 +63,6 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Button[] choiceButtons;          // 선택지 버튼들
     [SerializeField] private TextMeshProUGUI[] choiceButtonTexts; // 버튼 텍스트
 
-    private Dictionary<string, int> sheetIDStartDict = new Dictionary<string, int>()
-{
-    {"INTRO", 1000},
-    {"START", 2000},
-    {"CHAPTER1", 3000},
-};
-
-
 
     private int currentID = 1000;
     private int nextDialogueID = -1;  // 다음 대화 ID 저장용
@@ -201,12 +193,21 @@ public class DialogueManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(currentData.bgmName))
         {
-            AudioClip clip = DialogSoundManager.Instance.LoadAudioClipByName(currentData.bgmName);
-            if (clip != null)
+            // 먼저 DialogSE 객체 생성
+            var bgmSE = new DialogSE(SEType.BGM, null);
+
+            // clip 로드하면서 stopSE 여부도 같이 설정됨
+            bgmSE.clip = DialogSoundManager.Instance.LoadAudioClipByName(currentData.bgmName, bgmSE);
+
+            if (bgmSE.stopSE)
             {
-                if (DialogSoundManager.Instance.bgmSource.clip != clip)
+                // -1 명령이면 BGM 끔
+                DialogSoundManager.Instance.StopBGM();
+            }
+            else if (bgmSE.clip != null)
+            {
+                if (DialogSoundManager.Instance.bgmSource.clip != bgmSE.clip)
                 {
-                    var bgmSE = new DialogSE(SEType.BGM, clip);
                     DialogSoundManager.Instance.PlayBGM(bgmSE);
                 }
             }
@@ -215,6 +216,7 @@ public class DialogueManager : MonoBehaviour
                 Debug.LogWarning($"BGM 클립을 못 찾음: {currentData.bgmName}");
             }
         }
+
 
 
         if (typingCoroutine != null)
@@ -877,14 +879,26 @@ public class DialogueManager : MonoBehaviour
             {
                 Debug.Log($"선택지 클릭: nextID={capturedNextID}, nextIndex={capturedNextIndex}, soundEffect={choiceSoundEffectName}");
 
-                var clip = DialogSoundManager.Instance.LoadAudioClipByName(choiceSoundEffectName);
-                if (clip != null)
+                // 먼저 DialogSE 생성 (clip은 null로)
+                DialogSE se = new DialogSE(SEType.SE, null);
+
+                // clip 로드 (로드 과정에서 stopSE 설정 가능)
+                se.clip = DialogSoundManager.Instance.LoadAudioClipByName(choiceSoundEffectName, se);
+
+                if (se.stopSE)
                 {
-                    DialogSoundManager.Instance.PlaySE(new DialogSE(SEType.SE, clip));
+                    DialogSoundManager.Instance.StopSE();
+                    return;
+                }
+
+                if (se.clip != null)
+                {
+                    DialogSoundManager.Instance.PlaySE(se);
                 }
 
                 OnChoiceSelected(capturedNextID, capturedNextIndex);
             });
+
 
             Debug.Log($"리스너 등록 완료: 버튼 {i}");
         }
@@ -948,13 +962,26 @@ public class DialogueManager : MonoBehaviour
 
     public void PlayBGMByName(string bgmName, float volume = 1f, int loopCount = 0)
     {
-        AudioClip clip = DialogSoundManager.Instance.LoadAudioClipByName(bgmName);
-        if (clip == null)
+        // 먼저 DialogSE 생성 (clip은 일단 null)
+        DialogSE bgm = new DialogSE(SEType.BGM, null, loopCount, volume);
+
+        // clip 로드 (로드 과정에서 stopSE 설정 가능)
+        bgm.clip = DialogSoundManager.Instance.LoadAudioClipByName(bgmName, bgm);
+
+        if (bgm.stopSE)
+        {
+            // -1 처리 → BGM 중지
+            DialogSoundManager.Instance.StopBGM();
+            return;
+        }
+
+        if (bgm.clip == null)
         {
             Debug.LogWarning($"[DialogueManager] AudioClip '{bgmName}'를 찾을 수 없습니다.");
             return;
         }
-        DialogSE bgm = new DialogSE(SEType.BGM, clip, loopCount, volume);
+
         DialogSoundManager.Instance.PlayDialogSE(bgm);
     }
+
 }

@@ -75,10 +75,23 @@ public class DialogSoundManager : MonoBehaviour
 
         Debug.Log($"[PlayBGM] BGM '{bgm.clip.name}' 재생 시작 (볼륨: {bgm.volume})");
     }
-
     public void PlaySE(DialogSE se)
     {
-        if (se == null || se.clip == null) return;
+        if (se == null)
+            return;
+
+        // -1 명령이면 재생 중이던 효과음 모두 끔
+        if (se.stopSE)
+        {
+            seSource1.Stop();
+            seSource2.Stop();
+            choiceSeSource3.Stop();
+            Debug.Log("[PlaySE] -1 명령 → 모든 효과음 중지");
+            return;
+        }
+
+        if (se.clip == null) return;
+
         if (seSource1 == null || seSource2 == null || choiceSeSource3 == null)
         {
             Debug.LogError("[PlaySE] AudioSource 미할당");
@@ -94,7 +107,6 @@ public class DialogSoundManager : MonoBehaviour
             sourceToUse = choiceSeSource3;
         else
         {
-            // 모두 재생 중이면 첫 번째 강제 중지 후 사용
             seSource1.Stop();
             sourceToUse = seSource1;
         }
@@ -109,6 +121,9 @@ public class DialogSoundManager : MonoBehaviour
         if (se.loopCount > 0)
             StartCoroutine(PlaySELoop(sourceToUse, se.loopCount));
     }
+
+
+
 
 
     private IEnumerator PlaySELoop(AudioSource source, int loopCount)
@@ -150,17 +165,31 @@ public class DialogSoundManager : MonoBehaviour
         Debug.Log("[StopBGM] BGM 다시 시작");
     }
 
-    public AudioClip LoadAudioClipByName(string clipName)
+    public AudioClip LoadAudioClipByName(string clipName, DialogSE targetSE)
     {
-        if (string.IsNullOrEmpty(clipName)) return null;
+        if (string.IsNullOrEmpty(clipName) || clipName == "-1")
+        {
+            Debug.Log($"[LoadAudioClipByName] '{clipName}' → 효과음 끔 명령");
+            if (targetSE != null)
+                targetSE.stopSE = true; // -1 명령임 표시
+            return null;
+        }
+
         AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
         if (clip == null)
             Debug.LogWarning($"AudioClip '{clipName}'를 Resources/Audio 폴더에서 찾을 수 없습니다.");
         return clip;
     }
+
+
     void Start()
     {
         bgmSource.pitch = 1f;  // 초기화 코드가 없으면 다른 값이 남아있을 수 있음
+    }
+    public void StopSE()
+    {
+        if (seSource1 != null) seSource1.Stop();
+        if (seSource2 != null) seSource2.Stop();
     }
 
 }
