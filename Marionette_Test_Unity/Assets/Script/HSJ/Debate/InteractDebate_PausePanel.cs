@@ -10,6 +10,7 @@ public class InteractDebate_PausePanel : MonoBehaviour
     [SerializeField] Slider sfx;
     [SerializeField] TextMeshProUGUI sfxLabel;
     SaveLoadPanel saveLoadPanel;
+    public string sceneName = "HSJ_Lobby";
 
     // Req Setting Manager
 
@@ -18,17 +19,21 @@ public class InteractDebate_PausePanel : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
     private void Start()
     {
         saveLoadPanel = SaveLoadPanel.instance;
+        if(saveLoadPanel.onLoadAction == null)
+            saveLoadPanel.onLoadAction = () => InteractiveDebate_UIManager.instance.Loaded_DataSet();
+        else
+            saveLoadPanel.onLoadAction += () => InteractiveDebate_UIManager.instance.Loaded_DataSet();
         // TODO Setting Manager : Value Setting
     }
 
@@ -40,6 +45,11 @@ public class InteractDebate_PausePanel : MonoBehaviour
 
     }
 
+    private void OnDisable()
+    {
+        saveLoadPanel.onLoadAction -= () => InteractiveDebate_UIManager.instance.Loaded_DataSet();
+    }
+
     public void ChangeSlider(bool isBGM)
     {
         Slider slider = isBGM ? bgm : sfx;
@@ -49,9 +59,19 @@ public class InteractDebate_PausePanel : MonoBehaviour
         label.text = $"{cal.ToString()} %"; 
     }
 
-    public void OpenSaveLoadPanel(bool isSavePanel)
+    public void OpenSaveLoadPanel(SaveLoadPanel.SaveTpye saveTpye)
     {
         saveLoadPanel.gameObject.SetActive(true);
-        saveLoadPanel.Open(isSavePanel);
+        saveLoadPanel.Open(saveTpye);
+    }
+
+    public void SceneMove()
+    {
+        SaveDatabase.Instance.ChangeScene(sceneName);
+    }
+
+    public void OpenSaveLoad(bool isSave)
+    {
+        saveLoadPanel.Open(isSave ? SaveLoadPanel.SaveTpye.Save : SaveLoadPanel.SaveTpye.Load);
     }
 }

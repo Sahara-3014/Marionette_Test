@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/HSJ/HSJ_Lobby.unity
+    guid: 92518de98ed24114688b9a40140b057b
+  - enabled: 1
+    path: Assets/Scenes/CWJ/CWJ_SideScrolltest.unity
+    guid: 746218b502818114cb7bd3cdc9b9bcdb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
