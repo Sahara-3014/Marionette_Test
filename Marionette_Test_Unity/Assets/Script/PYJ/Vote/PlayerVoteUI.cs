@@ -92,4 +92,6 @@ public class PlayerVoteUI : MonoBehaviour
             background.color = Color.white;
     }
 
+
+
 }

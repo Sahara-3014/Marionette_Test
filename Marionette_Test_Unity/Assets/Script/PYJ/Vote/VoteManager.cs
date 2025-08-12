@@ -53,13 +53,70 @@ public class VoteManager : MonoBehaviour
         if (target != null)
             target.IncreaseVote();
 
-        centerText.text = "투표가 종료되었습니다.";   // 메시지 변경
-        resultText.text = "투표가 종료되었습니다.";   // 결과 텍스트도 변경
-        resultDialog.SetActive(true);                // 결과창 바로 활성화
+        if (votedPlayerName == correctAnswer)
+        {
+            // 투표 완료 상태로 변경
+            voteFinished = true;
+            currentVoteState = VoteState.VoteFinishedMessage;
 
-        voteFinished = true;
-        endMessageShown = true;   // 이걸 추가해서 Update()에서 또 띄우는 중복 방지
+            // 메시지 띄우기
+            centerText.text = "투표가 종료되었습니다.";
+            resultText.text = "투표가 종료되었습니다.";
+            resultDialog.SetActive(true);
+        }
+        else
+        {
+            StartCoroutine(ShowRetryDialog());
+        }
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && voteFinished)
+        {
+            switch (currentVoteState)
+            {
+                case VoteState.VoteFinishedMessage:
+                    // 1번째 스페이스바 → 메시지 닫고 투표 종료 패널 열기
+                    resultDialog.SetActive(false);
+                    voteEndPanel.SetActive(true);
+                    // 숫자 랜덤화는 하지 않는다! 여기선 안 함
+                    currentVoteState = VoteState.VoteEndPanelShown;
+                    break;
+
+                case VoteState.VoteEndPanelShown:
+                    // 2번째 스페이스바 → 종료 패널 닫고 최종 결과 메시지 띄우면서 숫자 랜덤화!
+                    voteEndPanel.SetActive(false);
+
+                    centerText.text = "최종 결과입니다.";
+                    resultText.text = "투표가 종료되었습니다!";
+
+                    resultDialog.SetActive(true);
+
+                    RandomizeVotes();  // 여기서 숫자 늘리는 함수 호출!
+
+                    currentVoteState = VoteState.FinalResultShown;
+                    break;
+
+                case VoteState.FinalResultShown:
+                    // 이후 추가 동작
+                    break;
+            }
+        }
+    }
+
+
+
+
+    private enum VoteState
+    {
+        WaitingForVote,        // 투표 진행중
+        VoteFinishedMessage,   // "투표가 종료되었습니다." 메시지 띄운 상태
+        VoteEndPanelShown,     // 투표 종료 패널 보여준 상태
+        FinalResultShown       // 최종 결과 보여준 상태
+    }
+
+    private VoteState currentVoteState = VoteState.WaitingForVote;
 
 
     public void OnConfirmNo()
@@ -74,12 +131,17 @@ public class VoteManager : MonoBehaviour
 
     IEnumerator ShowRetryDialog()
     {
-        yield return new WaitForSeconds(1f);
         resultDialog.SetActive(true);
         resultText.text = "이 사람은 진짜 범인이 아니야...\n다시 한번 선택해보자.";
         yield return new WaitForSeconds(2f);
         resultDialog.SetActive(false);
+
         votedPlayerName = null;
+        centerText.text = "최종 투표를 진행해주세요.";
+
+        // 버튼 활성화 (투표 다시 받도록)
+        foreach (var ui in playerVoteUIs)
+            ui.EnableButton();
     }
 
     public void StartVoting()
@@ -105,20 +167,23 @@ public class VoteManager : MonoBehaviour
 
     private bool canProcessSpace = true;
 
-    void Update()
+    IEnumerator ShowResultPanelThenFinalResult()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (voteFinished && endMessageShown && !endPanelShown)
-            {
-                endPanelShown = true;
-                resultDialog.SetActive(false);
-                voteEndPanel.SetActive(true);
-                RandomizeVotes();
-                Debug.Log("Show voteEndPanel and update votes");
-            }
-        }
+        voteEndPanel.SetActive(true);
+        RandomizeVotes();
+
+        yield return new WaitForSeconds(2f);
+
+        voteEndPanel.SetActive(false);
+
+        centerText.text = "투표가 종료되었습니다.";
+        resultText.text = "최종 결과입니다.";
+        resultDialog.SetActive(true);
+
+        voteFinished = true;
+        endMessageShown = true;
     }
+
 
     IEnumerator DelayNextSpaceInput()
     {
