@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class SaveDatabase : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class SaveDatabase : MonoBehaviour
     private Dictionary<string, UnityAction> sceneChangeEvent = new();
     private Dictionary<int, DialogueData[]> dialogs;
     private Dictionary<int, InteractiveDebate_DialogueData[]> interactiveDebateDialogs;
+    private Dictionary<int, ConfrontationDebate_DialogueData[]> confrontationDebateDialogs;
 
 
     #region 씬 이동 이벤트
@@ -56,6 +58,12 @@ public class SaveDatabase : MonoBehaviour
         }
 
     }
+
+    public void ChangeScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Single)
+    => SceneManager.LoadScene(sceneName, mode);
+
+    public void ChangeScene(int sceneIndex, LoadSceneMode mode = LoadSceneMode.Single)
+    => SceneManager.LoadScene(sceneIndex, mode);
 
     public void AddSceneChangeEvent(string sceneName, UnityAction action)
     {
@@ -182,6 +190,57 @@ public class SaveDatabase : MonoBehaviour
 
         TextSave("Dialog_InteractiveDebate.json", JsonConvert.SerializeObject(this.interactiveDebateDialogs));
     }
+
+    public ConfrontationDebate_DialogueData[] Get_ConfrontationDebateDialogs_NeedID(int id)
+    {
+        if (confrontationDebateDialogs == null)
+        {
+            string text = TextLoad("Dialog_InteractiveDebate");
+            if (text == null)
+                return null;
+
+            var dic = JsonConvert.DeserializeObject<Dictionary<int, ConfrontationDebate_DialogueData[]>>(text);
+
+            confrontationDebateDialogs = dic;
+        }
+
+        if (confrontationDebateDialogs.ContainsKey(id))
+            return confrontationDebateDialogs[id];
+
+        else
+            return null;
+    }
+
+    public void Add_ConfrontationDebateDialogs_NeedID(int id, ConfrontationDebate_DialogueData[] data)
+    {
+        if (confrontationDebateDialogs == null)
+            confrontationDebateDialogs = new();
+
+        if (confrontationDebateDialogs.ContainsKey(id) == false)
+            confrontationDebateDialogs.Add(id, data);
+        else
+            confrontationDebateDialogs[id] = data;
+    }
+
+    public void Set_ConfrontationDebateDialogs(Dictionary<int, ConfrontationDebate_DialogueData[]> dialogs)
+    {
+        if (this.confrontationDebateDialogs != null)
+        {
+            foreach (var dialog in dialogs)
+            {
+                if (this.confrontationDebateDialogs.ContainsKey(dialog.Key) == false)
+                    dialogs.Add(dialog.Key, dialog.Value);
+                else
+                    dialogs[dialog.Key] = dialog.Value;
+            }
+        }
+        else
+        {
+            this.confrontationDebateDialogs = dialogs;
+        }
+
+        TextSave("Dialog_ConfrontationDebate.json", JsonConvert.SerializeObject(this.confrontationDebateDialogs));
+    }
     #endregion
 
 
@@ -251,24 +310,18 @@ public class SaveDatabase : MonoBehaviour
             return null;
         return saveData.charsData[key];
     }
-    public GaugeInt SaveData_GetCharData_GetGauge(string key, string gauge)
+    public GaugeInt SaveData_GetCharData_GetGauge(string key, CharAttributeData.CharAttributeType gauge)
     {
         if (saveData.charsData == null || saveData.charsData.ContainsKey(key) == false)
             return new();
         CharAttributeData charData = saveData.charsData[key];
-        switch (gauge)
-        {
-            case "TRUST":
-                return charData.trust;
-            case "SUSPICTION":
-                return charData.suspicion;
-            case "MENTAL":
-                return charData.mental_Strength;
-            case "LIKE":
-                return charData.likeability;
-            default:
-                return new();
-        }
+
+        if(gauge == CharAttributeData.CharAttributeType.TRUST || gauge == CharAttributeData.CharAttributeType.SUSPICION)
+            return charData.trust;
+        else if(gauge == CharAttributeData.CharAttributeType.MENTAL || gauge == CharAttributeData.CharAttributeType.LIKE)
+            return charData.mental;
+        else
+            return new GaugeInt(); // 기본값 반환
     }
     public void SaveData_SetCharData(string key, CharAttributeData data)
     {
@@ -279,28 +332,19 @@ public class SaveDatabase : MonoBehaviour
         else
             saveData.charsData[key] = data;
     }
-    public void SaveData_SetCharData_SetGauge(string key, string gauge, int value)
+    public void SaveData_SetCharData_SetGauge(string key, CharAttributeData.CharAttributeType gauge, int value)
     {
         if (saveData.charsData == null)
             saveData.charsData = new Dictionary<string, CharAttributeData>();
         if (saveData.charsData.ContainsKey(key) == false)
             saveData.charsData.Add(key, new CharAttributeData());
         CharAttributeData charData = saveData.charsData[key];
-        switch (gauge)
-        {
-            case "TRUST":
-                charData.trust.value = (int)value;
-                break;
-            case "SUSPICTION":
-                charData.suspicion.value = (int)value;
-                break;
-            case "MENTAL":
-                charData.mental_Strength.value = (int)value;
-                break;
-            case "LIKE":
-                charData.likeability.value = (int)value;
-                break;
-        }
+
+        if (gauge == CharAttributeData.CharAttributeType.TRUST || gauge == CharAttributeData.CharAttributeType.SUSPICION)
+            charData.trust.value = value;
+        else if (gauge == CharAttributeData.CharAttributeType.MENTAL || gauge == CharAttributeData.CharAttributeType.LIKE)
+            charData.mental.value = value;
+
         saveData.charsData[key] = charData;
     }
 
@@ -316,11 +360,27 @@ public class SaveDatabase : MonoBehaviour
         _callback?.Invoke();
     }
 
-    public void AutoLoad(UnityAction _callback = null)
+    public SaveData AutoLoad()
     {
-        saveData.saveDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        PlayerPrefs.SetString($"SaveData_Auto", JsonConvert.SerializeObject(saveData));
-        _callback?.Invoke();
+        string str = PlayerPrefs.GetString($"SaveData_Auto", null);
+        if(str != null)
+        {
+            try
+            {
+                var data = JsonConvert.DeserializeObject<SaveData>(str);
+                return data;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("자동 저장 데이터가 비었습니다: " + e.Message);
+                return new SaveData { index = -1 }; // 자동 저장이 잘못된 경우
+            }
+
+        }
+        else
+        {
+            return new SaveData { index = -1 }; // 자동 저장이 없을 경우
+        }
     }
 
     public void Save(int _index, UnityAction _callback = null)
@@ -338,18 +398,27 @@ public class SaveDatabase : MonoBehaviour
         string data = PlayerPrefs.GetString($"SaveData_{_index}", null);
         if (data != null)
         {
-            var _data = JsonConvert.DeserializeObject<SaveData>(data);
-            if(isSet)
+            try
             {
-                saveData = _data;
-                return saveData;
+                var _data = JsonConvert.DeserializeObject<SaveData>(data);
+                if (isSet)
+                {
+                    saveData = _data;
+                    return saveData;
+                }
+                else
+                    return _data;
             }
-            else
-                return _data;
+            catch (Exception e)
+            {
+                Debug.Log("데이터가 비었습니다: " + e.Message);
+                return new SaveData { index = -1 }; // 잘못된 저장 데이터
+            }
         }
         else
-           return new SaveData { index = -1 };
+            return new SaveData { index = -1 };
     }
+
 
     /// <summary> Resources 폴더에 저장 </summary>
     /// <param name="key"> 확장자 필요 </param>
@@ -367,6 +436,12 @@ public class SaveDatabase : MonoBehaviour
          return Resources.Load<TextAsset>(key)?.text;
     }
     #endregion
+
+    public IEnumerator AfterAction(UnityAction action, float delay = 0f)
+    {
+        yield return new WaitForSeconds(delay);
+        action?.Invoke();
+    }
 }
 
 
@@ -442,12 +517,8 @@ public class CharAttributeData
     }
     /// <summary> 신뢰도 </summary>
     public GaugeInt trust = new();
-    /// <summary> 의심도 </summary>
-    public GaugeInt suspicion = new();
     /// <summary> 정신력 </summary>
-    public GaugeInt mental_Strength = new();
-    /// <summary> 호감도 </summary>
-    public GaugeInt likeability = new();
+    public GaugeInt mental = new();
 }
 
 public struct GaugeFloat
