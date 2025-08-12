@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &29266778
 RectTransform:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 740, y: -118}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 697.88, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &29266779
 MonoBehaviour:
@@ -977,7 +977,7 @@ MonoBehaviour:
   m_text: Button
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6d672b48092fa574c8459d241024b89a, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -7492047260369208157, guid: 6d672b48092fa574c8459d241024b89a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1042,7 +1042,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &629313107
@@ -1442,7 +1442,7 @@ MonoBehaviour:
   m_text: Button
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6d672b48092fa574c8459d241024b89a, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -7492047260369208157, guid: 6d672b48092fa574c8459d241024b89a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1507,7 +1507,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &856391683
@@ -1781,7 +1781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1170148906
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1800,7 +1800,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 740, y: 6}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 697.88, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1170148907
 MonoBehaviour:
@@ -2302,8 +2302,8 @@ Transform:
   m_GameObject: {fileID: 1366255724}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -812, y: -231, z: 0}
-  m_LocalScale: {x: 15.484104, y: 53.393463, z: 53.393463}
+  m_LocalPosition: {x: -778, y: -231, z: 0}
+  m_LocalScale: {x: 18.890608, y: 53.393463, z: 53.393463}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 974491226}
@@ -2381,7 +2381,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1395232075
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2400,7 +2400,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 740, y: -237}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 697.88, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1395232076
 MonoBehaviour:
@@ -3097,7 +3097,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -736, y: 195}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1851398382
@@ -3160,7 +3160,7 @@ MonoBehaviour:
   m_text: Button
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6d672b48092fa574c8459d241024b89a, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -7492047260369208157, guid: 6d672b48092fa574c8459d241024b89a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3225,7 +3225,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1851398385
@@ -3435,9 +3435,19 @@ PrefabInstance:
       propertyPath: 'characterRenderers.Array.data[5]'
       value: 
       objectReference: {fileID: 687156289}
+    - target: {fileID: 968195909254304737, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
+      propertyPath: m_Name
+      value: Skip_Button
+      objectReference: {fileID: 0}
     - target: {fileID: 1607437706688828300, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: m_Name
       value: DialogueManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3383450161275848979, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
+      propertyPath: m_text
+      value: 'Auto
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 3830523420393185608, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: leftPosition
@@ -3461,11 +3471,19 @@ PrefabInstance:
       objectReference: {fileID: 709040337}
     - target: {fileID: 5473322436551041018, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: TogglePauseDialogue
+      value: SkipToNextChoice
       objectReference: {fileID: 0}
     - target: {fileID: 5473322436551041018, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: DialogueManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5881005604886826458, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
+      propertyPath: m_text
+      value: SKIP!
+      objectReference: {fileID: 0}
+    - target: {fileID: 5881005604886826458, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6143164936565544381, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3473,7 +3491,7 @@ PrefabInstance:
       objectReference: {fileID: 709040337}
     - target: {fileID: 6143164936565544381, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SkipDialogue
+      value: ToggleAuto
       objectReference: {fileID: 0}
     - target: {fileID: 6143164936565544381, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -3483,6 +3501,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 363324648}
+    - target: {fileID: 7868692815627301140, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
+      propertyPath: m_Name
+      value: Auto_Button
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

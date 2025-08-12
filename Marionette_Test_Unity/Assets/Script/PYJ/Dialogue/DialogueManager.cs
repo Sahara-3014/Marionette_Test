@@ -9,7 +9,10 @@ using UnityEngine.UI;
 public class DialogueManager : MonoBehaviour
 {
     private Dictionary<(int ID, int index), DialogueData> dialogueDictByIDAndIndex;
+    public bool isAuto = false;  // 자동 진행 모드 여부
+    public float autoDelay = 2f; // 자동으로 다음 대사 넘어가기까지 대기 시간
 
+    private float autoTimer = 0f;
 
     [System.Serializable]
     public class CharacterStatus
@@ -497,7 +500,6 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         Debug.Log($"[TypeText] 받은 문장: '{sentence}'");
@@ -536,14 +538,16 @@ public class DialogueManager : MonoBehaviour
 
             ShowChoices(currentDialogue.choices, currentDialogue.choiceSoundEffectName);
 
-            // 선택지 뜰 땐 canInput = false 상태 유지
+            // 선택지 뜰 땐 canInput = false 상태 유지 (유저 선택 대기)
         }
         else
         {
             canInput = true;
+            autoTimer = 0f; // Auto 모드용 타이머 초기화
         }
 
-        isTyping = false;
+        // 중복 설정 제거
+        // isTyping = false;
 
         if (inputQueuedBeforeChoice)
         {
@@ -551,8 +555,15 @@ public class DialogueManager : MonoBehaviour
             yield break;
         }
     }
-
-
+    public void OnUserInput()
+    {
+        if (isAuto)
+        {
+            isAuto = false;
+            Debug.Log("Auto OFF by user input");
+        }
+        autoTimer = 0f;
+    }
     private void OnOff(bool flag)
     {
         sprite_DialogueBox.gameObject.SetActive(flag);
@@ -587,8 +598,31 @@ public class DialogueManager : MonoBehaviour
     {
         if (isPaused) return;
 
+        // Auto 모드일 때
+        if (isAuto)
+        {
+            // 타이핑 중이면 자동 진행 안 함
+            if (!isTyping && !choicePanel.activeInHierarchy)
+            {
+                autoTimer += Time.deltaTime;
+                if (autoTimer >= autoDelay)
+                {
+                    autoTimer = 0f;
+
+                    // 다음 대사 진행
+                    if (!isProcessingInput && canInput)
+                    {
+                        StartCoroutine(ProcessInputWithCooldown());
+                    }
+                }
+            }
+        }
+
+        // Space 키 입력 처리 (수동 진행)
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            autoTimer = 0f; // 입력 있으면 자동 진행 타이머 초기화
+
             // 타이핑 중이면 무조건 스킵
             if (isTyping)
             {
@@ -597,7 +631,7 @@ public class DialogueManager : MonoBehaviour
                 return;
             }
 
-            // 타이핑 완료 후, 선택지가 나오기 전 대기 상태일 때
+            // 타이핑 완료 후, 선택지 나오기 전 대기 상태일 때
             if (waitingForChoiceDisplay)
             {
                 // 대사 강제 출력
@@ -606,9 +640,9 @@ public class DialogueManager : MonoBehaviour
 
                 txt_Dialogue.text = dialogueDictByIDAndIndex[(currentID, currentIndex)].dialogue;
                 isTyping = false;
-                canInput = false; // 여기서는 바로 입력 가능으로 하지 말고 선택지 보여주는 쪽으로 넘겨야 함
+                canInput = false; // 선택지 보여주는 쪽으로 입력 넘김
 
-                waitingForChoiceDisplay = false;  // 대사 전체 출력했으니 대기 해제
+                waitingForChoiceDisplay = false;
 
                 var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
                 ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
@@ -616,11 +650,9 @@ public class DialogueManager : MonoBehaviour
                 return;
             }
 
-
             // 선택지 패널이 열려 있으면 입력 무시
             if (choicePanel.activeInHierarchy)
             {
-                // 선택지가 완전히 뜬 상태면 여기서 입력 무시
                 return;
             }
 
@@ -630,11 +662,30 @@ public class DialogueManager : MonoBehaviour
                 if (!isProcessingInput)
                     StartCoroutine(ProcessInputWithCooldown());
             }
+
+            // 유저가 직접 입력했으니 오토 모드 꺼도 괜찮음
+            if (isAuto)
+            {
+                isAuto = false;
+                Debug.Log("Auto OFF by user input");
+            }
         }
     }
 
 
-
+    public void ToggleAuto()
+    {
+        isAuto = !isAuto;
+        if (isAuto)
+        {
+            Debug.Log("Auto ON");
+            autoTimer = 0f; // 켤 때 타이머 초기화
+        }
+        else
+        {
+            Debug.Log("Auto OFF");
+        }
+    }
 
 
 
@@ -1002,6 +1053,62 @@ public class DialogueManager : MonoBehaviour
         }
 
         DialogSoundManager.Instance.PlayDialogSE(bgm);
+    }
+    // 현재 대화 위치부터 이후 대사들 중 선택지가 있는 첫 위치 반환
+    private (int id, int index)? FindNextChoicePosition(int startID, int startIndex)
+    {
+        int maxIndex = GetMaxDialogueIndex(startID);
+        for (int i = startIndex; i <= maxIndex; i++)
+        {
+            var key = (startID, i);
+            if (dialogueDictByIDAndIndex.ContainsKey(key))
+            {
+                var dialogue = dialogueDictByIDAndIndex[key];
+                if (dialogue.choices != null && dialogue.choices.Length > 0)
+                    return key;
+            }
+        }
+        return null;
+    }
+
+    private int GetMaxDialogueIndex(int id)
+    {
+        // 해당 ID에 속한 대사들 중 가장 큰 index 반환
+        return dialogueDictByIDAndIndex.Keys
+            .Where(k => k.ID == id)
+            .Max(k => k.index);
+    }
+
+    public void SkipToNextChoice()
+    {
+        var nextChoicePos = FindNextChoicePosition(currentID, currentIndex + 1);
+        if (nextChoicePos.HasValue)
+        {
+            var (id, index) = nextChoicePos.Value;
+
+            // 코루틴 중단 (타이핑 효과 취소)
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+            }
+
+            currentID = id;
+            currentIndex = index;
+
+            // 선택지 있는 대사 바로 보여주기 (타이핑 없이)
+            var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
+            txt_Dialogue.text = dialogueData.dialogue;
+            canInput = false;
+
+            ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
+
+            // 오토 모드 꺼도 좋음 (필요하면)
+            isAuto = false;
+        }
+        else
+        {
+            Debug.Log("더 이상 선택지가 없습니다.");
+        }
     }
 
 }
