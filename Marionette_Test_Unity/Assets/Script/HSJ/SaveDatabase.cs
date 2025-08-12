@@ -79,6 +79,27 @@ public class SaveDatabase : MonoBehaviour
     {
         dayCycleSystem?.RigisterDayChangeEvent(SaveData_SetDayNum);
         dayCycleSystem?.RigisterTimeChangeEvent(SaveData_SetGameTime);
+
+        string dialogStr = TextLoad("Dialog");
+        try
+        {
+            dialogs = JsonConvert.DeserializeObject<Dictionary<int, DialogueData[]>>(dialogStr);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("대화 데이터 로드 실패: " + e.Message);
+            dialogs = null;
+        }
+        string interactiveDebateStr = TextLoad("Dialog_InteractiveDebate");
+        try
+        {
+            interactiveDebateDialogs = JsonConvert.DeserializeObject<Dictionary<int, InteractiveDebate_DialogueData[]>>(interactiveDebateStr);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("논쟁 대화 데이터 로드 실패: " + e.Message);
+            interactiveDebateDialogs = null;
+        }
     }
 
     #endregion
@@ -178,9 +199,9 @@ public class SaveDatabase : MonoBehaviour
             foreach (var dialog in dialogs)
             {
                 if (this.interactiveDebateDialogs.ContainsKey(dialog.Key) == false)
-                    dialogs.Add(dialog.Key, dialog.Value);
+                    this.interactiveDebateDialogs.Add(dialog.Key, dialog.Value);
                 else
-                    dialogs[dialog.Key] = dialog.Value;
+                    this.interactiveDebateDialogs[dialog.Key] = dialog.Value;
             }
         }
         else

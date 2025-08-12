@@ -62,13 +62,23 @@ public class ConfrontationDebate_UIManager : MonoBehaviour
     private void Update()
     {
         //인풋처리
-        #if UNITY_ANDROID
+#if UNITY_STANDALONE_WIN
+        bool isKeyDowning = false;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isKeyDowning = true;
+        }
+        else if(Input.GetKeyUp(KeyCode.Space) && isKeyDowning)
+        {
+            isKeyDowning = false;
+        }
 
+        if(isKeyDowning)
+        {
+            dialogManager.Play();
+        }
 
-        #elif UNITY_STANDALONE_WIN
-
-
-        #endif
+#endif
     }
 
     /// <summary> Load했을때 이전 데이터 뿌려주기 </summary>

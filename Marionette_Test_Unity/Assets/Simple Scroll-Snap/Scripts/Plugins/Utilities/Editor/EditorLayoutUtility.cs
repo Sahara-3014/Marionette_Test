@@ -7,11 +7,19 @@ namespace DanielLochner.Assets
     {
         public static void Header(ref bool show, GUIContent content)
         {
-            GUIStyle style = new GUIStyle(EditorStyles.foldout)
+            try
             {
-                fontStyle = FontStyle.Bold
-            };
-            show = EditorGUILayout.Foldout(show, content, true, style);
+                GUIStyle style = new GUIStyle(EditorStyles.foldout)
+                {
+                    fontStyle = FontStyle.Bold
+                };
+                show = EditorGUILayout.Foldout(show, content, true, style);
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log("Error in EditorLayoutUtility.Header: " + e.Message);
+            }
+
         }
     }
 }

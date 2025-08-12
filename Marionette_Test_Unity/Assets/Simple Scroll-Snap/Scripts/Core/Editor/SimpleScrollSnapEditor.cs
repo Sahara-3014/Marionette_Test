@@ -19,44 +19,53 @@ namespace DanielLochner.Assets.SimpleScrollSnap
         #region Methods
         private void OnEnable()
         {
-            scrollSnap = target as SimpleScrollSnap;
+            try
+            {
+                scrollSnap = target as SimpleScrollSnap;
 
-            #region Serialized Properties
-            // Movement and Layout Settings
-            movementType = serializedObject.FindProperty("movementType");
-            movementAxis = serializedObject.FindProperty("movementAxis");
-            useAutomaticLayout = serializedObject.FindProperty("useAutomaticLayout");
-            sizeControl = serializedObject.FindProperty("sizeControl");
-            size = serializedObject.FindProperty("size");
-            automaticLayoutSpacing = serializedObject.FindProperty("automaticLayoutSpacing");
-            automaticLayoutMargins = serializedObject.FindProperty("automaticLayoutMargins");
-            useInfiniteScrolling = serializedObject.FindProperty("useInfiniteScrolling");
-            infiniteScrollingSpacing = serializedObject.FindProperty("infiniteScrollingSpacing");
-            useOcclusionCulling = serializedObject.FindProperty("useOcclusionCulling");
-            startingPanel = serializedObject.FindProperty("startingPanel");
+                #region Serialized Properties
+                // Movement and Layout Settings
+                movementType = serializedObject.FindProperty("movementType");
+                movementAxis = serializedObject.FindProperty("movementAxis");
+                useAutomaticLayout = serializedObject.FindProperty("useAutomaticLayout");
+                sizeControl = serializedObject.FindProperty("sizeControl");
+                size = serializedObject.FindProperty("size");
+                automaticLayoutSpacing = serializedObject.FindProperty("automaticLayoutSpacing");
+                automaticLayoutMargins = serializedObject.FindProperty("automaticLayoutMargins");
+                useInfiniteScrolling = serializedObject.FindProperty("useInfiniteScrolling");
+                infiniteScrollingSpacing = serializedObject.FindProperty("infiniteScrollingSpacing");
+                useOcclusionCulling = serializedObject.FindProperty("useOcclusionCulling");
+                startingPanel = serializedObject.FindProperty("startingPanel");
 
-            // Navigation Settings
-            useSwipeGestures = serializedObject.FindProperty("useSwipeGestures");
-            minimumSwipeSpeed = serializedObject.FindProperty("minimumSwipeSpeed");
-            previousButton = serializedObject.FindProperty("previousButton");
-            nextButton = serializedObject.FindProperty("nextButton");
-            pagination = serializedObject.FindProperty("pagination");
-            useToggleNavigation = serializedObject.FindProperty("useToggleNavigation");
+                // Navigation Settings
+                useSwipeGestures = serializedObject.FindProperty("useSwipeGestures");
+                minimumSwipeSpeed = serializedObject.FindProperty("minimumSwipeSpeed");
+                previousButton = serializedObject.FindProperty("previousButton");
+                nextButton = serializedObject.FindProperty("nextButton");
+                pagination = serializedObject.FindProperty("pagination");
+                useToggleNavigation = serializedObject.FindProperty("useToggleNavigation");
 
-            // Snap Settings
-            snapTarget = serializedObject.FindProperty("snapTarget");
-            snapSpeed = serializedObject.FindProperty("snapSpeed");
-            thresholdSpeedToSnap = serializedObject.FindProperty("thresholdSpeedToSnap");
-            useHardSnapping = serializedObject.FindProperty("useHardSnapping");
-            useUnscaledTime = serializedObject.FindProperty("useUnscaledTime");
+                // Snap Settings
+                snapTarget = serializedObject.FindProperty("snapTarget");
+                snapSpeed = serializedObject.FindProperty("snapSpeed");
+                thresholdSpeedToSnap = serializedObject.FindProperty("thresholdSpeedToSnap");
+                useHardSnapping = serializedObject.FindProperty("useHardSnapping");
+                useUnscaledTime = serializedObject.FindProperty("useUnscaledTime");
 
-            // ShowEvents
-            onTransitionEffects = serializedObject.FindProperty("onTransitionEffects");
-            onPanelSelecting = serializedObject.FindProperty("onPanelSelecting");
-            onPanelSelected = serializedObject.FindProperty("onPanelSelected");
-            onPanelCentering = serializedObject.FindProperty("onPanelCentering");
-            onPanelCentered = serializedObject.FindProperty("onPanelCentered");
-            #endregion
+                // ShowEvents
+                onTransitionEffects = serializedObject.FindProperty("onTransitionEffects");
+                onPanelSelecting = serializedObject.FindProperty("onPanelSelecting");
+                onPanelSelected = serializedObject.FindProperty("onPanelSelected");
+                onPanelCentering = serializedObject.FindProperty("onPanelCentering");
+                onPanelCentered = serializedObject.FindProperty("onPanelCentered");
+                #endregion
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log($"Error initializing {nameof(SimpleScrollSnapEditor)}: {e.Message}");
+            }
+
+
         }
         public override void OnInspectorGUI()
         {
