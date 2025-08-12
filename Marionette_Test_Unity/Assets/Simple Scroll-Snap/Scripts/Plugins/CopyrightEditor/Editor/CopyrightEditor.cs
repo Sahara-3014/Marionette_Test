@@ -1,4 +1,4 @@
-﻿// Copyright Notice
+// Copyright Notice
 // Copyright (c) Daniel Lochner
 
 using System;
@@ -18,8 +18,16 @@ namespace DanielLochner.Assets
 
         public override void OnInspectorGUI()
         {
-            ShowCopyrightNotice();
-            base.OnInspectorGUI();
+            try
+            {
+                ShowCopyrightNotice();
+                base.OnInspectorGUI();
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Error displaying copyright notice: {e.Message}");
+            }
+
         }
         public void ShowCopyrightNotice()
         {
