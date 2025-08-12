@@ -79,7 +79,18 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     /// <summary> Load했을때 이전 데이터 뿌려주기 </summary>
     public void Loaded_DataSet()
     {
+        while(scrollSnap.Content.childCount > 0)
+            scrollSnap.Remove(0);
         Loaded_TextSet();
+
+
+        var slots = inventoryManager.itemSlot;
+        for (int i = 0; i < slots.Length; i++)
+            Destroy(slots[i].gameObject);
+        inventoryManager.itemSlot = null;
+        Loaded_InventorySet();
+
+
         RefreshTimer();
     }
 
@@ -94,6 +105,15 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         {
             AddDialog(data[i].speaker, data[i].dialogue);
             skipAction?.Invoke();
+        }
+    }
+
+    void Loaded_InventorySet()
+    {
+        Dictionary<int, int> items = database.SaveData_GetItems();
+        foreach (var item in items)
+        {
+            inventoryManager.AddItem(item.Key, item.Value);
         }
     }
 

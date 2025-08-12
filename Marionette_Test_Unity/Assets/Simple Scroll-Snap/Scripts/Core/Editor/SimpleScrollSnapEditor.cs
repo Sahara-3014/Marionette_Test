@@ -1,4 +1,4 @@
-﻿// Simple Scroll-Snap - https://assetstore.unity.com/packages/tools/gui/simple-scroll-snap-140884
+// Simple Scroll-Snap - https://assetstore.unity.com/packages/tools/gui/simple-scroll-snap-140884
 // Copyright (c) Daniel Lochner
 
 using UnityEditor;
@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.SimpleScrollSnap
     public class SimpleScrollSnapEditor : SSSCopyrightEditor
     {
         #region Fields
-        private bool showMovementAndLayoutSettings = true, showNavigationSettings = true, showSnapSettings = true, showTransitionEffects = true, showEvents = false;
+        private bool showMovementAndLayoutSettings = true, showNavigationSettings = true, showSnapSettings = true, showEvents = false;
         private SerializedProperty movementType, movementAxis, useAutomaticLayout, sizeControl, size, automaticLayoutSpacing, automaticLayoutMargins, useInfiniteScrolling, infiniteScrollingSpacing, useOcclusionCulling, startingPanel, useSwipeGestures, minimumSwipeSpeed, previousButton, nextButton, pagination, useToggleNavigation, snapTarget, snapSpeed, thresholdSpeedToSnap, useHardSnapping, useUnscaledTime, onTransitionEffects, onPanelSelecting, onPanelSelected, onPanelCentering, onPanelCentered;
         private SimpleScrollSnap scrollSnap;
         #endregion
@@ -60,16 +60,24 @@ namespace DanielLochner.Assets.SimpleScrollSnap
         }
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
+            try
+            {
+                serializedObject.Update();
 
-            ShowCopyrightNotice();
-            ShowMovementAndLayoutSettings();
-            ShowNavigationSettings();
-            ShowSnapSettings();
-            ShowEvents();
+                ShowCopyrightNotice();
+                ShowMovementAndLayoutSettings();
+                ShowNavigationSettings();
+                ShowSnapSettings();
+                ShowEvents();
 
-            serializedObject.ApplyModifiedProperties();
-            PrefabUtility.RecordPrefabInstancePropertyModifications(scrollSnap);
+                serializedObject.ApplyModifiedProperties();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(scrollSnap);
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log($"Error in {nameof(SimpleScrollSnapEditor)}: {e.Message}");
+            }
+
         }
         
         private void ShowMovementAndLayoutSettings()
