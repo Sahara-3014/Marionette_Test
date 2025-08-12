@@ -69,7 +69,6 @@ public class NavOptionButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         navOptionManager.DeselectAllNavOptions();
         thisnavOptionButtonSelected = true;
 
-        Debug.Log("thisnavOptionButtonSelected2: " + thisnavOptionButtonSelected);
     }
 
     public void OnRightClick()

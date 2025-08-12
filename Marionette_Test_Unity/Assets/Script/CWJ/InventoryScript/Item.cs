@@ -2,20 +2,15 @@ using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class Item : MonoBehaviour
 {
+    
     [SerializeField]
-    private string itemName;
+    private int id;
 
     [SerializeField]
     private int quantity;
-
-    [SerializeField]
-    private Sprite sprite;
-
-    [TextArea]
-    [SerializeField]
-    private string ItemDescription;
 
     private InventoryManager inventoryManager;
     private InteractionIcon interactionIcon;
@@ -31,7 +26,7 @@ public class Item : MonoBehaviour
     {
         if (Input.GetButtonDown("Interaction") && interactionRange)
         {
-            inventoryManager.AddItem(itemName, quantity, sprite, ItemDescription);
+            inventoryManager.AddItem(id, quantity);
             Destroy(gameObject);
         }
     }

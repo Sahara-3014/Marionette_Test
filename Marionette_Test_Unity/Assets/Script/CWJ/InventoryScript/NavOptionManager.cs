@@ -6,7 +6,7 @@ public class NavOptionManager : MonoBehaviour
     public int Defaultnav;
     private void Start()
     {
-            navOptionButton[Defaultnav].thisnavOptionButtonSelected = true;
+        navOptionButton[Defaultnav].thisnavOptionButtonSelected = true;
         for (int i = 0; i < navOptionButton.Length; i++)
         {
             if(i != Defaultnav)

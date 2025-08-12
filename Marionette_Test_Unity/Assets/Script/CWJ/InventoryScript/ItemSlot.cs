@@ -35,7 +35,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
         inventoryManager = GameObject.Find("UI").GetComponent<InventoryManager>();
     }
-    public void AddItem(string itemName, int quantity, Sprite itemSprite, string ItemDescription)
+    public void AddItem(int id, string itemName, int quantity, Sprite itemSprite, string ItemDescription)
     {
         Debug.Log("ItemSlot AddItem");
         this.itemName = itemName;
@@ -48,6 +48,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         //quantityText.enabled = true; //아이템 개수 텍스트 보이기
         itemImage.sprite = itemSprite;
     }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
