@@ -372,6 +372,7 @@ public class SaveDatabase : MonoBehaviour
             }
             catch (Exception e)
             {
+                Debug.Log("자동 저장 데이터가 비었습니다: " + e.Message);
                 return new SaveData { index = -1 }; // 자동 저장이 잘못된 경우
             }
 
@@ -410,6 +411,7 @@ public class SaveDatabase : MonoBehaviour
             }
             catch (Exception e)
             {
+                Debug.Log("데이터가 비었습니다: " + e.Message);
                 return new SaveData { index = -1 }; // 잘못된 저장 데이터
             }
         }
