@@ -9,51 +9,54 @@ using Newtonsoft.Json.Bson;
 public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     Image image;
-    private Debate3GameManager debate3GameManager;
+    private PrintText debate3GameManager;
 
     public GameObject Debate3GameManager;
     public GameObject connect;
     public TMP_Text text;
+    public GameObject textObject;
+    public int BigfontSize, SmallfontSize;
     public bool thischoiceButtonSelected;
     public bool mouseEnter;
     void Start()
     {
         image = this.GetComponent<Image>();
-        debate3GameManager = GameObject.Find("Debate3GameManager").GetComponent<Debate3GameManager>();
+        debate3GameManager = GameObject.Find("Debate3GameManager").GetComponent<PrintText>();
     }
 
     
     void Update()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
-        
+        RectTransform textrectTransform = textObject.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = textrectTransform.sizeDelta;
         if (thischoiceButtonSelected)
         {
-            /*connect.SetActive(true);
+            connect.SetActive(true);
             Color color = image.color;
             color.a = 1f;
-            image.color = color;*/
+            image.color = color;
             
-            rectTransform.sizeDelta = new Vector2(1600, 400);
-            text.fontSize = 140;
+            //rectTransform.sizeDelta = textrectTransform.sizeDelta * new Vector2(1.1f,1.1f);
+            text.fontSize = BigfontSize;
         }
         else if (mouseEnter)
         {
 
-            /*Color color = image.color;
-            color.a = 0.5f;
-            image.color = color;*/
-            rectTransform.sizeDelta = new Vector2(1600, 400);
-            text.fontSize = 140;
+            Color color = image.color;
+            color.a = 0.8f;
+            image.color = color;
+            //rectTransform.sizeDelta = textrectTransform.sizeDelta * new Vector2(1.1f, 1.1f);
+            text.fontSize = BigfontSize;
         }
         else
         {
-            /*connect.SetActive(false);
+            connect.SetActive(false);
             Color color = image.color;
-            color.a = 0f;
-            image.color = color;*/
-            rectTransform.sizeDelta = new Vector2(1200, 300);
-            text.fontSize = 108;
+            color.a = 0.8f;
+            image.color = color;
+            //rectTransform.sizeDelta = textrectTransform.sizeDelta;
+            text.fontSize = SmallfontSize;
         }
     }
 
