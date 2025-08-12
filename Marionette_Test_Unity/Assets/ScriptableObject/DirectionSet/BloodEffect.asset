@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BloodEffect
   m_EditorClassIdentifier: 
   particlesToPlay: 09000000
-  postProcessingsToEnable: 
+  postProcessingsToEnable: 04000000
   fadeDuration: 1
   useFadeIn: 1
   useFadeOut: 1

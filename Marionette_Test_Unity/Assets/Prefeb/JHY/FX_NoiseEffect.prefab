@@ -47,11 +47,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetFeatureName: NoiseEffectFeature
   noiseMaterial: {fileID: -876546973899608171, guid: 2af9e6ab22b625b43b56063a46b432a1, type: 3}
+  effectOpacity: 1
   noiseIntensity: 1
   noiseSpeed: 0.1
   minGlitchIntensity: 0.1
   maxGlitchIntensity: 0.4
   glitchChangeSpeed: 5
+  blockSize: {x: 50, y: 200}
+  useRandomBlockSize: 0
+  minRandomSize: {x: 10, y: 50}
+  maxRandomSize: {x: 100, y: 400}
+  sizeChangeRate: 0.2
   useRandomBlockColor: 0
   glitchBlockColor: {r: 1, g: 0, b: 1, a: 1}
   randomColors:

@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "DS_NewDirectionSet", menuName = "Marionet Test/Direction Set")]
 
+[CreateAssetMenu(fileName = "DS_NewDirectionSet", menuName = "Marionet Test/Direction Set")]
 public class DirectionSetSO : ScriptableObject
 {
+
+
     [Header("이 세트에 포함될 이펙트 목록")]
     public List<EffectType> particlesToPlay;
     public List<PostProcessingEffectType> postProcessingsToEnable;
@@ -18,5 +20,4 @@ public class DirectionSetSO : ScriptableObject
 
     [Tooltip("체크하면 이펙트가 서서히 사라집니다 (페이드 아웃)")]
     public bool useFadeOut = true;
-    
 }

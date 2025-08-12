@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-// IFadeableEffect 인터페이스의 계약을 모두 이행합니다.
 public class NoiseEffectController : MonoBehaviour, IFadeableEffect
 {
     [Header("기본 설정")]
