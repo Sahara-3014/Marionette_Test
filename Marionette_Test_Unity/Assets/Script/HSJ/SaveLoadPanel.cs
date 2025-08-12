@@ -1,25 +1,31 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SaveLoadPanel : MonoBehaviour
 {
+    public enum SaveTpye { Save = 0, Load = 1, New = 2 }
+
     public static SaveLoadPanel instance;
-    SaveDatabase database;
+    [SerializeField] SaveDatabase database;
     [SerializeField] TextMeshProUGUI titleLabel;
     [SerializeField] Button[] btns;
+    [SerializeField] Button backBtn;
+    public UnityAction onLoadAction;
+    public UnityAction onNewAction;
 
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
@@ -29,35 +35,61 @@ public class SaveLoadPanel : MonoBehaviour
         database = SaveDatabase.Instance;
     }
 
-    public void Open(bool isSavePanel)
+    public void Open(SaveTpye saveType)
     {
-        titleLabel.text = isSavePanel ? "Save File" : "Load File";
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
+        if(database == null)
+            database = SaveDatabase.Instance;
+        titleLabel.text = saveType == SaveTpye.Save ? "Save File" : saveType == SaveTpye.Load ? "Load File" : "New File";
 
         for (int i = 0; i < btns.Length; i++)
         {
-            var data = database.Load(i, false);
+            var data = i == 0 ? database.AutoLoad() : database.Load(i, false);
 
             TextMeshProUGUI tmp = btns[i].GetComponentInChildren<TextMeshProUGUI>();
-            DateTime date = DateTime.Parse(data.saveDate);
-            if (i == 0)
+
+            DateTime date;
+            if (i == 0 && data.index != -1)
+            {
+                date = DateTime.Parse(data.saveDate);
                 tmp.text = $"AutoFile {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} {data.dayNum} Days";
+            }
+            else if(i== 0 && data.index == -1)
+                tmp.text = "AutoFile Empty";
             else if (data.index == -1)
                 tmp.text = $"File {i} Empty";
             else
+            {
+                date = DateTime.Parse(data.saveDate);
                 tmp.text = $"File {i} {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} {data.dayNum} Days";
+            }
 
             btns[i].onClick.RemoveAllListeners();
-            if(isSavePanel)
-                btns[i].onClick.AddListener(() => Save(i));
-            else
-                btns[i].onClick.AddListener(() => Load(i));
+            if (i != 0 && saveType == SaveTpye.Save)
+                btns[i].onClick.AddListener(() => { Save(i); });
+            else if (saveType == SaveTpye.Load)
+                btns[i].onClick.AddListener(() => { Load(i); });
+            else if (i != 0 && saveType == SaveTpye.New)
+                btns[i].onClick.AddListener(() => { NewGame(i); });
         }
+    }
+
+    public void NewGame(int index)
+    {
+        var data = database.SaveData_Get();
+        data.index = index;
+        data.saveDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        data.dayNum = 0;
+        onNewAction?.Invoke();
     }
 
     public void Save(int index)
     {
         database.Save(index);
-        btns[index].GetComponentInChildren<TextMeshProUGUI>().text = $"File {index} Saved";
+        var data = database.SaveData_Get();
+        var date = DateTime.Parse(data.saveDate);
+        btns[index].GetComponentInChildren<TextMeshProUGUI>().text = $"File {index} {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} {data.dayNum} Days";
     }
 
     public void Load(int index)
@@ -65,7 +97,26 @@ public class SaveLoadPanel : MonoBehaviour
         var data = database.Load(index, false);
         if (data.index == -1)
             return;
+        onLoadAction?.Invoke();
+    }
 
-        database.Load(index);
+    public void BtnsDisable()
+    {
+        foreach(var btn in btns)
+        {
+            btn.interactable = false;
+        }
+        if(backBtn != null)
+            backBtn.interactable = false;
+    }
+
+    public void BtnsEnable()
+    {
+        foreach (var btn in btns)
+        {
+            btn.interactable = true;
+        }
+        if (backBtn != null)
+            backBtn.interactable = true;
     }
 }

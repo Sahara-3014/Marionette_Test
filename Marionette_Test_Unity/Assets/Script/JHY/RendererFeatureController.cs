@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using System.Collections.Generic;
 
@@ -20,7 +20,7 @@ public class RendererFeatureController : MonoBehaviour
             return; 
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         InitializeFeatures();
     }
