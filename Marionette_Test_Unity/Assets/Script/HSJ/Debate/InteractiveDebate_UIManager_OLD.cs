@@ -188,7 +188,7 @@ public class InteractiveDebate_UIManager_OLD : MonoBehaviour
         {
             ItemSlot itemSlot = Instantiate(itemSlotPrefab, inventoryViewer);
             //일단 임시
-            itemSlot.AddItem(item.Key.ToString(), item.Value, null, "");
+            //itemSlot.AddItem(item.Key, item.Value, null, "");
             itemSlots.Add(itemSlot.gameObject);
         }
     }
