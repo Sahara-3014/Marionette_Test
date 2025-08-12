@@ -2,9 +2,6 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.UI;
-using System.ComponentModel;
 
 #region 열거형 및 데이터 구조체
 public enum EffectType
@@ -18,7 +15,10 @@ public enum EffectType
     FadeFromBlack,
     FadeOutTOFadeIn,
     ScreenNoiseGlitch,
-    Blood
+    Blood,
+    ScreenFlicker,
+    ShowCharacter,
+    ElectricDischarge
 }
 
 public enum PostProcessingEffectType
@@ -28,7 +28,8 @@ public enum PostProcessingEffectType
     MentalBreakdown,
     Flashback,
     RedFlash,
-    Vignette
+    Vignette,
+    InvertColor
 }
 
 [System.Serializable]
@@ -80,7 +81,7 @@ public class EffectManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -307,6 +308,8 @@ public class EffectManager : MonoBehaviour
         List<GameObject> instances = activeEffectInstances[effectType];
         List<GameObject> instancesCopy = new List<GameObject>(instances);
 
+        bool isHandled = false;
+
         foreach (GameObject instance in instancesCopy)
         {
             if (instance == null) continue;
@@ -325,8 +328,23 @@ public class EffectManager : MonoBehaviour
                 float destroyDelay = instance.GetComponent<EffectInfo>()?.MaxDuration ?? 3.0f;
                 Destroy(instance, destroyDelay);
             }
+
+            if (!isHandled)
+            {
+                // EffectInfo가 있다면, 그 시간을 존중해줍니다.
+                EffectInfo info = instance.GetComponent<EffectInfo>();
+                if (info != null)
+                {
+                    Destroy(instance, info.MaxDuration);
+                }
+                else
+                {
+                    // EffectInfo조차 없다면, 즉시 파괴하는 것이 가장 안전합니다.
+                    Destroy(instance);
+                }
+            }
+            instances.Clear();
         }
-        instances.Clear();
     }
 
 
