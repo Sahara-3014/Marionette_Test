@@ -18,7 +18,9 @@ public enum EffectType
     Blood,
     ScreenFlicker,
     ShowCharacter,
-    ElectricDischarge
+    ElectricDischarge,
+    BootEffect,
+    CameraMoving
 }
 
 public enum PostProcessingEffectType
@@ -29,7 +31,8 @@ public enum PostProcessingEffectType
     Flashback,
     RedFlash,
     Vignette,
-    InvertColor
+    InvertColor,
+    BlackScreen
 }
 
 [System.Serializable]
