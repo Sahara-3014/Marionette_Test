@@ -47,11 +47,6 @@ public class DialogueManager : MonoBehaviour
     private Dictionary<string, Sprite> backgroundSpriteDict;
 
 
-    [Header("캐릭터 스프라이트 등록")]
-    [SerializeField] private List<Sprite> characterSprites; // 이름: 파일 이름과 동일
-    private Dictionary<string, Sprite> characterSpriteDict;
-
-
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
 {
     { "주한", "JUHAN" },
@@ -79,11 +74,7 @@ public class DialogueManager : MonoBehaviour
     //
     private void Awake()
     {
-        characterSpriteDict = new Dictionary<string, Sprite>();
-        foreach (var sprite in characterSprites)
-        {
-            characterSpriteDict[sprite.name] = sprite;
-        }
+
 
         backgroundSpriteDict = new Dictionary<string, Sprite>();
         foreach (var bg in backgroundSprites)
@@ -229,10 +220,6 @@ public class DialogueManager : MonoBehaviour
 
     }
 
-
-    //
-    //캐릭터 보여주는 함수
-    //
     private void ShowCharacter(string name, string head, string body, Dialog_CharPos pos, Dialog_CharEffect effect)
     {
         int posIndex = (int)pos;
@@ -242,41 +229,53 @@ public class DialogueManager : MonoBehaviour
         var bodyRenderer = sprite_Bodies[posIndex];
 
         string englishName = characterNameMap.ContainsKey(name) ? characterNameMap[name] : name;
-        string headKey = $"{englishName}_{head}";
-        string bodyKey = $"{englishName}_{body}";
 
-        // 머리 출력
-        Debug.Log($"headKey = '{headKey}', 등록 여부 = {characterSpriteDict.ContainsKey(headKey)}");
-
-        if (!string.IsNullOrEmpty(headKey) && characterSpriteDict.ContainsKey(headKey))
+        string headSpriteName = $"{head}";
+        Sprite headSprite = LoadSpriteForSpeaker(name, headSpriteName);
+        if (headSprite != null)
         {
-            headRenderer.sprite = characterSpriteDict[headKey];
+            headRenderer.sprite = headSprite;
             headRenderer.gameObject.SetActive(true);
         }
         else
         {
             headRenderer.sprite = null;
             headRenderer.gameObject.SetActive(false);
-            Debug.LogWarning($"[머리 스프라이트 미적용] {headKey}는 등록되지 않았습니다.");
+            Debug.LogWarning($"[머리 스프라이트 미적용] {headSpriteName}를 {name} 폴더에서 못 찾음");
         }
 
-        // 몸 출력
-        if (!string.IsNullOrEmpty(bodyKey) && characterSpriteDict.ContainsKey(bodyKey))
+        string bodySpriteName = $"{body}";
+        Sprite bodySprite = LoadSpriteForSpeaker(name, bodySpriteName);
+        if (bodySprite != null)
         {
-            bodyRenderer.sprite = characterSpriteDict[bodyKey];
+            bodyRenderer.sprite = bodySprite;
             bodyRenderer.gameObject.SetActive(true);
         }
         else
         {
             bodyRenderer.sprite = null;
             bodyRenderer.gameObject.SetActive(false);
-            Debug.LogWarning($"[몸통 스프라이트 미적용] {bodyKey}는 등록되지 않았습니다.");
+            Debug.LogWarning($"[몸통 스프라이트 미적용] {bodySpriteName}를 {name} 폴더에서 못 찾음");
         }
 
         if (characterPositionManager != null)
         {
-            characterPositionManager.SetCharacter(headRenderer, pos);
-            characterPositionManager.SetCharacter(bodyRenderer, pos);
+            Vector3 basePos = characterPositionManager.GetPositionByCharPos(pos);
+
+            // 머리와 몸의 부모 컨테이너가 동일하다고 가정
+            Transform container = headRenderer.transform.parent;
+            if (container != null)
+            {
+                container.position = basePos;
+                // 머리와 몸의 localPosition은 인스펙터에서 조절한 값 유지됨
+            }
+            else
+            {
+                Debug.LogWarning("머리 스프라이트에 부모 컨테이너가 없습니다. 위치가 이상할 수 있습니다.");
+                // 부모 없으면 기존 방식 유지 (긴급 대비)
+                headRenderer.transform.position = basePos + headRenderer.transform.localPosition;
+                bodyRenderer.transform.position = basePos + bodyRenderer.transform.localPosition;
+            }
         }
 
         if (effect != Dialog_CharEffect.None)
@@ -285,6 +284,27 @@ public class DialogueManager : MonoBehaviour
             StartCoroutine(effectManager.RunCharacterEffect(effect, bodyRenderer));
         }
     }
+
+    private Sprite LoadSpriteForSpeaker(string speakerName, string spriteName)
+    {
+        string folderName = speakerName;
+        if (characterNameMap.ContainsKey(speakerName))
+        {
+            folderName = characterNameMap[speakerName];
+        }
+
+        string path = $"Sprites/Characters/{folderName}/{spriteName}";
+        Sprite sprite = Resources.Load<Sprite>(path);
+        if (sprite == null)
+        {
+            Debug.LogWarning($"[LoadSpriteForSpeaker] 스프라이트를 찾지 못함: {path}");
+        }
+        return sprite;
+    }
+
+
+
+
 
 
     public void NextDialogue()
