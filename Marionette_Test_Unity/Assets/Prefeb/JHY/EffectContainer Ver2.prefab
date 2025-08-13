@@ -154,6 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3127968026564608643}
   - component: {fileID: 21733518204640307}
+  - component: {fileID: 8346305549994187388}
   m_Layer: 0
   m_Name: EffectManager
   m_TagString: Untagged
@@ -196,8 +197,6 @@ MonoBehaviour:
     prefab: {fileID: 3789302256607365297, guid: a1add012b51e4f54d9d67ec79434d96e, type: 3}
   - effectType: 4
     prefab: {fileID: 815292113193373700, guid: 0df0d7c6f83977a4186e53d0895fef06, type: 3}
-  - effectType: 4
-    prefab: {fileID: 815292113193373700, guid: 0df0d7c6f83977a4186e53d0895fef06, type: 3}
   - effectType: 5
     prefab: {fileID: 5708344413116662463, guid: ce05d79af9d171446882efc77f0c0642, type: 3}
   - effectType: 6
@@ -210,8 +209,22 @@ MonoBehaviour:
     prefab: {fileID: 3828182387945353318, guid: 0f9649b0cbc5f7346a0475778d203a55, type: 3}
   - effectType: 10
     prefab: {fileID: 2778613285219953933, guid: 6821bb1a31559d848b950df14140aa67, type: 3}
+  - effectType: 13
+    prefab: {fileID: 3643231761155671413, guid: 0947be2414aece941bc41b2260cf379e, type: 3}
+  - effectType: 12
+    prefab: {fileID: 8425076202396212335, guid: 04a339b27b4b9e64a9edaae7051ae6bb, type: 3}
   - effectType: 11
     prefab: {fileID: 9194199221578388241, guid: b1a238c0d658c634f8df29ba0621d76d, type: 3}
+  - effectType: 8
+    prefab: {fileID: 8106076804652936775, guid: 179a8f62cdd290e459329b39ef052c84, type: 3}
+  - effectType: 14
+    prefab: {fileID: 5344092085396248165, guid: c26af750c51653c4c87608d61c000c9f, type: 3}
+  - effectType: 16
+    prefab: {fileID: 5708344413116662463, guid: 7ef0518aeb86eec41806062955b30e52, type: 3}
+  - effectType: 15
+    prefab: {fileID: 6583607471843724458, guid: 0ce096922a971264481fbe7cf5d51369, type: 3}
+  - effectType: 17
+    prefab: {fileID: 815292113193373700, guid: bd934c514ef9876449c059da5bdd7555, type: 3}
   volumeList:
   - effectType: 1
     prefab: {fileID: 8302285329884898372, guid: c789c00993cb2df46bd828423bd26f2d, type: 3}
@@ -223,18 +236,265 @@ MonoBehaviour:
     prefab: {fileID: 6082959601557219063, guid: 545471ed53fb43f4d9cbc131c634674e, type: 3}
   - effectType: 6
     prefab: {fileID: 6082959601557219063, guid: 28e4795883c6b8c44bd38e0d31e46f66, type: 3}
+  - effectType: 7
+    prefab: {fileID: 6082959601557219063, guid: 735b538f5d850064894f62e86c1a3715, type: 3}
   directionSetList:
   - {fileID: 11400000, guid: 1cafa395a355a16499c8c3a041671e57, type: 2}
   - {fileID: 11400000, guid: 90b6388541ecb514daa92b6cf1a99804, type: 2}
   - {fileID: 11400000, guid: 8a95e51af77b6db42a9426b7419ef161, type: 2}
   - {fileID: 11400000, guid: 1b6875e8afe683f44a76ea1251f794da, type: 2}
   - {fileID: 11400000, guid: 21d4be923f1023843abc35dac0ff5371, type: 2}
+  - {fileID: 11400000, guid: 173f967dced8ac64aa6ef3000940490f, type: 2}
+  - {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
+  - {fileID: 11400000, guid: 71559241c0e890e48a1f837c154139a1, type: 2}
   - {fileID: 11400000, guid: 0e98fe55f2a6b9d4a82afe1314404cc4, type: 2}
-  - {fileID: 11400000, guid: f09b879b0055bc04bb8ad3059c612979, type: 2}
+  - {fileID: 11400000, guid: 572f5d613a560ef409d256f011389abb, type: 2}
+  - {fileID: 11400000, guid: 4e08dfb38482bad48b8c579cdbb7405f, type: 2}
+  - {fileID: 11400000, guid: 59195ca5f2f9af947989e7d8950040e6, type: 2}
+  - {fileID: 11400000, guid: 08646a6b0e759654da1d0532b625819d, type: 2}
   sequenceList:
   - {fileID: 11400000, guid: 73d1562268778704797a1a22894eeca6, type: 2}
   - {fileID: 11400000, guid: fbf780685ba086546b5a78e8a995ff4f, type: 2}
-  - {fileID: 11400000, guid: 208562c00094aea40a47328bde3b223a, type: 2}
+--- !u!114 &8346305549994187388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891206470350881166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: c632fabf1d2651a46943d08023b96808, type: 2}
+    - {fileID: 11400000, guid: e5f7c392b5c831b4a8c8abe51b975d68, type: 2}
+    - {fileID: 11400000, guid: 5a5f80429303b9742a89c574ffec9999, type: 2}
+    - {fileID: 11400000, guid: 39b8a644bb9ff6b44892412a3701ec7b, type: 2}
+    - {fileID: 11400000, guid: eb287891841160d44b42ff47926b722c, type: 2}
+    - {fileID: 11400000, guid: 6baa2f58d17132f47bc1dd8a6dfc4864, type: 2}
+    - {fileID: 11400000, guid: af3eacbc349a94e45b0f478fae1ca99a, type: 2}
+    - {fileID: 11400000, guid: 4a5c8c622d9361d41ae32b0c65ddb419, type: 2}
+    - {fileID: 11400000, guid: 942764bbf65f7c546a65d7d0d2cfbe3e, type: 2}
+    - {fileID: 11400000, guid: e536853168606ba4eb0c9a0110476464, type: 2}
+    - {fileID: 11400000, guid: 3786da156bf2d434a8c018a11c8af22a, type: 2}
+    - {fileID: 11400000, guid: 555f9759b27dc9249a41c89b3559ec72, type: 2}
+    - {fileID: 11400000, guid: fd63657a4cf3a8e4183633a1d177dbad, type: 2}
+    - {fileID: 11400000, guid: 356a9fe45abb2ee4293d4d9b54051310, type: 2}
+    - {fileID: 11400000, guid: d6023e7e620e55c4483b7d4ee1481e31, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 44642e0c3ccace440b5f325867c4a227, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: StopDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 44642e0c3ccace440b5f325867c4a227, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 572f5d613a560ef409d256f011389abb, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 8ddf5cdbc14090443b62c7c8a46fe4f6, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: StopDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 572f5d613a560ef409d256f011389abb, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 84f15f9a9897f3a4bb7877186c29550f, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 3ca190849b6d02647bb2a537d34b38f4, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 5912c50d29731a74e9a203ff8ed5534a, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 173f967dced8ac64aa6ef3000940490f, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSet
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 71559241c0e890e48a1f837c154139a1, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: StopDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 71559241c0e890e48a1f837c154139a1, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: StopDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 5912c50d29731a74e9a203ff8ed5534a, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: PlayDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 1cafa395a355a16499c8c3a041671e57, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 21733518204640307}
+          m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+          m_MethodName: StopDirectionSetBySO
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 1cafa395a355a16499c8c3a041671e57, type: 2}
+            m_ObjectArgumentAssemblyTypeName: DirectionSetSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &2474398199486722462
 PrefabInstance:
   m_ObjectHideFlags: 0

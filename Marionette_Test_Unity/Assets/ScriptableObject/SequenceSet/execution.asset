@@ -13,12 +13,24 @@ MonoBehaviour:
   m_Name: execution
   m_EditorClassIdentifier: 
   steps:
-  - directionSet: {fileID: 11400000, guid: 0e98fe55f2a6b9d4a82afe1314404cc4, type: 2}
+  - directionSet: {fileID: 11400000, guid: 44642e0c3ccace440b5f325867c4a227, type: 2}
     duration: 3
     delayAfter: 1
-  - directionSet: {fileID: 11400000, guid: 4e08dfb38482bad48b8c579cdbb7405f, type: 2}
-    duration: 1
-    delayAfter: 0.5
-  - directionSet: {fileID: 11400000, guid: 4e08dfb38482bad48b8c579cdbb7405f, type: 2}
-    duration: 1
-    delayAfter: 0.5
+  - directionSet: {fileID: 11400000, guid: de998fa30b996fa45a54ad596176c881, type: 2}
+    duration: 5
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
+    duration: 3
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 5912c50d29731a74e9a203ff8ed5534a, type: 2}
+    duration: 5
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 173f967dced8ac64aa6ef3000940490f, type: 2}
+    duration: 3
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 71559241c0e890e48a1f837c154139a1, type: 2}
+    duration: 3
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
+    duration: 3
+    delayAfter: 0
