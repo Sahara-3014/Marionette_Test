@@ -9,61 +9,65 @@ public class PrintText : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Debate3ChoiceButton[] choiceButton;
-    public GameObject choicebuttons, choicebutton0, choicebutton1, choicebutton2;
+    public GameObject choicebuttons;
+    public Image choicebutton0, choicebutton1, choicebutton2;
+    public Image TimerCircle;
     public int CurrentRound;
     public int MaxRound;
     public bool NextRound;
     private int ChoicedAnswer;
     public int[] CorrectAnswer;
+    [TextArea]
     public string[] OppText, ProText;
     public int[] roundStartDialogueStartNum, roundStartDialogueEndNum, choiceDialogueStartNum, choiceDialogueEndNum;
     public string[] ProText1, ProText2, ProText3;
     public TMP_Text OppTextBox, ProTextBox, ProText1Box, ProText2Box, ProText3Box, TimerTextBox;
     private bool roundStart, choiceAppear;
-
+    private bool c1, c2, c3;
     public float timeLimit;
     private float currenttime;
     public Animator TimerUIanimator;
     public Animator BGanimator;
 
     public float textdelay;
+    public float linedelay;
     public float nexttextdelay;
+
     void Start()
     {
+        TimerUIanimator.enabled = true;
         TimerUIanimator.SetBool("Intro", true);
         BGanimator.SetBool("Intro", true);
 
         currenttime = timeLimit;
         NextRound = true;
         roundStart = true;
-        choiceAppear = true; //임시
-        /*choiceButton[Defaultchoice].thischoiceButtonSelected = true;
-        for (int i = 0; i < choiceButton.Length; i++)
-        {
-            if (i != Defaultchoice)
-            {
-                choiceButton[i].thischoiceButtonSelected = false;
-            }
-        }*/
+        choiceAppear = false;
+        c1 = true; c2 = true; c3 = true;
+        
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(!TimerUIanimator.GetCurrentAnimatorStateInfo(0).IsName("TimerUI_Intro"))
+        TimerCircle.fillAmount = currenttime / timeLimit;
+        Debug.Log("TimerCircle.fillAmount: " + currenttime / timeLimit);
+        if (!TimerUIanimator.GetCurrentAnimatorStateInfo(0).IsName("TimerUI_Intro"))
         {
+            TimerUIanimator.enabled = false;
             BGanimator.SetBool("Intro", false);
             if (choiceAppear)
-                    choicebuttons.SetActive(true);
-                else
-                    choicebuttons.SetActive(false);
+                ShowAllChoiceButtons();
+            else
+                HideAllChoiceButtons();
 
             if (NextRound == true)
             {
+                
                 if (roundStart)
                 {
                     roundStart = false;
                     StartCoroutine(RoundStartDialogue());
+                    
                 }
                 
 
@@ -75,23 +79,29 @@ public class PrintText : MonoBehaviour
 
             
                 string myString = Mathf.FloorToInt(currenttime).ToString();
-                TimerTextBox.text = myString;
+                if (currenttime < 0)
+                    TimerTextBox.text = "0";
+                else
+                    TimerTextBox.text = myString;
 
                 for (int i = 0; i < choiceButton.Length; i++)
                 {
                     if (choiceButton[i].thischoiceButtonSelected == true)
                     {
                         ChoicedAnswer = i;
-
-                        if(NextRound == true)
+                        
+                        if (NextRound == true)
                             StartCoroutine(ChoiceDialogue());
+
+                        
                     }
                 }
             }
 
-            if (currenttime > 1)
+            if (currenttime > 0)
                 currenttime -= Time.deltaTime;
-
+            else if (currenttime < 0)
+                currenttime = 0;
 
         }
 
@@ -100,6 +110,7 @@ public class PrintText : MonoBehaviour
 
     public void CheckAnswer()
     {
+        
         if (choiceButton[CorrectAnswer[CurrentRound]].thischoiceButtonSelected == true)
         {
             Debug.Log("Round" + CurrentRound + " 정답!");
@@ -108,14 +119,12 @@ public class PrintText : MonoBehaviour
 
             DeselectAllChoiceButtons();
             currenttime = timeLimit;
-            
+
+            c1 = true; c2 = true; c3 = true;
 
             
             NextRound = true;
             roundStart = true;
-            choicebutton0.SetActive(true);
-            choicebutton1.SetActive(true);
-            choicebutton2.SetActive(true);
         }
         else
         {
@@ -124,19 +133,20 @@ public class PrintText : MonoBehaviour
             switch (ChoicedAnswer)
             {
                 case 0:
-                    choicebutton0.SetActive(false);
+                    c1 = false;
                     break;
                 case 1:
-                    choicebutton1.SetActive(false);
+                    c2 = false;
                     break;
                 case 2:
-                    choicebutton2.SetActive(false);
+                    c3 = false;
                     break;
             }
 
 
             DeselectAllChoiceButtons();
             currenttime = timeLimit;
+            choiceAppear = true;
             NextRound = true;
         }
     }
@@ -149,11 +159,29 @@ public class PrintText : MonoBehaviour
             Debug.Log("i: " + i);
         }
     }
+    public void ShowAllChoiceButtons()
+    {
+        if(c1 == true)
+            choicebutton0.gameObject.SetActive(true);
+
+        if (c2 == true)
+            choicebutton1.gameObject.SetActive(true);
+
+        if (c3 == true)
+            choicebutton2.gameObject.SetActive(true);
+    }
+    public void HideAllChoiceButtons()
+    {
+        choicebutton0.gameObject.SetActive(false);
+        choicebutton1.gameObject.SetActive(false);
+        choicebutton2.gameObject.SetActive(false);
+    }
 
     public IEnumerator RoundStartDialogue()
     {
+        choiceAppear = false;
         // 대사 해야하는 게 라운드 시작 때 그리고 답 선택 때
-        for(int i = roundStartDialogueStartNum[CurrentRound]; i <= roundStartDialogueEndNum[CurrentRound]; i++)
+        for (int i = roundStartDialogueStartNum[CurrentRound]; i <= roundStartDialogueEndNum[CurrentRound]; i++)
         {
             Debug.Log("Print RoundStartDialogue Text" + i);
             yield return StartCoroutine(PrintingText(OppText[i], OppTextBox));
@@ -165,11 +193,13 @@ public class PrintText : MonoBehaviour
         ProText1Box.text = ProText1[CurrentRound];
         ProText2Box.text = ProText2[CurrentRound];
         ProText3Box.text = ProText3[CurrentRound];
-        
+
+        choiceAppear = true;
     }
 
     public IEnumerator ChoiceDialogue()
     {
+        choiceAppear = false;
         NextRound = false;
         int i = CurrentRound * 3 + ChoicedAnswer;
         for (int j = choiceDialogueStartNum[i]; j <= choiceDialogueEndNum[i]; j++)
@@ -180,6 +210,7 @@ public class PrintText : MonoBehaviour
 
             yield return new WaitForSeconds(nexttextdelay);
         }
+        
         CheckAnswer();
     }
     IEnumerator PrintingText(string printText, TMP_Text TextBox)
@@ -187,7 +218,14 @@ public class PrintText : MonoBehaviour
         TextBox.text = "";
         foreach (char letter in printText.ToCharArray())
         {
-            TextBox.text += letter;
+            if (letter == '\\')
+            {
+                TextBox.text += '\n';
+                yield return new WaitForSeconds(linedelay);
+            }
+            else
+                TextBox.text += letter;
+            
             yield return new WaitForSeconds(textdelay);
         }
     }
