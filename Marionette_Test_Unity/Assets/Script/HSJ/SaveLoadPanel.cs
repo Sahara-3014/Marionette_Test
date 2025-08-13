@@ -9,7 +9,7 @@ public class SaveLoadPanel : MonoBehaviour
     public enum SaveTpye { Save = 0, Load = 1, New = 2 }
 
     public static SaveLoadPanel instance;
-    [SerializeField] SaveDatabase database;
+    [SerializeField] private SaveDatabase database;
     [SerializeField] TextMeshProUGUI titleLabel;
     [SerializeField] Button[] btns;
     [SerializeField] Button backBtn;
