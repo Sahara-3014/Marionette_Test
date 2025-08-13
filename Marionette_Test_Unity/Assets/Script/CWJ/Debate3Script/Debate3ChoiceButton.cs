@@ -27,9 +27,7 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
     
     void Update()
     {
-        RectTransform rectTransform = GetComponent<RectTransform>();
-        RectTransform textrectTransform = textObject.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = textrectTransform.sizeDelta;
+        ReSize();
         if (thischoiceButtonSelected)
         {
             connect.SetActive(true);
@@ -37,7 +35,6 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
             color.a = 1f;
             image.color = color;
             
-            //rectTransform.sizeDelta = textrectTransform.sizeDelta * new Vector2(1.1f,1.1f);
             text.fontSize = BigfontSize;
         }
         else if (mouseEnter)
@@ -46,7 +43,7 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
             Color color = image.color;
             color.a = 0.8f;
             image.color = color;
-            //rectTransform.sizeDelta = textrectTransform.sizeDelta * new Vector2(1.1f, 1.1f);
+           
             text.fontSize = BigfontSize;
         }
         else
@@ -55,12 +52,19 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
             Color color = image.color;
             color.a = 0.8f;
             image.color = color;
-            //rectTransform.sizeDelta = textrectTransform.sizeDelta;
+            
             text.fontSize = SmallfontSize;
         }
     }
 
-
+    public void ReSize()
+    {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        RectTransform textrectTransform = textObject.GetComponent<RectTransform>();
+        
+        rectTransform.sizeDelta = textrectTransform.sizeDelta * new Vector2(1.3f, 1.3f);
+        textrectTransform.anchoredPosition = rectTransform.sizeDelta / 2;
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         mouseEnter = true; 

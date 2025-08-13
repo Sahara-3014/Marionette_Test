@@ -9,6 +9,7 @@ public class PrintText : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Debate3ChoiceButton[] choiceButton;
+    
     public GameObject choicebuttons;
     public Image choicebutton0, choicebutton1, choicebutton2;
     public Image TimerCircle;
@@ -56,7 +57,9 @@ public class PrintText : MonoBehaviour
             TimerUIanimator.enabled = false;
             BGanimator.SetBool("Intro", false);
             if (choiceAppear)
+            {
                 ShowAllChoiceButtons();
+            }     
             else
                 HideAllChoiceButtons();
 
@@ -74,8 +77,7 @@ public class PrintText : MonoBehaviour
 
                 Debug.Log("Round:" + CurrentRound);
 
-                /*OppTextBox.text = OppText[CurrentRound];
-                 ProTextBox.text = ProText[CurrentRound];*/
+                
 
             
                 string myString = Mathf.FloorToInt(currenttime).ToString();
@@ -96,12 +98,15 @@ public class PrintText : MonoBehaviour
                         
                     }
                 }
+
+                if (currenttime > 0)
+                    currenttime -= Time.deltaTime;
+                else if (currenttime < 0)
+                    currenttime = 0;
+
             }
 
-            if (currenttime > 0)
-                currenttime -= Time.deltaTime;
-            else if (currenttime < 0)
-                currenttime = 0;
+           
 
         }
 
@@ -193,7 +198,7 @@ public class PrintText : MonoBehaviour
         ProText1Box.text = ProText1[CurrentRound];
         ProText2Box.text = ProText2[CurrentRound];
         ProText3Box.text = ProText3[CurrentRound];
-
+       
         choiceAppear = true;
     }
 
