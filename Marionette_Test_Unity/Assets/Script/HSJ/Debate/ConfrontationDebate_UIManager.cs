@@ -15,6 +15,7 @@ public class ConfrontationDebate_UIManager : MonoBehaviour
     public static ConfrontationDebate_UIManager instance;
     SaveDatabase database;
     DayCycleSystem dayCycleSystem;
+    InventoryManager invManager;
     [SerializeField] ConfrontationDebate_DialogManager dialogManager;
 
     [Header("Default UI Values")]
@@ -50,6 +51,7 @@ public class ConfrontationDebate_UIManager : MonoBehaviour
         // 초기화
         database = SaveDatabase.Instance;
         dayCycleSystem = DayCycleSystem.Instance;
+        invManager = InventoryManager.Instance;
 
         CloseChoicePanel();
 
@@ -60,19 +62,30 @@ public class ConfrontationDebate_UIManager : MonoBehaviour
     private void Update()
     {
         //인풋처리
-        #if UNITY_ANDROID
+#if UNITY_STANDALONE_WIN
+        bool isKeyDowning = false;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isKeyDowning = true;
+        }
+        else if(Input.GetKeyUp(KeyCode.Space) && isKeyDowning)
+        {
+            isKeyDowning = false;
+        }
 
+        if(isKeyDowning)
+        {
+            dialogManager.Play();
+        }
 
-        #elif UNITY_STANDALONE_WIN
-
-
-        #endif
+#endif
     }
 
     /// <summary> Load했을때 이전 데이터 뿌려주기 </summary>
     public void Loaded_DataSet()
     {
         Loaded_TextSet();
+        Loaded_InventorySet();
     }
 
     /// <summary> 대화 내용 뿌려주기 </summary>
@@ -86,6 +99,16 @@ public class ConfrontationDebate_UIManager : MonoBehaviour
         {
             //AddDialog(data[i].speaker, data[i].dialogue);
             skipAction?.Invoke();
+        }
+    }
+
+    void Loaded_InventorySet()
+    {
+        Dictionary<int, int> items = database.SaveData_GetItems();
+        // 인벤토리 아이템 셋팅
+        foreach (var item in items)
+        {
+            invManager.AddItem(item.Key, item.Value);
         }
     }
 

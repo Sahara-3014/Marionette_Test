@@ -1,4 +1,4 @@
-﻿// Simple Scroll-Snap - https://assetstore.unity.com/packages/tools/gui/simple-scroll-snap-140884
+// Simple Scroll-Snap - https://assetstore.unity.com/packages/tools/gui/simple-scroll-snap-140884
 // Copyright (c) Daniel Lochner
 
 using System;
@@ -668,20 +668,25 @@ namespace DanielLochner.Assets.SimpleScrollSnap
         {
             Add(panel, NumberOfPanels);
         }
-        public void Add(GameObject panel, int index)
+        public void Add(GameObject panel, int index = -1, bool isInstantiate = false)
         {
-            if (NumberOfPanels != 0 && (index < 0 || index > NumberOfPanels))
-            {
-                Debug.LogError("<b>[SimpleScrollSnap]</b> Index must be an integer from 0 to " + NumberOfPanels + ".", gameObject);
-                return;
-            }
-            else if (!useAutomaticLayout)
+            index = (index < 0) ? NumberOfPanels : index;
+            //if (NumberOfPanels != 0 && (index < 0 || index > NumberOfPanels))
+            //{
+            //    Debug.LogError("<b>[SimpleScrollSnap]</b> Index must be an integer from 0 to " + NumberOfPanels + ".", gameObject);
+            //    return;
+            //}
+            //else 
+            if (!useAutomaticLayout)
             {
                 Debug.LogError("<b>[SimpleScrollSnap]</b> \"Automatic Layout\" must be enabled for content to be dynamically added during runtime.");
                 return;
             }
 
-            panel = Instantiate(panel, Content, false);
+            if(isInstantiate)
+                panel = Instantiate(panel, Content, false);
+            else
+                panel.transform.SetParent(Content, false);
             panel.transform.SetSiblingIndex(index);
 
             if (ValidConfig)

@@ -2500,6 +2500,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 936858123557467589, guid: 72a4c3417fb33fd4da0e661085450f4a, type: 3}
+      propertyPath: directionSetList.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 936858123557467589, guid: 72a4c3417fb33fd4da0e661085450f4a, type: 3}
+      propertyPath: 'directionSetList.Array.data[6]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 173f967dced8ac64aa6ef3000940490f, type: 2}
+    - target: {fileID: 936858123557467589, guid: 72a4c3417fb33fd4da0e661085450f4a, type: 3}
+      propertyPath: 'directionSetList.Array.data[7]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
     - target: {fileID: 8595968701611835485, guid: 72a4c3417fb33fd4da0e661085450f4a, type: 3}
       propertyPath: m_Name
       value: EffectContainer

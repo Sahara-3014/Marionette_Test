@@ -79,6 +79,27 @@ public class SaveDatabase : MonoBehaviour
     {
         dayCycleSystem?.RigisterDayChangeEvent(SaveData_SetDayNum);
         dayCycleSystem?.RigisterTimeChangeEvent(SaveData_SetGameTime);
+
+        string dialogStr = TextLoad("Dialog");
+        try
+        {
+            dialogs = JsonConvert.DeserializeObject<Dictionary<int, DialogueData[]>>(dialogStr);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("대화 데이터 로드 실패: " + e.Message);
+            dialogs = null;
+        }
+        string interactiveDebateStr = TextLoad("Dialog_InteractiveDebate");
+        try
+        {
+            interactiveDebateDialogs = JsonConvert.DeserializeObject<Dictionary<int, InteractiveDebate_DialogueData[]>>(interactiveDebateStr);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("논쟁 대화 데이터 로드 실패: " + e.Message);
+            interactiveDebateDialogs = null;
+        }
     }
 
     #endregion
@@ -90,12 +111,20 @@ public class SaveDatabase : MonoBehaviour
         if(dialogs == null)
         {
             string text = TextLoad("Dialog");
-            if (text == null)
+            if (text == null || text == "")
                 return null;
 
-            var dic = JsonConvert.DeserializeObject<Dictionary<int, DialogueData[]>>(text);
+            try
+            {
+                var dic = JsonConvert.DeserializeObject<Dictionary<int, DialogueData[]>>(text);
 
-            dialogs = dic;
+                dialogs = dic;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("대화 데이터 로드 실패: " + e.Message);
+                return null;
+            }
         }
 
         if (dialogs.ContainsKey(id))
@@ -118,20 +147,25 @@ public class SaveDatabase : MonoBehaviour
 
     public void Set_Dialogs(Dictionary<int, DialogueData[]> dialogs)
     {
-        if(this.dialogs != null)
-        {
-            foreach(var dialog in dialogs)
-            {
-                if (this.dialogs.ContainsKey(dialog.Key) == false)
-                    this.dialogs.Add(dialog.Key, dialog.Value);
-                else
-                    this.dialogs[dialog.Key] = dialog.Value;
-            }
-        }
-        else
-        {
-            this.dialogs = dialogs;
-        }
+        //if(this.dialogs != null)
+        //{
+        //    foreach(var dialog in dialogs)
+        //    {
+        //        if (this.dialogs.ContainsKey(dialog.Key) == false)
+        //            this.dialogs.Add(dialog.Key, dialog.Value);
+        //        else
+        //        {
+        //            if (this.dialogs[dialog.Key].Length != dialog.Value.Length)
+        //                this.dialogs[dialog.Key] = dialog.Value;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    this.dialogs = dialogs;
+        //}
+
+        this.dialogs = dialogs;
 
         TextSave("Dialog.json", JsonConvert.SerializeObject(this.dialogs));
     }
@@ -145,12 +179,21 @@ public class SaveDatabase : MonoBehaviour
         if (interactiveDebateDialogs == null)
         {
             string text = TextLoad("Dialog_InteractiveDebate");
-            if (text == null)
+            if (text == null || text == "")
                 return null;
 
-            var dic = JsonConvert.DeserializeObject<Dictionary<int, InteractiveDebate_DialogueData[]>>(text);
+            try
+            {
+                var dic = JsonConvert.DeserializeObject<Dictionary<int, InteractiveDebate_DialogueData[]>>(text);
 
-            interactiveDebateDialogs = dic;
+                interactiveDebateDialogs = dic;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("논쟁 대화 데이터 로드 실패: " + e.Message);
+                return null;
+            }
+
         }
 
         if (interactiveDebateDialogs.ContainsKey(id))
@@ -173,20 +216,22 @@ public class SaveDatabase : MonoBehaviour
 
     public void Set_InteractiveDebateDialogs(Dictionary<int, InteractiveDebate_DialogueData[]> dialogs)
     {
-        if (this.interactiveDebateDialogs != null)
-        {
-            foreach (var dialog in dialogs)
-            {
-                if (this.interactiveDebateDialogs.ContainsKey(dialog.Key) == false)
-                    dialogs.Add(dialog.Key, dialog.Value);
-                else
-                    dialogs[dialog.Key] = dialog.Value;
-            }
-        }
-        else
-        {
-            this.interactiveDebateDialogs = dialogs;
-        }
+        //if (this.interactiveDebateDialogs != null)
+        //{
+        //    foreach (var dialog in dialogs)
+        //    {
+        //        if (this.interactiveDebateDialogs.ContainsKey(dialog.Key) == false)
+        //            this.interactiveDebateDialogs.Add(dialog.Key, dialog.Value);
+        //        else
+        //            this.interactiveDebateDialogs[dialog.Key] = dialog.Value;
+        //    }
+        //}
+        //else
+        //{
+        //    this.interactiveDebateDialogs = dialogs;
+        //}
+
+        this.interactiveDebateDialogs = dialogs;
 
         TextSave("Dialog_InteractiveDebate.json", JsonConvert.SerializeObject(this.interactiveDebateDialogs));
     }
