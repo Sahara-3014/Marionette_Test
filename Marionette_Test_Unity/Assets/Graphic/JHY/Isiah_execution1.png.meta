@@ -198,7 +198,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Isiah_execution1_0: 8291898745588862127
+      Isiah_execution1_1: -1956945722368185721
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
