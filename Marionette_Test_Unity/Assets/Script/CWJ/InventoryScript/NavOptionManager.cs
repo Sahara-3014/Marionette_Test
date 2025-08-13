@@ -17,7 +17,7 @@ public class NavOptionManager : MonoBehaviour
     }
     void Update()
     {
-        Debug.Log("NavOptionManager-Update");
+        //Debug.Log("NavOptionManager-Update");
 
     }
     public void DeselectAllNavOptions()

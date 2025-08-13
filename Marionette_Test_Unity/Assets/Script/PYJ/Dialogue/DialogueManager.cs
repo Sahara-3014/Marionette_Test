@@ -9,7 +9,10 @@ using UnityEngine.UI;
 public class DialogueManager : MonoBehaviour
 {
     private Dictionary<(int ID, int index), DialogueData> dialogueDictByIDAndIndex;
+    public bool isAuto = false;  // 자동 진행 모드 여부
+    public float autoDelay = 2f; // 자동으로 다음 대사 넘어가기까지 대기 시간
 
+    private float autoTimer = 0f;
 
     [System.Serializable]
     public class CharacterStatus
@@ -47,11 +50,6 @@ public class DialogueManager : MonoBehaviour
     private Dictionary<string, Sprite> backgroundSpriteDict;
 
 
-    [Header("캐릭터 스프라이트 등록")]
-    [SerializeField] private List<Sprite> characterSprites; // 이름: 파일 이름과 동일
-    private Dictionary<string, Sprite> characterSpriteDict;
-
-
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
 {
     { "주한", "JUHAN" },
@@ -62,14 +60,6 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GameObject choicePanel;        // 선택지 전체 UI
     [SerializeField] private Button[] choiceButtons;          // 선택지 버튼들
     [SerializeField] private TextMeshProUGUI[] choiceButtonTexts; // 버튼 텍스트
-
-    private Dictionary<string, int> sheetIDStartDict = new Dictionary<string, int>()
-{
-    {"INTRO", 1000},
-    {"START", 2000},
-    {"CHAPTER1", 3000},
-};
-
 
 
     private int currentID = 1000;
@@ -87,11 +77,7 @@ public class DialogueManager : MonoBehaviour
     //
     private void Awake()
     {
-        characterSpriteDict = new Dictionary<string, Sprite>();
-        foreach (var sprite in characterSprites)
-        {
-            characterSpriteDict[sprite.name] = sprite;
-        }
+
 
         backgroundSpriteDict = new Dictionary<string, Sprite>();
         foreach (var bg in backgroundSprites)
@@ -201,12 +187,21 @@ public class DialogueManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(currentData.bgmName))
         {
-            AudioClip clip = DialogSoundManager.Instance.LoadAudioClipByName(currentData.bgmName);
-            if (clip != null)
+            // 먼저 DialogSE 객체 생성
+            var bgmSE = new DialogSE(SEType.BGM, null);
+
+            // clip 로드하면서 stopSE 여부도 같이 설정됨
+            bgmSE.clip = DialogSoundManager.Instance.LoadAudioClipByName(currentData.bgmName, bgmSE);
+
+            if (bgmSE.stopSE)
             {
-                if (DialogSoundManager.Instance.bgmSource.clip != clip)
+                // -1 명령이면 BGM 끔
+                DialogSoundManager.Instance.StopBGM();
+            }
+            else if (bgmSE.clip != null)
+            {
+                if (DialogSoundManager.Instance.bgmSource.clip != bgmSE.clip)
                 {
-                    var bgmSE = new DialogSE(SEType.BGM, clip);
                     DialogSoundManager.Instance.PlayBGM(bgmSE);
                 }
             }
@@ -215,6 +210,7 @@ public class DialogueManager : MonoBehaviour
                 Debug.LogWarning($"BGM 클립을 못 찾음: {currentData.bgmName}");
             }
         }
+
 
 
         if (typingCoroutine != null)
@@ -227,10 +223,6 @@ public class DialogueManager : MonoBehaviour
 
     }
 
-
-    //
-    //캐릭터 보여주는 함수
-    //
     private void ShowCharacter(string name, string head, string body, Dialog_CharPos pos, Dialog_CharEffect effect)
     {
         int posIndex = (int)pos;
@@ -240,41 +232,53 @@ public class DialogueManager : MonoBehaviour
         var bodyRenderer = sprite_Bodies[posIndex];
 
         string englishName = characterNameMap.ContainsKey(name) ? characterNameMap[name] : name;
-        string headKey = $"{englishName}_{head}";
-        string bodyKey = $"{englishName}_{body}";
 
-        // 머리 출력
-        Debug.Log($"headKey = '{headKey}', 등록 여부 = {characterSpriteDict.ContainsKey(headKey)}");
-
-        if (!string.IsNullOrEmpty(headKey) && characterSpriteDict.ContainsKey(headKey))
+        string headSpriteName = $"{head}";
+        Sprite headSprite = LoadSpriteForSpeaker(name, headSpriteName);
+        if (headSprite != null)
         {
-            headRenderer.sprite = characterSpriteDict[headKey];
+            headRenderer.sprite = headSprite;
             headRenderer.gameObject.SetActive(true);
         }
         else
         {
             headRenderer.sprite = null;
             headRenderer.gameObject.SetActive(false);
-            Debug.LogWarning($"[머리 스프라이트 미적용] {headKey}는 등록되지 않았습니다.");
+            Debug.LogWarning($"[머리 스프라이트 미적용] {headSpriteName}를 {name} 폴더에서 못 찾음");
         }
 
-        // 몸 출력
-        if (!string.IsNullOrEmpty(bodyKey) && characterSpriteDict.ContainsKey(bodyKey))
+        string bodySpriteName = $"{body}";
+        Sprite bodySprite = LoadSpriteForSpeaker(name, bodySpriteName);
+        if (bodySprite != null)
         {
-            bodyRenderer.sprite = characterSpriteDict[bodyKey];
+            bodyRenderer.sprite = bodySprite;
             bodyRenderer.gameObject.SetActive(true);
         }
         else
         {
             bodyRenderer.sprite = null;
             bodyRenderer.gameObject.SetActive(false);
-            Debug.LogWarning($"[몸통 스프라이트 미적용] {bodyKey}는 등록되지 않았습니다.");
+            Debug.LogWarning($"[몸통 스프라이트 미적용] {bodySpriteName}를 {name} 폴더에서 못 찾음");
         }
 
         if (characterPositionManager != null)
         {
-            characterPositionManager.SetCharacter(headRenderer, pos);
-            characterPositionManager.SetCharacter(bodyRenderer, pos);
+            Vector3 basePos = characterPositionManager.GetPositionByCharPos(pos);
+
+            // 머리와 몸의 부모 컨테이너가 동일하다고 가정
+            Transform container = headRenderer.transform.parent;
+            if (container != null)
+            {
+                container.position = basePos;
+                // 머리와 몸의 localPosition은 인스펙터에서 조절한 값 유지됨
+            }
+            else
+            {
+                Debug.LogWarning("머리 스프라이트에 부모 컨테이너가 없습니다. 위치가 이상할 수 있습니다.");
+                // 부모 없으면 기존 방식 유지 (긴급 대비)
+                headRenderer.transform.position = basePos + headRenderer.transform.localPosition;
+                bodyRenderer.transform.position = basePos + bodyRenderer.transform.localPosition;
+            }
         }
 
         if (effect != Dialog_CharEffect.None)
@@ -283,6 +287,27 @@ public class DialogueManager : MonoBehaviour
             StartCoroutine(effectManager.RunCharacterEffect(effect, bodyRenderer));
         }
     }
+
+    private Sprite LoadSpriteForSpeaker(string speakerName, string spriteName)
+    {
+        string folderName = speakerName;
+        if (characterNameMap.ContainsKey(speakerName))
+        {
+            folderName = characterNameMap[speakerName];
+        }
+
+        string path = $"Sprites/Characters/{folderName}/{spriteName}";
+        Sprite sprite = Resources.Load<Sprite>(path);
+        if (sprite == null)
+        {
+            Debug.LogWarning($"[LoadSpriteForSpeaker] 스프라이트를 찾지 못함: {path}");
+        }
+        return sprite;
+    }
+
+
+
+
 
 
     public void NextDialogue()
@@ -473,9 +498,6 @@ public class DialogueManager : MonoBehaviour
         Debug.Log($"배경키: {bgKey}, sprite_BG.sprite: {sprite_BG.sprite}, sprite_BG.color: {sprite_BG.color}, sprite_BG.activeSelf: {sprite_BG.gameObject.activeSelf}");
 
     }
-
-
-
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         Debug.Log($"[TypeText] 받은 문장: '{sentence}'");
@@ -496,32 +518,46 @@ public class DialogueManager : MonoBehaviour
         if (hasChoice)
             waitingForChoiceDisplay = true;
 
-        foreach (char letter in sentence)
+        int i = 0;
+        string visibleText = "";
+        while (i < sentence.Length)
         {
             while (isPaused)
                 yield return null;
 
-            txt_Dialogue.text += letter;
+            if (sentence[i] == '<') // 태그 시작
+            {
+                int tagEnd = sentence.IndexOf('>', i);
+                if (tagEnd != -1)
+                {
+                    string tag = sentence.Substring(i, tagEnd - i + 1);
+                    visibleText += tag; // 태그 포함
+                    i = tagEnd + 1;
+                    yield return null;
+                    continue;
+                }
+            }
+
+            visibleText += sentence[i];
+            txt_Dialogue.text = visibleText;
+            i++;
             yield return new WaitForSeconds(0.05f);
         }
 
         isTyping = false;
 
+        // --- 선택지 출력 로직 ---
         if (hasChoice && currentDialogue != null && !choicePanel.activeSelf)
         {
             yield return new WaitForSeconds(0.1f);
             waitingForChoiceDisplay = false;
-
             ShowChoices(currentDialogue.choices, currentDialogue.choiceSoundEffectName);
-
-            // 선택지 뜰 땐 canInput = false 상태 유지
         }
         else
         {
             canInput = true;
+            autoTimer = 0f;
         }
-
-        isTyping = false;
 
         if (inputQueuedBeforeChoice)
         {
@@ -531,6 +567,25 @@ public class DialogueManager : MonoBehaviour
     }
 
 
+
+
+
+
+
+
+
+
+
+
+    public void OnUserInput()
+    {
+        if (isAuto)
+        {
+            isAuto = false;
+            Debug.Log("Auto OFF by user input");
+        }
+        autoTimer = 0f;
+    }
     private void OnOff(bool flag)
     {
         sprite_DialogueBox.gameObject.SetActive(flag);
@@ -558,6 +613,9 @@ public class DialogueManager : MonoBehaviour
     private bool isProcessingInput = false;
 
 
+
+
+
     //
     // 매 프레임마다 입력 처리
     //
@@ -565,8 +623,31 @@ public class DialogueManager : MonoBehaviour
     {
         if (isPaused) return;
 
+        // Auto 모드일 때
+        if (isAuto)
+        {
+            // 타이핑 중이면 자동 진행 안 함
+            if (!isTyping && !choicePanel.activeInHierarchy)
+            {
+                autoTimer += Time.deltaTime;
+                if (autoTimer >= autoDelay)
+                {
+                    autoTimer = 0f;
+
+                    // 다음 대사 진행
+                    if (!isProcessingInput && canInput)
+                    {
+                        StartCoroutine(ProcessInputWithCooldown());
+                    }
+                }
+            }
+        }
+
+        // Space 키 입력 처리 (수동 진행)
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            autoTimer = 0f; // 입력 있으면 자동 진행 타이머 초기화
+
             // 타이핑 중이면 무조건 스킵
             if (isTyping)
             {
@@ -575,7 +656,7 @@ public class DialogueManager : MonoBehaviour
                 return;
             }
 
-            // 타이핑 완료 후, 선택지가 나오기 전 대기 상태일 때
+            // 타이핑 완료 후, 선택지 나오기 전 대기 상태일 때
             if (waitingForChoiceDisplay)
             {
                 // 대사 강제 출력
@@ -584,9 +665,9 @@ public class DialogueManager : MonoBehaviour
 
                 txt_Dialogue.text = dialogueDictByIDAndIndex[(currentID, currentIndex)].dialogue;
                 isTyping = false;
-                canInput = false; // 여기서는 바로 입력 가능으로 하지 말고 선택지 보여주는 쪽으로 넘겨야 함
+                canInput = false; // 선택지 보여주는 쪽으로 입력 넘김
 
-                waitingForChoiceDisplay = false;  // 대사 전체 출력했으니 대기 해제
+                waitingForChoiceDisplay = false;
 
                 var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
                 ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
@@ -594,11 +675,9 @@ public class DialogueManager : MonoBehaviour
                 return;
             }
 
-
             // 선택지 패널이 열려 있으면 입력 무시
             if (choicePanel.activeInHierarchy)
             {
-                // 선택지가 완전히 뜬 상태면 여기서 입력 무시
                 return;
             }
 
@@ -608,11 +687,31 @@ public class DialogueManager : MonoBehaviour
                 if (!isProcessingInput)
                     StartCoroutine(ProcessInputWithCooldown());
             }
+
+            // 유저가 직접 입력했으니 오토 모드 꺼도 괜찮음
+            if (isAuto)
+            {
+                isAuto = false;
+                Debug.Log("Auto OFF by user input");
+            }
         }
     }
 
 
 
+    public void ToggleAuto()
+    {
+        isAuto = !isAuto;
+        if (isAuto)
+        {
+            Debug.Log("Auto ON");
+            autoTimer = 0f; // 켤 때 타이머 초기화
+        }
+        else
+        {
+            Debug.Log("Auto OFF");
+        }
+    }
 
 
 
@@ -877,14 +976,26 @@ public class DialogueManager : MonoBehaviour
             {
                 Debug.Log($"선택지 클릭: nextID={capturedNextID}, nextIndex={capturedNextIndex}, soundEffect={choiceSoundEffectName}");
 
-                var clip = DialogSoundManager.Instance.LoadAudioClipByName(choiceSoundEffectName);
-                if (clip != null)
+                // 먼저 DialogSE 생성 (clip은 null로)
+                DialogSE se = new DialogSE(SEType.SE, null);
+
+                // clip 로드 (로드 과정에서 stopSE 설정 가능)
+                se.clip = DialogSoundManager.Instance.LoadAudioClipByName(choiceSoundEffectName, se);
+
+                if (se.stopSE)
                 {
-                    DialogSoundManager.Instance.PlaySE(new DialogSE(SEType.SE, clip));
+                    DialogSoundManager.Instance.StopSE();
+                    return;
+                }
+
+                if (se.clip != null)
+                {
+                    DialogSoundManager.Instance.PlaySE(se);
                 }
 
                 OnChoiceSelected(capturedNextID, capturedNextIndex);
             });
+
 
             Debug.Log($"리스너 등록 완료: 버튼 {i}");
         }
@@ -948,13 +1059,127 @@ public class DialogueManager : MonoBehaviour
 
     public void PlayBGMByName(string bgmName, float volume = 1f, int loopCount = 0)
     {
-        AudioClip clip = DialogSoundManager.Instance.LoadAudioClipByName(bgmName);
-        if (clip == null)
+        // 먼저 DialogSE 생성 (clip은 일단 null)
+        DialogSE bgm = new DialogSE(SEType.BGM, null, loopCount, volume);
+
+        // clip 로드 (로드 과정에서 stopSE 설정 가능)
+        bgm.clip = DialogSoundManager.Instance.LoadAudioClipByName(bgmName, bgm);
+
+        if (bgm.stopSE)
+        {
+            // -1 처리 → BGM 중지
+            DialogSoundManager.Instance.StopBGM();
+            return;
+        }
+
+        if (bgm.clip == null)
         {
             Debug.LogWarning($"[DialogueManager] AudioClip '{bgmName}'를 찾을 수 없습니다.");
             return;
         }
-        DialogSE bgm = new DialogSE(SEType.BGM, clip, loopCount, volume);
+
         DialogSoundManager.Instance.PlayDialogSE(bgm);
     }
+    // 현재 대화 위치부터 이후 대사들 중 선택지가 있는 첫 위치 반환
+
+    private int GetMaxDialogueIndex(int id)
+    {
+        // 해당 ID에 속한 대사들 중 가장 큰 index 반환
+        return dialogueDictByIDAndIndex.Keys
+            .Where(k => k.ID == id)
+            .Max(k => k.index);
+    }
+    private (int id, int index)? FindNextChoicePosition(int startID, int startIndex)
+    {
+        // 모든 대사를 ID → index 순으로 정렬
+        var allKeys = dialogueDictByIDAndIndex.Keys
+            .OrderBy(k => k.ID)
+            .ThenBy(k => k.index)
+            .ToList();
+
+        bool startFound = false;
+
+        foreach (var key in allKeys)
+        {
+            // 현재 위치 이후부터 탐색 시작
+            if (!startFound)
+            {
+                if (key.ID > startID || (key.ID == startID && key.index >= startIndex))
+                    startFound = true;
+                else
+                    continue;
+            }
+
+            var dialogue = dialogueDictByIDAndIndex[key];
+            if (dialogue.choices != null && dialogue.choices.Length > 0)
+            {
+                return (key.ID, key.index); // 첫 번째 선택지 반환
+            }
+        }
+
+        return null; // 끝까지 못 찾으면
+    }
+
+
+    public void SkipToNextChoice()
+    {
+        // 🚫 대화 시작 전이거나 데이터가 없는 경우 무시
+        if (dialogueDictByIDAndIndex == null || dialogueDictByIDAndIndex.Count == 0)
+            return;
+
+        if (!dialogueDictByIDAndIndex.ContainsKey((currentID, currentIndex)))
+            return;
+
+        // 타이핑 중이면 먼저 끝내기
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+
+            var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
+            txt_Dialogue.text = dialogueData.dialogue;
+
+            if (dialogueData.choices != null && dialogueData.choices.Length > 0)
+            {
+                ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
+                return;
+            }
+        }
+
+        var currentDialogue = dialogueDictByIDAndIndex[(currentID, currentIndex)];
+        if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
+        {
+            Debug.Log("이미 선택지 구간입니다. 스킵 불가.");
+            return;
+        }
+
+        var nextChoicePos = FindNextChoicePosition(currentID, currentIndex + 1);
+        if (nextChoicePos.HasValue)
+        {
+            var (id, index) = nextChoicePos.Value;
+            JumpToDialogue(id, index);
+        }
+        else
+        {
+            Debug.Log("더 이상 선택지가 없습니다.");
+        }
+    }
+
+
+    private void JumpToDialogue(int id, int index)
+    {
+        currentID = id;
+        currentIndex = index;
+
+        var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
+        txt_Dialogue.text = dialogueData.dialogue;
+        canInput = false;
+        ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
+        isAuto = false;
+    }
+
+
+
+
+
 }

@@ -186,10 +186,11 @@ public class InteractiveDebate_UIManager_OLD : MonoBehaviour
         Dictionary<int, int> items = database.SaveData_GetItems();
         foreach(KeyValuePair<int, int> item in items)
         {
-            ItemSlot itemSlot = Instantiate(itemSlotPrefab, inventoryViewer);
-            //일단 임시
-            //itemSlot.AddItem(item.Key, item.Value, null, "");
-            itemSlots.Add(itemSlot.gameObject);
+            //ItemSlot itemSlot = Instantiate(itemSlotPrefab, inventoryViewer);
+            ////일단 임시
+            //itemSlot.AddItem(item.Key, item.Value);
+            //itemSlots.Add(itemSlot.gameObject);
+            inventoryManager.AddItem(item.Key, item.Value);
         }
     }
 

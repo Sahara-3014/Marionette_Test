@@ -1,4 +1,4 @@
-﻿// Simple Scroll-Snap - https://assetstore.unity.com/packages/tools/gui/simple-scroll-snap-140884
+// Simple Scroll-Snap - https://assetstore.unity.com/packages/tools/gui/simple-scroll-snap-140884
 // Copyright (c) Daniel Lochner
 
 using UnityEditor;
@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.SimpleScrollSnap
     public class SimpleScrollSnapEditor : SSSCopyrightEditor
     {
         #region Fields
-        private bool showMovementAndLayoutSettings = true, showNavigationSettings = true, showSnapSettings = true, showTransitionEffects = true, showEvents = false;
+        private bool showMovementAndLayoutSettings = true, showNavigationSettings = true, showSnapSettings = true, showEvents = false;
         private SerializedProperty movementType, movementAxis, useAutomaticLayout, sizeControl, size, automaticLayoutSpacing, automaticLayoutMargins, useInfiniteScrolling, infiniteScrollingSpacing, useOcclusionCulling, startingPanel, useSwipeGestures, minimumSwipeSpeed, previousButton, nextButton, pagination, useToggleNavigation, snapTarget, snapSpeed, thresholdSpeedToSnap, useHardSnapping, useUnscaledTime, onTransitionEffects, onPanelSelecting, onPanelSelected, onPanelCentering, onPanelCentered;
         private SimpleScrollSnap scrollSnap;
         #endregion
@@ -19,57 +19,74 @@ namespace DanielLochner.Assets.SimpleScrollSnap
         #region Methods
         private void OnEnable()
         {
-            scrollSnap = target as SimpleScrollSnap;
+            try
+            {
+                scrollSnap = target as SimpleScrollSnap;
 
-            #region Serialized Properties
-            // Movement and Layout Settings
-            movementType = serializedObject.FindProperty("movementType");
-            movementAxis = serializedObject.FindProperty("movementAxis");
-            useAutomaticLayout = serializedObject.FindProperty("useAutomaticLayout");
-            sizeControl = serializedObject.FindProperty("sizeControl");
-            size = serializedObject.FindProperty("size");
-            automaticLayoutSpacing = serializedObject.FindProperty("automaticLayoutSpacing");
-            automaticLayoutMargins = serializedObject.FindProperty("automaticLayoutMargins");
-            useInfiniteScrolling = serializedObject.FindProperty("useInfiniteScrolling");
-            infiniteScrollingSpacing = serializedObject.FindProperty("infiniteScrollingSpacing");
-            useOcclusionCulling = serializedObject.FindProperty("useOcclusionCulling");
-            startingPanel = serializedObject.FindProperty("startingPanel");
+                #region Serialized Properties
+                // Movement and Layout Settings
+                movementType = serializedObject.FindProperty("movementType");
+                movementAxis = serializedObject.FindProperty("movementAxis");
+                useAutomaticLayout = serializedObject.FindProperty("useAutomaticLayout");
+                sizeControl = serializedObject.FindProperty("sizeControl");
+                size = serializedObject.FindProperty("size");
+                automaticLayoutSpacing = serializedObject.FindProperty("automaticLayoutSpacing");
+                automaticLayoutMargins = serializedObject.FindProperty("automaticLayoutMargins");
+                useInfiniteScrolling = serializedObject.FindProperty("useInfiniteScrolling");
+                infiniteScrollingSpacing = serializedObject.FindProperty("infiniteScrollingSpacing");
+                useOcclusionCulling = serializedObject.FindProperty("useOcclusionCulling");
+                startingPanel = serializedObject.FindProperty("startingPanel");
 
-            // Navigation Settings
-            useSwipeGestures = serializedObject.FindProperty("useSwipeGestures");
-            minimumSwipeSpeed = serializedObject.FindProperty("minimumSwipeSpeed");
-            previousButton = serializedObject.FindProperty("previousButton");
-            nextButton = serializedObject.FindProperty("nextButton");
-            pagination = serializedObject.FindProperty("pagination");
-            useToggleNavigation = serializedObject.FindProperty("useToggleNavigation");
+                // Navigation Settings
+                useSwipeGestures = serializedObject.FindProperty("useSwipeGestures");
+                minimumSwipeSpeed = serializedObject.FindProperty("minimumSwipeSpeed");
+                previousButton = serializedObject.FindProperty("previousButton");
+                nextButton = serializedObject.FindProperty("nextButton");
+                pagination = serializedObject.FindProperty("pagination");
+                useToggleNavigation = serializedObject.FindProperty("useToggleNavigation");
 
-            // Snap Settings
-            snapTarget = serializedObject.FindProperty("snapTarget");
-            snapSpeed = serializedObject.FindProperty("snapSpeed");
-            thresholdSpeedToSnap = serializedObject.FindProperty("thresholdSpeedToSnap");
-            useHardSnapping = serializedObject.FindProperty("useHardSnapping");
-            useUnscaledTime = serializedObject.FindProperty("useUnscaledTime");
+                // Snap Settings
+                snapTarget = serializedObject.FindProperty("snapTarget");
+                snapSpeed = serializedObject.FindProperty("snapSpeed");
+                thresholdSpeedToSnap = serializedObject.FindProperty("thresholdSpeedToSnap");
+                useHardSnapping = serializedObject.FindProperty("useHardSnapping");
+                useUnscaledTime = serializedObject.FindProperty("useUnscaledTime");
 
-            // ShowEvents
-            onTransitionEffects = serializedObject.FindProperty("onTransitionEffects");
-            onPanelSelecting = serializedObject.FindProperty("onPanelSelecting");
-            onPanelSelected = serializedObject.FindProperty("onPanelSelected");
-            onPanelCentering = serializedObject.FindProperty("onPanelCentering");
-            onPanelCentered = serializedObject.FindProperty("onPanelCentered");
-            #endregion
+                // ShowEvents
+                onTransitionEffects = serializedObject.FindProperty("onTransitionEffects");
+                onPanelSelecting = serializedObject.FindProperty("onPanelSelecting");
+                onPanelSelected = serializedObject.FindProperty("onPanelSelected");
+                onPanelCentering = serializedObject.FindProperty("onPanelCentering");
+                onPanelCentered = serializedObject.FindProperty("onPanelCentered");
+                #endregion
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log($"Error initializing {nameof(SimpleScrollSnapEditor)}: {e.Message}");
+            }
+
+
         }
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
+            try
+            {
+                serializedObject.Update();
 
-            ShowCopyrightNotice();
-            ShowMovementAndLayoutSettings();
-            ShowNavigationSettings();
-            ShowSnapSettings();
-            ShowEvents();
+                ShowCopyrightNotice();
+                ShowMovementAndLayoutSettings();
+                ShowNavigationSettings();
+                ShowSnapSettings();
+                ShowEvents();
 
-            serializedObject.ApplyModifiedProperties();
-            PrefabUtility.RecordPrefabInstancePropertyModifications(scrollSnap);
+                serializedObject.ApplyModifiedProperties();
+                PrefabUtility.RecordPrefabInstancePropertyModifications(scrollSnap);
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log($"Error in {nameof(SimpleScrollSnapEditor)}: {e.Message}");
+            }
+
         }
         
         private void ShowMovementAndLayoutSettings()

@@ -9,38 +9,32 @@ public class CharacterPositionManager : MonoBehaviour
 
     private Dictionary<Dialog_CharPos, SpriteRenderer> charSlots = new Dictionary<Dialog_CharPos, SpriteRenderer>();
 
-    public void SetCharacter(SpriteRenderer character, Dialog_CharPos pos)
+    public void SetCharacter(SpriteRenderer character, Dialog_CharPos pos, Vector3 offset)
     {
         if (pos == Dialog_CharPos.None)
-        {
-            // À§Ä¡ º¯°æ ¾øÀ½
             return;
-        }
-
         if (pos == Dialog_CharPos.Clear)
         {
-            // Clear Ã³¸® (¿¹: ¸ğµç ½½·Ô Á¦°Å)
             ClearAllSlots();
             return;
         }
 
-        // À§Ä¡ ´ë»ó Transform °¡Á®¿À±â
         Transform targetPos = GetTransformByCharPos(pos);
         if (targetPos == null)
         {
-            Debug.LogWarning("[CharPosManager] ÁöÁ¤µÈ À§Ä¡ÀÇ TransformÀÌ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("[CharPosManager] ì§€ì •ëœ ìœ„ì¹˜ì˜ Transformì´ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        character.transform.position = targetPos.position;
+        character.transform.position = targetPos.position + offset; // ì—¬ê¸° ìˆ˜ì •ë¨
         character.gameObject.SetActive(true);
 
-        // ÇØ´ç ½½·Ô¿¡ µî·Ï
         if (pos == Dialog_CharPos.Left || pos == Dialog_CharPos.Center || pos == Dialog_CharPos.Right)
         {
             charSlots[pos] = character;
         }
     }
+
 
     public void ClearSlot(Dialog_CharPos pos)
     {
@@ -76,6 +70,11 @@ public class CharacterPositionManager : MonoBehaviour
                 return null;
         }
     }
-    
+    public Vector3 GetPositionByCharPos(Dialog_CharPos pos)
+    {
+        var t = GetTransformByCharPos(pos);
+        return t != null ? t.position : Vector3.zero;
+    }
+
 
 }

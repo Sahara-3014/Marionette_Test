@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 7308992065101256164}
   - component: {fileID: 8461236373518909277}
   - component: {fileID: 5621511476984548310}
-  - component: {fileID: 7585412899256174901}
+  - component: {fileID: 695747817846375309}
   m_Layer: 5
   m_Name: DialogLabel
   m_TagString: Untagged
@@ -480,7 +480,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls: []
---- !u!114 &7585412899256174901
+--- !u!114 &695747817846375309
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -489,7 +489,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2771421848814847781}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d9473e4b487ccf4ca65a67d2359aa28, type: 3}
+  m_Script: {fileID: 11500000, guid: f486b39cb18558c47b303be25c43cd70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onBtnPress:
@@ -507,4 +507,3 @@ MonoBehaviour:
   playBtnPressEffect:
     m_PersistentCalls:
       m_Calls: []
-  diableColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Playables;
 
 #region 열거형 및 데이터 구조체
 public enum EffectType
@@ -20,7 +21,10 @@ public enum EffectType
     ShowCharacter,
     ElectricDischarge,
     BootEffect,
-    CameraMoving
+    CameraMoving,
+    CameraMoving2,
+    Flash,
+    CameraShakeHorizontal
 }
 
 public enum PostProcessingEffectType
@@ -123,6 +127,28 @@ public class EffectManager : MonoBehaviour
         foreach (var pType in set.particlesToPlay) StopEffect(pType, set); 
         foreach (var ppType in set.postProcessingsToEnable) DisablePP(ppType, set.fadeDuration);
     }
+
+
+
+    public void PlayDirectionSetBySO(DirectionSetSO set)
+    {
+        if (set == null)
+        {
+            Debug.LogWarning("[EffectManager] PlayDirectionSetBySO에 null값이 전달되었습니다.");
+            return;
+        }
+        PlayDirectionSet(set);
+    }
+    public void StopDirectionSetBySO(DirectionSetSO set)
+    {
+        if (set == null)
+        {
+            Debug.LogWarning("[EffectManager] StopDirectionSetBySO에 null값이 전달되었습니다.");
+            return;
+        }
+        StopDirectionSet(set, false);
+    }
+
     public Coroutine PlaySequence(EffectSequenceSO so)
     {
         if (so == null)

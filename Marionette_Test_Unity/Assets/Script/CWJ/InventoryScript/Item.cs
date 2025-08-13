@@ -18,8 +18,8 @@ public class Item : MonoBehaviour
 
     void Start()
     {
-        inventoryManager = GameObject.Find("UI").GetComponent<InventoryManager>();
-        interactionIcon = GameObject.Find("Interaction Icon").GetComponent<InteractionIcon>();
+        inventoryManager = InventoryManager.Instance;
+        interactionIcon = GameObject.FindAnyObjectByType<InteractionIcon>();
     }
 
     void Update()
