@@ -2141,6 +2141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3de67f55823c8e4abbf9e9a11ec0401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAuto: 0
+  autoDelay: 2
   sheetLoader: {fileID: 407996721}
   cutsceneImageObject: {fileID: 0}
   characterRenderers: []
@@ -2156,7 +2158,6 @@ MonoBehaviour:
   txt_CharacterName: {fileID: 0}
   characterPositionManager: {fileID: 640033073}
   backgroundSprites: []
-  characterSprites: []
   choicePanel: {fileID: 0}
   choiceButtons: []
   choiceButtonTexts: []
@@ -9254,7 +9255,7 @@ MonoBehaviour:
   - {fileID: 1015437977}
   - {fileID: 1007313760}
   - {fileID: 238843600}
-  sceneName: CWJ_SideScrolltest
+  sceneName: HSJ_CWJ_Investigate
 --- !u!4 &2134064852
 Transform:
   m_ObjectHideFlags: 0
