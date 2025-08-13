@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb57f374b74454441aa6211f69db77e9, type: 3}
+  m_Name: execution
+  m_EditorClassIdentifier: 
+  steps:
+  - directionSet: {fileID: 11400000, guid: 44642e0c3ccace440b5f325867c4a227, type: 2}
+    duration: 3
+    delayAfter: 1
+  - directionSet: {fileID: 11400000, guid: de998fa30b996fa45a54ad596176c881, type: 2}
+    duration: 5
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
+    duration: 3
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 5912c50d29731a74e9a203ff8ed5534a, type: 2}
+    duration: 5
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 173f967dced8ac64aa6ef3000940490f, type: 2}
+    duration: 3
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 71559241c0e890e48a1f837c154139a1, type: 2}
+    duration: 3
+    delayAfter: 0
+  - directionSet: {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
+    duration: 3
+    delayAfter: 0
