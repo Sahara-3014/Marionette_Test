@@ -9,25 +9,29 @@ using Newtonsoft.Json.Bson;
 public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     Image image;
-    private PrintText debate3GameManager;
+    private Debate3GameManager debate3GameManager;
 
-    public GameObject Debate3GameManager;
+    
     public GameObject connect;
     public TMP_Text text;
     public GameObject textObject;
+    
     public int BigfontSize, SmallfontSize;
     public bool thischoiceButtonSelected;
     public bool mouseEnter;
     void Start()
     {
         image = this.GetComponent<Image>();
-        debate3GameManager = GameObject.Find("Debate3GameManager").GetComponent<PrintText>();
+        debate3GameManager = GameObject.Find("Debate3GameManager").GetComponent<Debate3GameManager>();
+        
     }
 
     
     void Update()
     {
         ReSize();
+            
+
         if (thischoiceButtonSelected)
         {
             connect.SetActive(true);
@@ -59,6 +63,8 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void ReSize()
     {
+        
+        
         RectTransform rectTransform = GetComponent<RectTransform>();
         RectTransform textrectTransform = textObject.GetComponent<RectTransform>();
         
