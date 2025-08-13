@@ -1,7 +1,9 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +11,10 @@ public class DebateVotingSystem : MonoBehaviour
 {
     public static DebateVotingSystem Instance;
     public RectTransform[] charVotingGauge;
+    public List<int> tempVote = new()
+    {
+        14, 0, 14, 11, 14, 0, 0, 11, 14, 14, 14, 12, 14
+    };
 
     private void Awake()
     {
@@ -23,52 +29,59 @@ public class DebateVotingSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator AddVoteToCharacters(List<int> voteIndexs, UnityAction callback = null)
+    async public void AddVoteToCharacters(List<int> voteIndexs, UnityAction callback = null)
     {
-        WaitForSecondsRealtime wait = new WaitForSecondsRealtime(1f);
-        int nowMaxVote = 0;
-        Dictionary<int, int> charVotes = new();
+        
+        List<int> charVotes = new();
         for(int i=0;i<charVotingGauge.Length;i++)
-            charVotes.Add(i, 0);
+        {
+            charVotingGauge[i].sizeDelta = new Vector2(0f, charVotingGauge[i].sizeDelta.y);
+            charVotes.Add(0);
+        }
 
         for (int i=0;i<voteIndexs.Count;i++)
         {
-            charVotes[voteIndexs[i]]+=1;
-            nowMaxVote += 1;
+            charVotes[voteIndexs[i]] += 1;
             for (int j=0;j<charVotingGauge.Length;j++)
-               AddVoteToCharacter(j, charVotes[voteIndexs[i]], nowMaxVote);
-            yield return wait;
+            {
+                //Debug.Log($"{j}번째 {charVotes[i]}번 캐릭터 투표: {charVotes[j]} / {voteIndexs.Count}");
+                ChangeVoteGauge(j, charVotes[j], charVotes.Sum());
+            }
+            await Task.Delay(TimeSpan.FromSeconds(1f));
         }
 
         callback?.Invoke();
     }
 
-    void AddVoteToCharacter(int charIndex, int nowCharVote, int max, UnityAction callback = null)
+    void ChangeVoteGauge(int charIndex, int nowCharVote, int max, UnityAction callback = null)
     {
-        for (int i=0;i<charVotingGauge.Length;i++)
-        {
-            float _maxGauge = charVotingGauge[charIndex].parent.GetComponent<RectTransform>().rect.width;
-            _maxGauge -= charVotingGauge[charIndex].anchoredPosition.x * 2f;
+        float _maxGauge = charVotingGauge[charIndex].parent.GetComponent<RectTransform>().rect.width;
+        _maxGauge -= (charVotingGauge[charIndex].anchoredPosition.x * 2f);
 
-            charVotingGauge[i].DOSizeDelta(new Vector2(((float)nowCharVote / max) / _maxGauge,
-                charVotingGauge[i].sizeDelta.y), 0.5f);
-        }
+        charVotingGauge[charIndex].DOSizeDelta(new Vector2(((float)nowCharVote / max) * _maxGauge,
+            charVotingGauge[charIndex].sizeDelta.y), 0.5f);
 
         callback?.Invoke();
     }
 
-    public void CharSelect(int charIndex)
+    public void ToggleSelectPanel(int index)
     {
         // 예외처리
-        if (charIndex <= 0 || charIndex >= charVotingGauge.Length)
+        if (index <= 0 || index >= charVotingGauge.Length)
             return;
         // 죽은사람 투표X
-        if (charVotingGauge[charIndex].transform.parent.parent.GetChild(0).GetChild(0).gameObject.activeSelf)
+        if (charVotingGauge[index].transform.parent.parent.GetChild(0).GetChild(0).gameObject.activeSelf)
             return;
 
-        GameObject selectObj = charVotingGauge[charIndex].transform.parent.parent.GetChild(0).GetChild(1).gameObject;
+        GameObject selectObj = charVotingGauge[index].transform.parent.parent.GetChild(0).GetChild(1).gameObject;
         selectObj.SetActive(!selectObj.activeSelf);
 
+    }
+
+    public void ToggleDeadPanel(int index)
+    {
+        GameObject deadObj = charVotingGauge[index].transform.parent.parent.GetChild(0).GetChild(0).gameObject;
+        deadObj.SetActive(!deadObj.activeSelf);
     }
 
     public int IsSelectedCharacter()
@@ -82,5 +95,16 @@ public class DebateVotingSystem : MonoBehaviour
         }
 
         return -1; // 선택된 캐릭터가 없음
+    }
+
+    public void TempVoteAction()
+    {
+        ToggleDeadPanel(0);
+
+        AddVoteToCharacters(tempVote, () =>
+        {
+            int index = tempVote.Max();
+            ToggleDeadPanel(index);
+        });
     }
 }

@@ -685,6 +685,8 @@ namespace DanielLochner.Assets.SimpleScrollSnap
 
             if(isInstantiate)
                 panel = Instantiate(panel, Content, false);
+            else
+                panel.transform.SetParent(Content, false);
             panel.transform.SetSiblingIndex(index);
 
             if (ValidConfig)

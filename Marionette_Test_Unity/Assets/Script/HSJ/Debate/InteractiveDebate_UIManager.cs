@@ -74,14 +74,15 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isKeyDowning = true;
-            autoPlayTimer = 0f; // 자동 재생 타이머 초기화
         }
-        else if(Input.GetKeyUp(KeyCode.Space) && isKeyDowning)
+        else
         {
             isKeyDowning = false;
             autoPlayTimer = 0f; // 자동 재생 타이머 초기화
         }
-        else if(isKeyDowning)
+        
+        
+        if(isKeyDowning)
         {
             autoPlayTimer += Time.fixedDeltaTime;
             if (autoPlayTimer >= autoPlayDelay)
@@ -134,6 +135,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     void Loaded_InventorySet()
     {
         Dictionary<int, int> items = database.SaveData_GetItems();
+        if(items == null || items.Count == 0) return;
         foreach (var item in items)
         {
             inventoryManager.AddItem(item.Key, item.Value);
@@ -143,7 +145,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     public void AddDialog(string name, string text, UnityAction callback = null)
     {
         // 대화 프리팹 생성
-        int index = scrollSnap.Content.childCount;
+        int index = scrollSnap.NumberOfPanels;
         scrollSnap.Add(dialogPrefab, index, true);
         GameObject dialogObj = scrollSnap.Content.GetChild(index).gameObject;
         TextMeshProUGUI nameLabel = dialogObj.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();

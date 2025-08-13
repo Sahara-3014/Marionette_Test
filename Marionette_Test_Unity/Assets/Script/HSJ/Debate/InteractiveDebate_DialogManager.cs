@@ -240,7 +240,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
             await Task.Yield();
         }
 
-        onNextProductionAcion.Invoke();
+        onNextProductionAcion?.Invoke();
     }
 
     /// <summary> SE2 재생 / 캐릭터 연출 재생 </summary>
@@ -265,7 +265,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         // TODO 기다리고 바로 실행하기
         Debug.Log("Step3 Waiting");
         await Task.Delay(TimeSpan.FromSeconds(uiEffectManager.duration));
-        onNextProductionAcion.Invoke();
+        onNextProductionAcion?.Invoke();
     }
 
     /// <summary> 대사 출력 / 다음 대사 넘어가기 </summary>
