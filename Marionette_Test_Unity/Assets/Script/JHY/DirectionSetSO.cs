@@ -1,6 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
+public struct EffectExecutionData
+{
+    public EffectType effectType;
+
+    [Tooltip("플리커 이펙트의 기본값을 덮어씁니다.")]
+    public FlickerParams flickerOverrides;
+
+}
+
+
 
 [CreateAssetMenu(fileName = "DS_NewDirectionSet", menuName = "Marionet Test/Direction Set")]
 public class DirectionSetSO : ScriptableObject

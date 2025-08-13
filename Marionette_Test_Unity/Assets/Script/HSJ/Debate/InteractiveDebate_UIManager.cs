@@ -34,6 +34,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     [HideInInspector]
     public UnityAction skipAction = null;
 
+    bool isKeyDowning = false;
+    public float autoPlayDelay = 0.05f; // 자동 재생 딜레이
+    float autoPlayTimer = 0f;
 
     private void Awake()
     {
@@ -64,22 +67,54 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         Loaded_DataSet();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         //인풋처리
-        #if UNITY_ANDROID
+        #if UNITY_STANDALONE_WIN
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isKeyDowning = true;
+        }
+        else
+        {
+            isKeyDowning = false;
+            autoPlayTimer = 0f; // 자동 재생 타이머 초기화
+        }
+        
+        
+        if(isKeyDowning)
+        {
+            autoPlayTimer += Time.fixedDeltaTime;
+            if (autoPlayTimer >= autoPlayDelay)
+            {
+                dialogManager.Play();
+                autoPlayTimer = 0f; // 자동 재생 타이머 초기화
+            }
+        }
 
+#endif
+    }
 
-        #elif UNITY_STANDALONE_WIN
-
-
-        #endif
+    private void OnDisable()
+    {
+        isKeyDowning = false;
     }
 
     /// <summary> Load했을때 이전 데이터 뿌려주기 </summary>
     public void Loaded_DataSet()
     {
+        while(scrollSnap.Content.childCount > 0)
+            scrollSnap.Remove(0);
         Loaded_TextSet();
+
+
+        var slots = inventoryManager.itemSlot;
+        for (int i = 0; i < slots.Length; i++)
+            Destroy(slots[i].gameObject);
+        inventoryManager.itemSlot = null;
+        Loaded_InventorySet();
+
+
         RefreshTimer();
     }
 
@@ -88,19 +123,31 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     {
         int dialog_id = database.SaveData_GetNowDialogID();
         int dialog_index = database.SaveData_GetNowDialogIndex();
-        DialogueData[] data = database.Get_Dialogs_NeedID(dialog_id);
+        InteractiveDebate_DialogueData[] data = database.Get_DebateDialogs_NeedID(dialog_id);
 
         for(int i=0;i<dialog_index;i++)
         {
-            AddDialog(data[i].speaker, data[i].dialogue);
+            AddDialog(data[i].SPEAKER, data[i].DIALOGUE);
             skipAction?.Invoke();
+        }
+    }
+
+    void Loaded_InventorySet()
+    {
+        Dictionary<int, int> items = database.SaveData_GetItems();
+        if(items == null || items.Count == 0) return;
+        foreach (var item in items)
+        {
+            inventoryManager.AddItem(item.Key, item.Value);
         }
     }
 
     public void AddDialog(string name, string text, UnityAction callback = null)
     {
         // 대화 프리팹 생성
-        GameObject dialogObj = Instantiate(dialogPrefab, scrollSnap.Content);
+        int index = scrollSnap.NumberOfPanels;
+        scrollSnap.Add(dialogPrefab, index, true);
+        GameObject dialogObj = scrollSnap.Content.GetChild(index).gameObject;
         TextMeshProUGUI nameLabel = dialogObj.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI dialogLabel = dialogObj.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         
@@ -122,7 +169,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         TimeSpan delay = TimeSpan.FromSeconds(lettersDelay);
         for(int i=0;i<=text.Length;i++)
         {
-            tmp.text += text.Substring(i, 1);
+            tmp.text = text.Substring(0, i);
             await Task.Delay(delay);
         }
         skipAction = null;
