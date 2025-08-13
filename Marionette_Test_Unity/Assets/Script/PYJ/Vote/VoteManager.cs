@@ -13,6 +13,7 @@ public class VoteManager : MonoBehaviour
         public Sprite characterSprite;
     }
 
+    public DebateVotingSystem debateVotingSystem; // TempVoteAction이 들어있는 스크립트
     public List<PlayerInfo> playerInfos = new List<PlayerInfo>();
     public GameObject startButton;
     public GameObject playerVoteUIPrefab;
@@ -22,127 +23,30 @@ public class VoteManager : MonoBehaviour
     public TextMeshProUGUI confirmText;
     public GameObject resultDialog;
     public TextMeshProUGUI resultText;
+    public GameObject voteEndPanel;
 
     [Header("※ 진짜 범인을 여기서 고르세요!")]
     public string correctAnswer;
 
     public Transform playerVoteListParent;
     public List<string> playerNames = new List<string> { "시민1", "시민2", "범인" };
-    public GameObject voteEndPanel;
 
-    private bool voteFinished = false;     // 투표가 완료됐는지
-    private bool endMessageShown = false;  // "투표 종료되었습니다." 메시지 표시 여부
-    private bool endPanelShown = false;    // 투표 종료 패널 표시 여부
-
+    private bool voteFinished = false;
+    private bool endMessageShown = false;
+    private bool endPanelShown = false;
     private string votedPlayerName = null;
-
-    public void OnVoteButtonClicked(string targetPlayerName)
-    {
-        if (votedPlayerName != null) return;
-
-        confirmDialog.SetActive(true);
-        confirmText.text = $"{targetPlayerName}에게 투표하시겠습니까?";
-        votedPlayerName = targetPlayerName;
-    }
-
-    public void OnConfirmYes()
-    {
-        confirmDialog.SetActive(false);
-
-        var target = playerVoteUIs.FirstOrDefault(p => p.playerName == votedPlayerName);
-        if (target != null)
-            target.IncreaseVote();
-
-        if (votedPlayerName == correctAnswer)
-        {
-            // 투표 완료 상태로 변경
-            voteFinished = true;
-            currentVoteState = VoteState.VoteFinishedMessage;
-
-            // 메시지 띄우기
-            centerText.text = "투표가 종료되었습니다.";
-            resultText.text = "투표가 종료되었습니다.";
-            resultDialog.SetActive(true);
-        }
-        else
-        {
-            StartCoroutine(ShowRetryDialog());
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && voteFinished)
-        {
-            switch (currentVoteState)
-            {
-                case VoteState.VoteFinishedMessage:
-                    // 1번째 스페이스바 → 메시지 닫고 투표 종료 패널 열기
-                    resultDialog.SetActive(false);
-                    voteEndPanel.SetActive(true);
-                    // 숫자 랜덤화는 하지 않는다! 여기선 안 함
-                    currentVoteState = VoteState.VoteEndPanelShown;
-                    break;
-
-                case VoteState.VoteEndPanelShown:
-                    // 2번째 스페이스바 → 종료 패널 닫고 최종 결과 메시지 띄우면서 숫자 랜덤화!
-                    voteEndPanel.SetActive(false);
-
-                    centerText.text = "최종 결과입니다.";
-
-                    resultDialog.SetActive(true);
-
-                    RandomizeVotes();  // 여기서 숫자 늘리는 함수 호출!
-
-                    currentVoteState = VoteState.FinalResultShown;
-                    break;
-
-                case VoteState.FinalResultShown:
-                    // 이후 추가 동작
-                    break;
-            }
-        }
-    }
-
-
-
 
     private enum VoteState
     {
-        WaitingForVote,        // 투표 진행중
-        VoteFinishedMessage,   // "투표가 종료되었습니다." 메시지 띄운 상태
-        VoteEndPanelShown,     // 투표 종료 패널 보여준 상태
-        FinalResultShown       // 최종 결과 보여준 상태
+        WaitingForVote,
+        VoteFinishedMessage,
+        VoteEndPanelShown,
+        FinalResultShown
     }
 
     private VoteState currentVoteState = VoteState.WaitingForVote;
 
-
-    public void OnConfirmNo()
-    {
-        votedPlayerName = null;
-        confirmDialog.SetActive(false);
-        centerText.text = "다시 선택해주세요.";
-
-        foreach (var ui in playerVoteUIs)
-            ui.EnableButton();
-    }
-
-    IEnumerator ShowRetryDialog()
-    {
-        resultDialog.SetActive(true);
-        resultText.text = "이 사람은 진짜 범인이 아니야...\n다시 한번 선택해보자.";
-        yield return new WaitForSeconds(2f);
-        resultDialog.SetActive(false);
-
-        votedPlayerName = null;
-        centerText.text = "최종 투표를 진행해주세요.";
-
-        // 버튼 활성화 (투표 다시 받도록)
-        foreach (var ui in playerVoteUIs)
-            ui.EnableButton();
-    }
-
+    #region 투표 UI
     public void StartVoting()
     {
         playerVoteListParent.gameObject.SetActive(true);
@@ -164,45 +68,109 @@ public class VoteManager : MonoBehaviour
         Debug.Log($"[투표 시작] 정답은: {correctAnswer}");
     }
 
-    private bool canProcessSpace = true;
-
-    IEnumerator ShowResultPanelThenFinalResult()
+    public void OnVoteButtonClicked(string targetPlayerName)
     {
-        voteEndPanel.SetActive(true);
-        RandomizeVotes();
+        if (votedPlayerName != null) return;
 
-        yield return new WaitForSeconds(2f);
-
-        voteEndPanel.SetActive(false);
-
-        centerText.text = "투표가 종료되었습니다.";
-        resultText.text = "최종 결과입니다.";
-        resultDialog.SetActive(true);
-
-        voteFinished = true;
-        endMessageShown = true;
+        confirmDialog.SetActive(true);
+        confirmText.text = $"{targetPlayerName}에게 투표하시겠습니까?";
+        votedPlayerName = targetPlayerName;
     }
 
+    public void OnConfirmYes()
+    {
+        confirmDialog.SetActive(false);
 
-    IEnumerator DelayNextSpaceInput()
-    {
-        canProcessSpace = false;
-        yield return new WaitForSeconds(0.2f);  // 0.2초 대기 (원하는 시간으로 조정)
-        canProcessSpace = true;
-    }
-    void RandomizeVotes()
-    {
-        foreach (var ui in playerVoteUIs)
+        var target = playerVoteUIs.FirstOrDefault(p => p.playerName == votedPlayerName);
+        if (target != null)
+            target.IncreaseVote();
+
+        if (votedPlayerName == correctAnswer)
         {
-            int newVotes = Random.Range(0, 11); // 0~10 랜덤 투표 수
-            ui.SetVoteCount(newVotes);
+            voteFinished = true;
+            currentVoteState = VoteState.VoteFinishedMessage;
+
+            centerText.text = "투표가 종료되었습니다.";
+            resultText.text = "투표가 종료되었습니다.";
+            resultDialog.SetActive(true);
+        }
+        else
+        {
+            StartCoroutine(ShowRetryDialog());
         }
     }
 
+    public void OnConfirmNo()
+    {
+        votedPlayerName = null;
+        confirmDialog.SetActive(false);
+        centerText.text = "다시 선택해주세요.";
+
+        foreach (var ui in playerVoteUIs)
+            ui.EnableButton();
+    }
+
+    IEnumerator ShowRetryDialog()
+    {
+        resultDialog.SetActive(true);
+        resultText.text = "이 사람은 진짜 범인이 아니야...\n다시 한번 선택해보자.";
+        yield return new WaitForSeconds(2f);
+        resultDialog.SetActive(false);
+
+        votedPlayerName = null;
+        centerText.text = "최종 투표를 진행해주세요.";
+
+        foreach (var ui in playerVoteUIs)
+            ui.EnableButton();
+    }
+    #endregion
+
+    #region Update
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && voteFinished)
+        {
+            switch (currentVoteState)
+            {
+                case VoteState.VoteFinishedMessage:
+                    resultDialog.SetActive(false);
+                    voteEndPanel.SetActive(true);
+                    currentVoteState = VoteState.VoteEndPanelShown;
+                    break;
+
+                case VoteState.VoteEndPanelShown:
+                    voteEndPanel.SetActive(false);
+
+                    // 투표 종료 후 데드패널 표시
+                    debateVotingSystem.TempVoteAction();
+                    debateVotingSystem.gameObject.SetActive(true);
+                    break;
+
+                case VoteState.FinalResultShown:
+                    break;
+            }
+        }
+    }
+    #endregion
+
+    #region Start 버튼 클릭
     public void OnClickStartButton()
     {
         Debug.Log("시작 버튼이 눌렸습니다.");
+
+        // 1️⃣ 모든 DeadPanel 끄기 (0번~끝까지)
+        for (int i = 0; i < debateVotingSystem.charVotingGauge.Length; i++)
+        {
+            GameObject deadObj = debateVotingSystem.charVotingGauge[i].transform.parent.parent.GetChild(0).GetChild(0).gameObject;
+            deadObj.SetActive(false);
+            Debug.Log($"DeadPanel {i} 비활성화 완료");
+        }
+
+        // 2️⃣ Start 버튼 숨기기
         startButton.SetActive(false);
+
+        // 3️⃣ 투표 UI 시작
         StartVoting();
     }
+    #endregion
 }
