@@ -52,7 +52,7 @@ public class DialogueManager : MonoBehaviour
 
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
 {
-    { "주한", "JUHAN" },
+    { "김주한", "JUHAN" },
     { "미래", "MIRAE" },
     { "계란", "EGG" }
     // 필요한 만큼 추가

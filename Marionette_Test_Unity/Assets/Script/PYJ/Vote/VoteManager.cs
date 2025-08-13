@@ -81,10 +81,10 @@ public class VoteManager : MonoBehaviour
     {
         confirmDialog.SetActive(false);
 
-        var target = playerVoteUIs.FirstOrDefault(p => p.playerName == votedPlayerName);
-        if (target != null)
-            target.IncreaseVote();
-
+        // 🔹 투표 수 증가 기능 제거
+        // var target = playerVoteUIs.FirstOrDefault(p => p.playerName == votedPlayerName);
+        // if (target != null)
+        // 
         if (votedPlayerName == correctAnswer)
         {
             voteFinished = true;
