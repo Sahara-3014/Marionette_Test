@@ -498,8 +498,6 @@ public class DialogueManager : MonoBehaviour
         Debug.Log($"배경키: {bgKey}, sprite_BG.sprite: {sprite_BG.sprite}, sprite_BG.color: {sprite_BG.color}, sprite_BG.activeSelf: {sprite_BG.gameObject.activeSelf}");
 
     }
-
-
     private IEnumerator TypeText(string sentence, int dialogueIndex)
     {
         Debug.Log($"[TypeText] 받은 문장: '{sentence}'");
@@ -520,34 +518,46 @@ public class DialogueManager : MonoBehaviour
         if (hasChoice)
             waitingForChoiceDisplay = true;
 
-        foreach (char letter in sentence)
+        int i = 0;
+        string visibleText = "";
+        while (i < sentence.Length)
         {
             while (isPaused)
                 yield return null;
 
-            txt_Dialogue.text += letter;
+            if (sentence[i] == '<') // 태그 시작
+            {
+                int tagEnd = sentence.IndexOf('>', i);
+                if (tagEnd != -1)
+                {
+                    string tag = sentence.Substring(i, tagEnd - i + 1);
+                    visibleText += tag; // 태그 포함
+                    i = tagEnd + 1;
+                    yield return null;
+                    continue;
+                }
+            }
+
+            visibleText += sentence[i];
+            txt_Dialogue.text = visibleText;
+            i++;
             yield return new WaitForSeconds(0.05f);
         }
 
         isTyping = false;
 
+        // --- 선택지 출력 로직 ---
         if (hasChoice && currentDialogue != null && !choicePanel.activeSelf)
         {
             yield return new WaitForSeconds(0.1f);
             waitingForChoiceDisplay = false;
-
             ShowChoices(currentDialogue.choices, currentDialogue.choiceSoundEffectName);
-
-            // 선택지 뜰 땐 canInput = false 상태 유지 (유저 선택 대기)
         }
         else
         {
             canInput = true;
-            autoTimer = 0f; // Auto 모드용 타이머 초기화
+            autoTimer = 0f;
         }
-
-        // 중복 설정 제거
-        // isTyping = false;
 
         if (inputQueuedBeforeChoice)
         {
@@ -555,6 +565,18 @@ public class DialogueManager : MonoBehaviour
             yield break;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
     public void OnUserInput()
     {
         if (isAuto)
@@ -589,6 +611,9 @@ public class DialogueManager : MonoBehaviour
     }
 
     private bool isProcessingInput = false;
+
+
+
 
 
     //
@@ -671,6 +696,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
+
 
 
     public void ToggleAuto()
@@ -1097,6 +1123,13 @@ public class DialogueManager : MonoBehaviour
 
     public void SkipToNextChoice()
     {
+        // 🚫 대화 시작 전이거나 데이터가 없는 경우 무시
+        if (dialogueDictByIDAndIndex == null || dialogueDictByIDAndIndex.Count == 0)
+            return;
+
+        if (!dialogueDictByIDAndIndex.ContainsKey((currentID, currentIndex)))
+            return;
+
         // 타이핑 중이면 먼저 끝내기
         if (typingCoroutine != null)
         {
