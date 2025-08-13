@@ -1055,21 +1055,6 @@ public class DialogueManager : MonoBehaviour
         DialogSoundManager.Instance.PlayDialogSE(bgm);
     }
     // 현재 대화 위치부터 이후 대사들 중 선택지가 있는 첫 위치 반환
-    private (int id, int index)? FindNextChoicePosition(int startID, int startIndex)
-    {
-        int maxIndex = GetMaxDialogueIndex(startID);
-        for (int i = startIndex; i <= maxIndex; i++)
-        {
-            var key = (startID, i);
-            if (dialogueDictByIDAndIndex.ContainsKey(key))
-            {
-                var dialogue = dialogueDictByIDAndIndex[key];
-                if (dialogue.choices != null && dialogue.choices.Length > 0)
-                    return key;
-            }
-        }
-        return null;
-    }
 
     private int GetMaxDialogueIndex(int id)
     {
@@ -1078,37 +1063,90 @@ public class DialogueManager : MonoBehaviour
             .Where(k => k.ID == id)
             .Max(k => k.index);
     }
+    private (int id, int index)? FindNextChoicePosition(int startID, int startIndex)
+    {
+        // 모든 대사를 ID → index 순으로 정렬
+        var allKeys = dialogueDictByIDAndIndex.Keys
+            .OrderBy(k => k.ID)
+            .ThenBy(k => k.index)
+            .ToList();
+
+        bool startFound = false;
+
+        foreach (var key in allKeys)
+        {
+            // 현재 위치 이후부터 탐색 시작
+            if (!startFound)
+            {
+                if (key.ID > startID || (key.ID == startID && key.index >= startIndex))
+                    startFound = true;
+                else
+                    continue;
+            }
+
+            var dialogue = dialogueDictByIDAndIndex[key];
+            if (dialogue.choices != null && dialogue.choices.Length > 0)
+            {
+                return (key.ID, key.index); // 첫 번째 선택지 반환
+            }
+        }
+
+        return null; // 끝까지 못 찾으면
+    }
+
 
     public void SkipToNextChoice()
     {
+        // 타이핑 중이면 먼저 끝내기
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+
+            var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
+            txt_Dialogue.text = dialogueData.dialogue;
+
+            if (dialogueData.choices != null && dialogueData.choices.Length > 0)
+            {
+                ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
+                return;
+            }
+        }
+
+        var currentDialogue = dialogueDictByIDAndIndex[(currentID, currentIndex)];
+        if (currentDialogue.choices != null && currentDialogue.choices.Length > 0)
+        {
+            Debug.Log("이미 선택지 구간입니다. 스킵 불가.");
+            return;
+        }
+
         var nextChoicePos = FindNextChoicePosition(currentID, currentIndex + 1);
         if (nextChoicePos.HasValue)
         {
             var (id, index) = nextChoicePos.Value;
-
-            // 코루틴 중단 (타이핑 효과 취소)
-            if (typingCoroutine != null)
-            {
-                StopCoroutine(typingCoroutine);
-            }
-
-            currentID = id;
-            currentIndex = index;
-
-            // 선택지 있는 대사 바로 보여주기 (타이핑 없이)
-            var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
-            txt_Dialogue.text = dialogueData.dialogue;
-            canInput = false;
-
-            ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
-
-            // 오토 모드 꺼도 좋음 (필요하면)
-            isAuto = false;
+            JumpToDialogue(id, index);
         }
         else
         {
             Debug.Log("더 이상 선택지가 없습니다.");
         }
     }
+
+
+    private void JumpToDialogue(int id, int index)
+    {
+        currentID = id;
+        currentIndex = index;
+
+        var dialogueData = dialogueDictByIDAndIndex[(currentID, currentIndex)];
+        txt_Dialogue.text = dialogueData.dialogue;
+        canInput = false;
+        ShowChoices(dialogueData.choices, dialogueData.choiceSoundEffectName);
+        isAuto = false;
+    }
+
+
+
+
 
 }

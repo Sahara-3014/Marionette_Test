@@ -3396,6 +3396,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 618650078162537882, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
+      propertyPath: 'backgroundSprites.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 7f309dfd4eb06644ab6635e15d877d6f, type: 3}
+    - target: {fileID: 618650078162537882, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: 'backgroundSprites.Array.data[2]'
       value: 
       objectReference: {fileID: 21300000, guid: f684fde81a63e834aba3cc9d3ba349c7, type: 3}

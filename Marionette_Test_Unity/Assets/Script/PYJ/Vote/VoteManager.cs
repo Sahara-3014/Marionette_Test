@@ -89,7 +89,6 @@ public class VoteManager : MonoBehaviour
                     voteEndPanel.SetActive(false);
 
                     centerText.text = "최종 결과입니다.";
-                    resultText.text = "투표가 종료되었습니다!";
 
                     resultDialog.SetActive(true);
 
