@@ -49,7 +49,6 @@ public class CameraSequencer : MonoBehaviour
     {
         if (isInitialized || EffectCameraController.Instance == null) return;
         Transform currentRoot = EffectCameraController.Instance.GetCurrentCameraRoot();
-        // ▼▼▼ 핵심 수정: 이제 Getter를 통해 최초 줌 크기를 가져옵니다 ▼▼▼
         initialCameraZoom = EffectCameraController.Instance.GetInitialOrthographicSize();
         if (currentRoot != null)
         {
@@ -90,7 +89,6 @@ public class CameraSequencer : MonoBehaviour
                 yield return new WaitForSeconds(step.duration);
                 break;
             case CameraCommandType.ZoomTo:
-                // 변환된 targetSize를 사용합니다.
                 controller.ZoomTo(targetSize, step.duration);
                 yield return new WaitForSeconds(step.duration);
                 break;
