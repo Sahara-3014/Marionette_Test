@@ -2,6 +2,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
+[System.Serializable]
+public class FlickerParams
+{
+    public bool overrideDuration;
+    public bool overrideFrequency;
+    public bool overrideColorA;
+    public bool overrideColorB;
+
+    public float duration = 1.0f;
+    public float frequency = 10.0f;
+    public Color colorA = Color.red;
+    public Color colorB = Color.black;
+}
+
+
 public class FlickerPlayer : MonoBehaviour
 {
     [Header("깜빡임 설정")]

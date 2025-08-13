@@ -527,7 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d474e1b9a092d4daa3362fc43a1f81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectIdx: 5
+  effectIdx: 9
   isTest: 1
 --- !u!4 &905132959
 Transform:
@@ -872,6 +872,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: directionSetList.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[5]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 173f967dced8ac64aa6ef3000940490f, type: 2}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[6]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[7]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 71559241c0e890e48a1f837c154139a1, type: 2}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[8]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e98fe55f2a6b9d4a82afe1314404cc4, type: 2}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[9]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 572f5d613a560ef409d256f011389abb, type: 2}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[10]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 4e08dfb38482bad48b8c579cdbb7405f, type: 2}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[11]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 59195ca5f2f9af947989e7d8950040e6, type: 2}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[12]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 08646a6b0e759654da1d0532b625819d, type: 2}
+    - target: {fileID: 21733518204640307, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
+      propertyPath: 'directionSetList.Array.data[13]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 08646a6b0e759654da1d0532b625819d, type: 2}
     - target: {fileID: 1411711688660585234, guid: 467189515cf18aa4cb26784d7cd31118, type: 3}
       propertyPath: m_Name
       value: EffectContainer
