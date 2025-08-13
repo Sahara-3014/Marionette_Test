@@ -43,24 +43,24 @@ public class HSJ_LobbyManager : MonoBehaviour
         float delay = 3f;
         SaveDatabase.Instance.AddSceneChangeEvent(sceneName , () =>
         {
-            var so = EffectManager.Instance.directionSetList[7];
+            var so = EffectManager.Instance.directionSetList[6];
             EffectManager.Instance.PlayDirectionSet(so);
             SaveDatabase.Instance.StartCoroutine(SaveDatabase.Instance.AfterAction(() =>
             {
-                var so = EffectManager.Instance.directionSetList[7];
+                var so = EffectManager.Instance.directionSetList[6];
                 EffectManager.Instance.StopDirectionSet(so);
             }, delay));
         });
 
         saveLoadPanel.BtnsDisable();
 
-        var so = EffectManager.Instance.directionSetList[6];
+        var so = EffectManager.Instance.directionSetList[5];
         EffectManager.Instance.PlayDirectionSet(so);
         
         //EffectManager.Instance.PlayEffect(idx);
         SaveDatabase.Instance.StartCoroutine(SaveDatabase.Instance.AfterAction(() =>
         {
-            var so = EffectManager.Instance.directionSetList[6];
+            var so = EffectManager.Instance.directionSetList[5];
             SaveDatabase.Instance.ChangeScene(sceneName);
             //EffectManager.Instance.StopEffect(idx);
             EffectManager.Instance.StopDirectionSet(so);
