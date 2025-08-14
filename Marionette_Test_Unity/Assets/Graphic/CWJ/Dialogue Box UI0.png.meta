@@ -1,10 +1,37 @@
 fileFormatVersion: 2
-guid: b0acd7e3e2a87524184eb2b85fbf90ec
+guid: 72684ea9a291dc24a8ac08bc8529eda8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5090892696396447281
-    second: Dialogue System UI2_0
+      213: 1069414901369641934
+    second: Dialogue Box UI0_0
+  - first:
+      213: -3567919368642371452
+    second: Dialogue Box UI0_1
+  - first:
+      213: 5619317606015372142
+    second: Dialogue Box UI0_2
+  - first:
+      213: 7328320758487210376
+    second: Dialogue Box UI0_3
+  - first:
+      213: -8070315909052075312
+    second: Dialogue Box UI0_4
+  - first:
+      213: 5476334310650822434
+    second: Dialogue Box UI0_5
+  - first:
+      213: 3925092293575536439
+    second: Dialogue Box UI0_6
+  - first:
+      213: -6951551083222432886
+    second: Dialogue Box UI0_7
+  - first:
+      213: -6566552130666641945
+    second: Dialogue Box UI0_8
+  - first:
+      213: -9103685305876925152
+    second: Dialogue Box UI0_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,7 +99,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -109,53 +136,27 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Dialogue System UI2_0
+      name: Dialogue Box UI0_0
       rect:
         serializedVersion: 2
-        x: 229
-        y: 128
-        width: 3147
-        height: 841
+        x: 0
+        y: 0
+        width: 3170
+        height: 833
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 13e37564feb76a640800000000000000
-      internalID: 5090892696396447281
+      spriteID: 48b3910b9ae07244d8c72cae1903830a
+      internalID: 1090871413
       vertices: []
       indices: 
       edges: []
@@ -164,7 +165,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c17e44b184568de4bbaae8224c84c035
     internalID: 0
     vertices: []
     indices: 
@@ -174,7 +175,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Dialogue System UI2_0: 5090892696396447281
+      Dialogue Box UI0_0: 1090871413
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
