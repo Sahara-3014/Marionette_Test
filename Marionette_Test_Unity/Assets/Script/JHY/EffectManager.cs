@@ -117,6 +117,7 @@ public class EffectManager : MonoBehaviour
     public void PlayDirectionSet(DirectionSetSO set)
     {
         if (set == null) return;
+        bool useNewSystem = set.effectsToPlayWithOverrides != null && set.effectsToPlayWithOverrides.Count > 0;
         foreach (var pType in set.particlesToPlay) PlayEffect(pType, set); 
         foreach (var ppType in set.postProcessingsToEnable) EnablePP(ppType, set.fadeDuration);
     }
@@ -360,7 +361,6 @@ public class EffectManager : MonoBehaviour
 
             if (!isHandled)
             {
-                // EffectInfo가 있다면, 그 시간을 존중해줍니다.
                 EffectInfo info = instance.GetComponent<EffectInfo>();
                 if (info != null)
                 {
@@ -368,7 +368,6 @@ public class EffectManager : MonoBehaviour
                 }
                 else
                 {
-                    // EffectInfo조차 없다면, 즉시 파괴하는 것이 가장 안전합니다.
                     Destroy(instance);
                 }
             }

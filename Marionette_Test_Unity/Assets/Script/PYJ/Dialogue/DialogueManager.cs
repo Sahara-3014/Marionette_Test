@@ -427,10 +427,10 @@ public class DialogueManager : MonoBehaviour
         }
 
         // 화면 효과
-        if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
+       /* if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
         {
             StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
-        }
+        }*/
 
         // 사운드
         if (currentDialogue.bgm != null)
