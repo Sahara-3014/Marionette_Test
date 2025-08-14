@@ -24,7 +24,7 @@ public class Item : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Interaction") && interactionRange)
+        if (Input.GetKeyDown(KeyCode.E) && interactionRange)
         {
             inventoryManager.AddItem(id, quantity);
             Destroy(gameObject);
