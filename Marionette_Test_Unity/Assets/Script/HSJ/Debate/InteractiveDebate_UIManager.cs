@@ -109,9 +109,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
 
 
         var slots = inventoryManager.itemSlot;
-        for (int i = 0; i < slots.Length; i++)
-            Destroy(slots[i].gameObject);
-        inventoryManager.itemSlot = null;
+        //for (int i = 0; i < slots.Length; i++)
+        //    Destroy(slots[i].gameObject);
+        //inventoryManager.itemSlot = null;
         Loaded_InventorySet();
 
 

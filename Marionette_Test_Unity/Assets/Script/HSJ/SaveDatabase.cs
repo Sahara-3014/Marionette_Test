@@ -401,7 +401,7 @@ public class SaveDatabase : MonoBehaviour
     public void AutoSave(UnityAction _callback = null)
     {
         saveData.saveDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        PlayerPrefs.SetString($"SaveData_Auto", JsonConvert.SerializeObject(saveData));
+        PlayerPrefs.SetString($"SaveData_Auto", JsonUtility.ToJson(saveData));
         _callback?.Invoke();
     }
 
@@ -412,7 +412,7 @@ public class SaveDatabase : MonoBehaviour
         {
             try
             {
-                var data = JsonConvert.DeserializeObject<SaveData>(str);
+                var data = JsonUtility.FromJson<SaveData>(str);
                 return data;
             }
             catch (Exception e)
@@ -433,7 +433,7 @@ public class SaveDatabase : MonoBehaviour
         savePlayIndex = _index;
         saveData.index = _index;
         saveData.saveDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        PlayerPrefs.SetString($"SaveData_{_index}", JsonConvert.SerializeObject(saveData));
+        PlayerPrefs.SetString($"SaveData_{_index}", JsonUtility.ToJson(saveData));
         _callback?.Invoke();
     }
 
@@ -445,7 +445,7 @@ public class SaveDatabase : MonoBehaviour
         {
             try
             {
-                var _data = JsonConvert.DeserializeObject<SaveData>(data);
+                var _data = JsonUtility.FromJson<SaveData>(data);
                 if (isSet)
                 {
                     saveData = _data;
