@@ -32,8 +32,6 @@ public class VoteManager : MonoBehaviour
     public List<string> playerNames = new List<string> { "시민1", "시민2", "범인" };
 
     private bool voteFinished = false;
-    private bool endMessageShown = false;
-    private bool endPanelShown = false;
     private string votedPlayerName = null;
 
     private enum VoteState
