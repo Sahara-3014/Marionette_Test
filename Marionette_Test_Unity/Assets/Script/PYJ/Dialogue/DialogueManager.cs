@@ -52,7 +52,7 @@ public class DialogueManager : MonoBehaviour
 
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
 {
-    { "주한", "JUHAN" },
+    { "김주한", "JUHAN" },
     { "미래", "MIRAE" },
     { "계란", "EGG" }
     // 필요한 만큼 추가
@@ -426,11 +426,11 @@ public class DialogueManager : MonoBehaviour
             sprite_BG.sprite = null;
         }
 
-        // 화면 효과
-       /* if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
-        {
-            StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
-        }*/
+        //// 화면 효과
+        //if (currentDialogue.screenEffect != Dialog_ScreenEffect.None && sprite_BG != null)
+        //{
+        //    StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
+        //}
 
         // 사운드
         if (currentDialogue.bgm != null)
@@ -466,10 +466,10 @@ public class DialogueManager : MonoBehaviour
                     string nextSheetName = currentDialogue.nextSheet.Trim();
                     Debug.Log($"다음 시트로 전환: {nextSheetName}");
 
-                    GoogleSheetLoader.Instance.LoadNextSheet(nextSheetName);
+                    sheetLoader.LoadNextSheet(nextSheetName);
 
                     // 대사 초기화
-                    currentID = GoogleSheetLoader.Instance.firstIDOfCurrentSheet;
+                    currentID = sheetLoader.firstIDOfCurrentSheet;
                     currentIndex = 1; // 보통 1부터 시작
 
                     ShowDialogue(currentID, currentIndex);
@@ -565,11 +565,6 @@ public class DialogueManager : MonoBehaviour
             yield break;
         }
     }
-
-
-
-
-
 
 
 
@@ -915,19 +910,19 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
-        GoogleSheetLoader.Instance.OnSheetLoaded += OnSheetLoadedHandler;
+        sheetLoader = GoogleSheetLoader.Instance;
+        sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
     }
 
     void OnDestroy()
     {
-        if (GoogleSheetLoader.Instance != null)
-            GoogleSheetLoader.Instance.OnSheetLoaded -= OnSheetLoadedHandler;
+        sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
     }
 
     private void OnSheetLoadedHandler()
     {
         // 새 시트 로드가 완료되면 호출됨
-        int firstID = GoogleSheetLoader.Instance.firstIDOfCurrentSheet;
+        int firstID = sheetLoader.firstIDOfCurrentSheet;
 
         currentID = firstID;
         currentIndex = 1;
