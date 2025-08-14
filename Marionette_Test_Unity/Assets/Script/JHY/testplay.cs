@@ -5,9 +5,11 @@ using System.Collections.Generic;
 public class testplay : MonoBehaviour
 {
     public int effectIdx = 0;
-    private bool isPlay = false;
-    private bool isEnable = false;
+    [SerializeField]private bool isPlay = false;
+    [SerializeField] private bool isEnable = false;
     public bool isTest = false;
+
+    public EffectManager effectManager;
     IEnumerator Start()
     {
         yield return new WaitUntil(() =>

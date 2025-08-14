@@ -65,13 +65,23 @@ public class SaveLoadPanel : MonoBehaviour
                 tmp.text = $"File {i} {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} {data.dayNum} Days";
             }
 
+            int index = i;
             btns[i].onClick.RemoveAllListeners();
             if (i != 0 && saveType == SaveTpye.Save)
-                btns[i].onClick.AddListener(() => { Save(i); });
+                btns[i].onClick.AddListener(() =>
+                {
+                    Save(index);
+                });
             else if (saveType == SaveTpye.Load)
-                btns[i].onClick.AddListener(() => { Load(i); });
+                btns[i].onClick.AddListener(() =>
+                {
+                    Load(index);
+                });
             else if (i != 0 && saveType == SaveTpye.New)
-                btns[i].onClick.AddListener(() => { NewGame(i); });
+                btns[i].onClick.AddListener(() =>
+                {
+                    NewGame(index);
+                });
         }
     }
 
@@ -86,9 +96,16 @@ public class SaveLoadPanel : MonoBehaviour
 
     public void Save(int index)
     {
-        database.Save(index);
+        
         var data = database.SaveData_Get();
+        data.saveDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        CharacterController player = FindAnyObjectByType<CharacterController>();
+        if (player != null)
+            database.SaveData_SetPosition(player.transform.position);
+        database.Save(index);
+
         var date = DateTime.Parse(data.saveDate);
+        Debug.Log($"File {index} {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} ");
         btns[index].GetComponentInChildren<TextMeshProUGUI>().text = $"File {index} {date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}:{date.Second} {data.dayNum} Days";
     }
 
@@ -97,6 +114,12 @@ public class SaveLoadPanel : MonoBehaviour
         var data = database.Load(index, false);
         if (data.index == -1)
             return;
+        CharacterController player = FindAnyObjectByType<CharacterController>();
+        if (player != null)
+        {
+            Vector2 pos = database.SaveData_GetPosition();
+            player.transform.position = pos;
+        }
         onLoadAction?.Invoke();
     }
 

@@ -13,10 +13,21 @@ public class InventoryManager : MonoBehaviour
     public ItemSlot[] itemSlot;
 
     [SerializeField] private List<ItemData> itemDatabase;
-    
+
+    private void Awake()
+    {
+        if(Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
     void Update()
     {
-        if (Input.GetButtonDown("Inventory") && menuActivated)
+        if (Input.GetKeyDown(KeyCode.Tab) && menuActivated)
         {
             Time.timeScale = 1;
             InventoryIcon.SetActive(true);
@@ -24,7 +35,7 @@ public class InventoryManager : MonoBehaviour
             menuActivated = false;
             Debug.Log("Inventory false");
         }
-        else if (Input.GetButtonDown("Inventory") && !menuActivated)
+        else if (Input.GetKeyDown(KeyCode.Tab) && !menuActivated)
         {
             Time.timeScale = 0;
             InventoryIcon.SetActive(false);
