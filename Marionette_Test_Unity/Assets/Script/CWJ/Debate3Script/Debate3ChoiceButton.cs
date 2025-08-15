@@ -36,7 +36,7 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             connect.SetActive(true);
             Color color = image.color;
-            color.a = 1f;
+            //color.a = 1f;
             image.color = color;
             
             text.fontSize = BigfontSize;
@@ -45,7 +45,7 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
         {
 
             Color color = image.color;
-            color.a = 0.8f;
+            //color.a = 0.8f;
             image.color = color;
            
             text.fontSize = BigfontSize;
@@ -54,7 +54,7 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             connect.SetActive(false);
             Color color = image.color;
-            color.a = 0.8f;
+            //color.a = 0.8f;
             image.color = color;
             
             text.fontSize = SmallfontSize;
@@ -63,8 +63,6 @@ public class Debate3ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void ReSize()
     {
-        
-        
         RectTransform rectTransform = GetComponent<RectTransform>();
         RectTransform textrectTransform = textObject.GetComponent<RectTransform>();
         
