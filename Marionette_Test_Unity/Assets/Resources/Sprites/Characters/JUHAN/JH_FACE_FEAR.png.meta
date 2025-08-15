@@ -5,9 +5,6 @@ TextureImporter:
   - first:
       213: -2487066532600888944
     second: JH_FACE_FEAR_0
-  - first:
-      213: 6942223458235336668
-    second: JH_FACE_FEAR_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -145,10 +142,10 @@ TextureImporter:
       name: JH_FACE_FEAR_0
       rect:
         serializedVersion: 2
-        x: 60
-        y: 168
-        width: 1746
-        height: 2279
+        x: 1675
+        y: 4314
+        width: 1699
+        height: 2421
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,28 +156,6 @@ TextureImporter:
       bones: []
       spriteID: 091cf876a2a2c7dd0800000000000000
       internalID: -2487066532600888944
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: JH_FACE_FEAR_1
-      rect:
-        serializedVersion: 2
-        x: 442
-        y: 215
-        width: 297
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cd7408b247bb75060800000000000000
-      internalID: 6942223458235336668
       vertices: []
       indices: 
       edges: []
@@ -200,7 +175,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       JH_FACE_FEAR_0: -2487066532600888944
-      JH_FACE_FEAR_1: 6942223458235336668
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -5,9 +5,6 @@ TextureImporter:
   - first:
       213: -7209528761272243457
     second: JH_FACE_FRUST_0
-  - first:
-      213: -80894932890856124
-    second: JH_FACE_FRUST_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -145,10 +142,10 @@ TextureImporter:
       name: JH_FACE_FRUST_0
       rect:
         serializedVersion: 2
-        x: 60
-        y: 168
-        width: 1746
-        height: 2279
+        x: 1675
+        y: 4314
+        width: 1699
+        height: 2421
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,28 +156,6 @@ TextureImporter:
       bones: []
       spriteID: ffae7621acb92fb90800000000000000
       internalID: -7209528761272243457
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: JH_FACE_FRUST_1
-      rect:
-        serializedVersion: 2
-        x: 442
-        y: 215
-        width: 297
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 44559e4bc7a90eef0800000000000000
-      internalID: -80894932890856124
       vertices: []
       indices: 
       edges: []
@@ -200,7 +175,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       JH_FACE_FRUST_0: -7209528761272243457
-      JH_FACE_FRUST_1: -80894932890856124
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

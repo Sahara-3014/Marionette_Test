@@ -57,7 +57,7 @@ public class DialogueManager : MonoBehaviour
 { "하서하", "SEOHA" },
 { "유무구", "MUGU" },
 { "정해온", "HAEWON" },
-{ "도민결", "MINGYEOL" },
+{ "도민결", "MINKYEOL" },
 { "배수경", "SUKYUNG" },
 { "권하루", "HARU" },
 { "박세진", "SEJIN" },
