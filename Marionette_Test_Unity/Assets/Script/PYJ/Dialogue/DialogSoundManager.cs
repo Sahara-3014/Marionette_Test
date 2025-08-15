@@ -8,7 +8,7 @@ public class DialogSoundManager : MonoBehaviour
     public AudioSource bgmSource;
     public AudioSource seSource1;
     public AudioSource seSource2;
-    public AudioSource choiceSeSource3; // 추가
+    public AudioSource choiceSeSource3; 
     private void Awake()
     {
         if (Instance == null)
@@ -75,23 +75,23 @@ public class DialogSoundManager : MonoBehaviour
 
         Debug.Log($"[PlayBGM] BGM '{bgm.clip.name}' 재생 시작 (볼륨: {bgm.volume})");
     }
+
+    private Coroutine seLoopCoroutine1;
+    private Coroutine seLoopCoroutine2;
+    private Coroutine seLoopCoroutine3;
+    private bool stopAllSEFlag = false;
+
     public void PlaySE(DialogSE se)
     {
-        if (se == null)
-            return;
+        if (se == null) return;
 
-        // -1 명령이면 재생 중이던 효과음 모두 끔
         if (se.stopSE)
         {
-            seSource1.Stop();
-            seSource2.Stop();
-            choiceSeSource3.Stop();
-            Debug.Log("[PlaySE] -1 명령 → 모든 효과음 중지");
+            StopAllSE();
             return;
         }
 
         if (se.clip == null) return;
-
         if (seSource1 == null || seSource2 == null || choiceSeSource3 == null)
         {
             Debug.LogError("[PlaySE] AudioSource 미할당");
@@ -99,31 +99,47 @@ public class DialogSoundManager : MonoBehaviour
         }
 
         AudioSource sourceToUse = null;
+        Coroutine coroutineToUse = null;
+
         if (!seSource1.isPlaying)
+        {
             sourceToUse = seSource1;
+            coroutineToUse = seLoopCoroutine1;
+        }
         else if (!seSource2.isPlaying)
+        {
             sourceToUse = seSource2;
+            coroutineToUse = seLoopCoroutine2;
+        }
         else if (!choiceSeSource3.isPlaying)
+        {
             sourceToUse = choiceSeSource3;
+            coroutineToUse = seLoopCoroutine3;
+        }
         else
         {
             seSource1.Stop();
             sourceToUse = seSource1;
+            coroutineToUse = seLoopCoroutine1;
         }
+
+        // 기존 루프 코루틴 있으면 멈추기
+        if (coroutineToUse != null)
+            StopCoroutine(coroutineToUse);
 
         sourceToUse.clip = se.clip;
         sourceToUse.volume = se.volume;
-        sourceToUse.loop = (se.loopCount == 0);
+        sourceToUse.loop = false;
         sourceToUse.Play();
 
-        Debug.Log($"[PlaySE] 효과음 '{se.clip.name}' 재생 시작 (볼륨: {se.volume})");
-
         if (se.loopCount > 0)
-            StartCoroutine(PlaySELoop(sourceToUse, se.loopCount));
+        {
+            Coroutine newCoroutine = StartCoroutine(PlaySELoopSafe(sourceToUse, se.loopCount));
+            if (sourceToUse == seSource1) seLoopCoroutine1 = newCoroutine;
+            else if (sourceToUse == seSource2) seLoopCoroutine2 = newCoroutine;
+            else seLoopCoroutine3 = newCoroutine;
+        }
     }
-
-
-
 
 
     private IEnumerator PlaySELoop(AudioSource source, int loopCount)
@@ -179,6 +195,46 @@ public class DialogSoundManager : MonoBehaviour
         if (clip == null)
             Debug.LogWarning($"AudioClip '{clipName}'를 Resources/Audio 폴더에서 찾을 수 없습니다.");
         return clip;
+    }
+
+    private IEnumerator PlaySELoopSafe(AudioSource source, int loopCount)
+    {
+        int played = 1;
+        while (played < loopCount)
+        {
+            float length = source.clip != null ? source.clip.length : 0f;
+            float timer = 0f;
+
+            while (timer < length)
+            {
+                if (stopAllSEFlag) yield break;
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            if (stopAllSEFlag) yield break;
+
+            source.Play();
+            played++;
+        }
+    }
+
+    public void StopAllSE()
+    {
+        stopAllSEFlag = true; // 모든 코루틴 종료 신호
+
+        if (seLoopCoroutine1 != null) { StopCoroutine(seLoopCoroutine1); seLoopCoroutine1 = null; }
+        if (seLoopCoroutine2 != null) { StopCoroutine(seLoopCoroutine2); seLoopCoroutine2 = null; }
+        if (seLoopCoroutine3 != null) { StopCoroutine(seLoopCoroutine3); seLoopCoroutine3 = null; }
+
+        if (seSource1 != null) seSource1.Stop();
+        if (seSource2 != null) seSource2.Stop();
+        if (choiceSeSource3 != null) choiceSeSource3.Stop();
+
+        Debug.Log("[StopAllSE] 모든 효과음 강제 종료");
+
+        // 다시 다음 SE 재생 가능하게 false로 초기화
+        stopAllSEFlag = false;
     }
 
 
