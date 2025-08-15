@@ -1385,10 +1385,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3de67f55823c8e4abbf9e9a11ec0401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueList: []
+  isAuto: 0
+  autoDelay: 2
+  sheetLoader: {fileID: 0}
+  cutsceneImageObject: {fileID: 0}
+  characterRenderers: []
+  dialogueText: {fileID: 0}
   effectManager: {fileID: 0}
   soundManager: {fileID: 0}
-  sprite_Characters: []
+  sprite_Heads: []
+  sprite_Bodies: []
   sprite_BG: {fileID: 566643308}
   sprite_DialogueBox: {fileID: 509164787}
   sprite_CharacterNameBox: {fileID: 317856781}
@@ -1398,10 +1404,9 @@ MonoBehaviour:
   backgroundSprites:
   - {fileID: 21300000, guid: 5a654415ecb1c934e9d058222882d618, type: 3}
   - {fileID: 21300000, guid: c0f2d0be2d1d3d243930360f887527fb, type: 3}
-  characterSprites:
-  - {fileID: 21300000, guid: 6b0dce037b810c744aaf4903797c7803, type: 3}
-  - {fileID: 21300000, guid: e827ff65f32c8e5448a58af78264dfb3, type: 3}
-  - {fileID: 21300000, guid: 4066a66783b8a6947bf37f6f6408125b, type: 3}
+  choicePanel: {fileID: 0}
+  choiceButtons: []
+  choiceButtonTexts: []
   dialogue: []
 --- !u!4 &1635737708
 Transform:
@@ -1447,9 +1452,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 734cd9c0a67e39b44aca7d1890c52ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueManager: {fileID: 0}
   apiKey: AIzaSyCYF6AGzi8Fe0HhVew-t0LOngxs0IOZIuc
   spreadsheetId: 1N2Z-yXGz8rUvUBwLfkeB9GYIOWhMrfs6lWok9lcNIjk
-  sheetName: INTRO
+  fixedSheetSequence:
+  - INTRO
+  - START
+  - CHAPTER1
+  firstIDOfCurrentSheet: 0
+  usingBranching: 0
   dialogueSystem: {fileID: 1635737707}
 --- !u!4 &1676622348
 Transform:
@@ -1665,6 +1676,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1921842714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1921842715}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1921842715
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921842714}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.168491, y: 7.68604, z: 181.0876}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2114535798
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,3 +1764,4 @@ SceneRoots:
   - {fileID: 1036701189}
   - {fileID: 2114535800}
   - {fileID: 1367349512}
+  - {fileID: 1921842715}

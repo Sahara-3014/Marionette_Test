@@ -70,9 +70,9 @@ public class DialogueData
     public float delay = 0.05f;
     public float duration = 0f;
 
-    public DialogSE se1;
-    public DialogSE se2;
-    public DialogSE bgm;
+    public SoundAsset se1;
+    public SoundAsset se2;
+    public SoundAsset bgm;
     public string commands;  // 명령어 저장용
 
     public Dialog_CharPos charPos1;
@@ -249,33 +249,15 @@ public class DialogueData
         // 오디오 클립 로드
         if (!string.IsNullOrEmpty(bgmName))
         {
-            bgm = new DialogSE
-            {
-                type = SEType.BGM,
-                clip = LoadAudioClipByName(bgmName),
-                volume = 1f,
-                loopCount = 1
-            };
+            bgm = LoadAudioAssetByName(bgmName);
         }
         if (!string.IsNullOrEmpty(sfx1Name))
         {
-            se1 = new DialogSE
-            {
-                type = SEType.SE,
-                clip = LoadAudioClipByName(sfx1Name),
-                volume = 1f,
-                loopCount = 1
-            };
+            se1 = LoadAudioAssetByName(sfx1Name);
         }
         if (!string.IsNullOrEmpty(sfx2Name))
         {
-            se2 = new DialogSE
-            {
-                type = SEType.SE,
-                clip = LoadAudioClipByName(sfx2Name),
-                volume = 1f,
-                loopCount = 1
-            };
+            se2 = LoadAudioAssetByName(sfx2Name);
         }
     }
 
@@ -334,9 +316,9 @@ public class DialogueData
         }
 
         // 오디오 클립 로드
-        bgm = new DialogSE(SEType.BGM, LoadAudioClipByName(bgmName));
-        se1 = new DialogSE(SEType.SE, LoadAudioClipByName(sfx1Name));
-        se2 = new DialogSE(SEType.SE, LoadAudioClipByName(sfx2Name));
+        bgm = LoadAudioAssetByName(bgmName);
+        se1 = LoadAudioAssetByName(sfx1Name);
+        se2 = LoadAudioAssetByName(sfx2Name);
 
     }
 
@@ -344,6 +326,11 @@ public class DialogueData
     protected AudioClip LoadAudioClipByName(string clipName)
     {
         return Resources.Load<AudioClip>($"Audio/{clipName}");
+    }
+
+    protected SoundAsset LoadAudioAssetByName(string clipName)
+    {
+        return Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
     }
 
 
