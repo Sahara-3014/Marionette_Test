@@ -57,13 +57,13 @@ public class InteractDebate_PausePanel : MonoBehaviour
         bgm.value = setting.BGMVolume;
         bgmLabel.text = $"{Mathf.FloorToInt(bgm.value * 100f)} %";
         var mixer = GetAudioMixer();
-        mixer.SetFloat(AudioMixerType.BGM.ToString(), Mathf.Log10(setting.BGMVolume));
+        mixer.SetFloat(AudioMixerType.BGM.ToString(), Mathf.Log10(setting.BGMVolume)*20);
         // TODO sfx setting
         sfx.maxValue = 1f;
         sfx.minValue = 0.0001f;
         sfx.value = setting.SFXVolume;
         sfxLabel.text = $"{Mathf.FloorToInt(sfx.value * 100f)} %";
-        mixer.SetFloat(AudioMixerType.SFX.ToString(), Mathf.Log10(setting.SFXVolume));
+        mixer.SetFloat(AudioMixerType.SFX.ToString(), Mathf.Log10(setting.SFXVolume)*20);
     }
 
     private void OnDisable()

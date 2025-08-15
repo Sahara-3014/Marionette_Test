@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SimpleJSON;
 using System.Linq;
+using UnityEngine.Events;
 
 
 public class GoogleSheetLoader : MonoBehaviour
@@ -18,6 +19,7 @@ public class GoogleSheetLoader : MonoBehaviour
     public int firstIDOfCurrentSheet;
     private int currentFixedIndex = 0;
     public bool usingBranching = false;
+    public Dictionary<string, float> progress;
 
     private string currentSheet = "";
 
@@ -73,13 +75,31 @@ public class GoogleSheetLoader : MonoBehaviour
         string url = $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
 
         UnityWebRequest www = UnityWebRequest.Get(url);
-        yield return www.SendWebRequest();
+        var operation = www.SendWebRequest();
+        if (progress != null && progress.ContainsKey($"LoadGoogleSheet[{sheetName}]"))
+        {
+            progress[$"LoadGoogleSheet[{sheetName}]"] = operation.progress;
+        }
+        else
+        {
+            if(progress == null)
+                progress = new();
+
+            progress.Add($"LoadGoogleSheet[{sheetName}]", operation.progress);
+        }
+
+        while (!operation.isDone)
+        {
+            progress[$"LoadGoogleSheet[{sheetName}]"] = operation.progress;
+            yield return null; // 비동기 대기
+        }
 
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError("시트 불러오기 실패: " + www.error);
             yield break;
         }
+        progress[$"LoadGoogleSheet[{sheetName}]"] = 1f;
 
         var json = JSON.Parse(www.downloadHandler.text);
         var values = json["values"];
@@ -131,7 +151,7 @@ public class GoogleSheetLoader : MonoBehaviour
         SaveDatabase.Instance.Set_Dialogs(combined);
 
         // 대화 시스템 딕셔너리 갱신
-        dialogueSystem.RefreshDialogueDict();
+        dialogueSystem?.RefreshDialogueDict();
 
         // --- 추가된 부분 끝 ---
 
@@ -139,6 +159,7 @@ public class GoogleSheetLoader : MonoBehaviour
         int startID = dialogueList[0].ID;
         firstIDOfCurrentSheet = startID;
         OnSheetLoaded?.Invoke();
+        progress.Remove($"LoadGoogleSheet[{sheetName}]"); // 로딩 완료 후 진행률 제거
     }
 
 
@@ -153,7 +174,7 @@ public class GoogleSheetLoader : MonoBehaviour
 
     async public void LoadInteractiveDebate()
     {
-        string range = "DEBATE1.2!A3:AI100";
+        string range = "CH1_DEBATE1.2!A3:AI100";
         // Google Sheets URL 설정
         string url = //$"https://docs.google.com/spreadsheets/d/{spreadsheetId}/export?format=csv&id={spreadsheetId}";
             $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
@@ -168,8 +189,19 @@ public class GoogleSheetLoader : MonoBehaviour
         // Google Sheets 데이터 불러오기
         UnityWebRequest www = UnityWebRequest.Get(url);
         var operation = www.SendWebRequest();
+        if (progress != null && progress.ContainsKey("LoadInteractiveDebate"))
+        {
+            progress["LoadInteractiveDebate"] = operation.progress;
+        }
+        else
+        {
+            if (progress == null)
+                progress = new();
+            progress.Add("LoadInteractiveDebate", operation.progress);
+        }
         while (!operation.isDone)
         {
+            progress["LoadInteractiveDebate"] = operation.progress;
             await System.Threading.Tasks.Task.Yield(); // 비동기 대기
         }
 
@@ -179,6 +211,7 @@ public class GoogleSheetLoader : MonoBehaviour
             Debug.LogError("데이터 불러오기 실패: " + www.error);
             return;
         }
+        progress["LoadInteractiveDebate"] = 1f;
         Debug.Log("데이터 성공: " + www.result + "\n" + www.downloadHandler.text);
 
         List<InteractiveDebate_DialogueData> list = new();
@@ -242,6 +275,7 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 데이터 저장
         SaveDatabase.Instance.Set_InteractiveDebateDialogs(data);
+        progress.Remove("LoadInteractiveDebate"); // 로딩 완료 후 진행률 제거
     }
 
 
