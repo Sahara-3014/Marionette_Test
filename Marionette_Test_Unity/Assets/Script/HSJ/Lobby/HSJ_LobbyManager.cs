@@ -187,4 +187,15 @@ public class HSJ_LobbyManager : MonoBehaviour
             audioMixer = audioMixerGroup.audioMixer;
         return audioMixer;
     }
+
+    public void ExitGame()
+    {
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        //#elif UNITY_WEBPLAYER
+        //        Application.OpenURL(webplayerQuitURL);
+        #else
+                Application.Quit();
+        #endif
+    }
 }
