@@ -1,7 +1,7 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
 using System.Collections;
 using System.Net.NetworkInformation;
@@ -9,7 +9,6 @@ public class Debate3GameManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Debate3ChoiceButton[] choiceButton;
-    
     public GameObject choicebuttons;
     public Image choicebutton0, choicebutton1, choicebutton2;
     public Image TimerCircle;
@@ -81,7 +80,7 @@ public class Debate3GameManager : MonoBehaviour
                     {
                         ChoicedAnswer = i;
                         
-                        if (NextRound == true)
+                        //if (NextRound == true)
                             StartCoroutine(ChoiceDialogue());
 
                         
@@ -91,7 +90,11 @@ public class Debate3GameManager : MonoBehaviour
                 if (currenttime > 0)
                     currenttime -= Time.deltaTime;
                 else if (currenttime < 0)
-                    currenttime = 0;
+                {
+                    Debug.Log("신뢰도 소모"); //신뢰도 소모 추가
+                    currenttime = 30; //다시 30초로
+                }
+                    
             }
             
         }
@@ -105,9 +108,15 @@ public class Debate3GameManager : MonoBehaviour
         {
             Debug.Log("Round" + CurrentRound + " 정답!");
             if (CurrentRound < MaxRound)
+            {
                 CurrentRound++;
+            }
+            else
+            {
+                Debug.Log("현 논쟁 파트 완료"); //다음 논쟁 파트로
+            }
 
-            DeselectAllChoiceButtons();
+                DeselectAllChoiceButtons();
             currenttime = timeLimit;
 
             c1 = true; c2 = true; c3 = true;
@@ -119,6 +128,7 @@ public class Debate3GameManager : MonoBehaviour
         else
         {
             Debug.Log("Round" + CurrentRound + " 오답!");
+            Debug.Log("신뢰도 소모"); //신뢰도 소모 추가
 
             switch (ChoicedAnswer)
             {
@@ -171,7 +181,7 @@ public class Debate3GameManager : MonoBehaviour
 
     public IEnumerator RoundStartDialogue()
     {
-        HideAllChoiceButtons(); //choiceAppear = false;
+        HideAllChoiceButtons();
         // 대사 해야하는 게 라운드 시작 때 그리고 답 선택 때
         for (int i = roundStartDialogueStartNum[CurrentRound]; i <= roundStartDialogueEndNum[CurrentRound]; i++)
         {
@@ -186,12 +196,12 @@ public class Debate3GameManager : MonoBehaviour
         ProText2Box.text = ProText2[CurrentRound];
         ProText3Box.text = ProText3[CurrentRound];
 
-        ShowAllChoiceButtons(); //choiceAppear = true;
+        ShowAllChoiceButtons();
     }
 
     public IEnumerator ChoiceDialogue()
     {
-        HideAllChoiceButtons(); //choiceAppear = false;
+        HideAllChoiceButtons();
         NextRound = false;
         int i = CurrentRound * 3 + ChoicedAnswer;
         for(int j = choiceDialogueStartNum[i]; j <= choiceDialogueEndNum[i]; j++)

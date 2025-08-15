@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: b0acd7e3e2a87524184eb2b85fbf90ec
+guid: ca42ebcf077b3da4f8639b2ab380ea45
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5090892696396447281
-    second: Dialogue System UI2_0
+      213: 2481962778762213042
+    second: Inventory Icon UI0_0
+  - first:
+      213: 5734981523754732669
+    second: Inventory Icon UI0_1
+  - first:
+      213: -6853921888044967205
+    second: Inventory Icon UI0_2
+  - first:
+      213: 2704124614252065180
+    second: Inventory Icon UI0_3
+  - first:
+      213: 2564429083096635738
+    second: Inventory Icon UI0_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,7 +84,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -109,53 +121,93 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Dialogue System UI2_0
+      name: Inventory Icon UI0_0
       rect:
         serializedVersion: 2
-        x: 229
-        y: 128
-        width: 3147
-        height: 841
+        x: 211
+        y: 1339
+        width: 338
+        height: 692
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 13e37564feb76a640800000000000000
-      internalID: 5090892696396447281
+      spriteID: 2b6fcdd4ff3b17220800000000000000
+      internalID: 2481962778762213042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Inventory Icon UI0_2
+      rect:
+        serializedVersion: 2
+        x: 1810
+        y: 254
+        width: 710
+        height: 228
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bda1ec04b5af1e0a0800000000000000
+      internalID: -6853921888044967205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Inventory Icon UI0_3
+      rect:
+        serializedVersion: 2
+        x: 2743
+        y: 79
+        width: 352
+        height: 545
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9172e4720bf68520800000000000000
+      internalID: 2704124614252065180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Inventory Icon UI0_4
+      rect:
+        serializedVersion: 2
+        x: 3322
+        y: 111
+        width: 354
+        height: 369
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a59d7a50aaea69320800000000000000
+      internalID: 2564429083096635738
       vertices: []
       indices: 
       edges: []
@@ -164,7 +216,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f7d8fbaa548740f4486a680ec7f21608
     internalID: 0
     vertices: []
     indices: 
@@ -174,7 +226,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Dialogue System UI2_0: 5090892696396447281
+      Inventory Icon UI0_0: 2481962778762213042
+      Inventory Icon UI0_2: -6853921888044967205
+      Inventory Icon UI0_3: 2704124614252065180
+      Inventory Icon UI0_4: 2564429083096635738
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
