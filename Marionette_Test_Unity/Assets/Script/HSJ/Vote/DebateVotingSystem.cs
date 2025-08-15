@@ -31,21 +31,24 @@ public class DebateVotingSystem : MonoBehaviour
 
     async public void AddVoteToCharacters(List<int> voteIndexs, UnityAction callback = null)
     {
-        
+
         List<int> charVotes = new();
-        for(int i=0;i<charVotingGauge.Length;i++)
+        for (int i = 0; i < charVotingGauge.Length; i++)
         {
             charVotingGauge[i].sizeDelta = new Vector2(0f, charVotingGauge[i].sizeDelta.y);
             charVotes.Add(0);
         }
 
-        for (int i=0;i<voteIndexs.Count;i++)
+        for (int i = 0; i < voteIndexs.Count; i++)
         {
             charVotes[voteIndexs[i]] += 1;
-            for (int j=0;j<charVotingGauge.Length;j++)
+            for (int j = 0; j < charVotingGauge.Length; j++)
             {
                 //Debug.Log($"{j}번째 {charVotes[i]}번 캐릭터 투표: {charVotes[j]} / {voteIndexs.Count}");
-                ChangeVoteGauge(j, charVotes[j], charVotes.Sum());
+                if ((j == voteIndexs[i] && IsSelectedSlot(j) == false) ||
+                    (j != voteIndexs[i] && IsSelectedSlot(j) == true))
+                    ToggleSelectPanel(j);
+                ChangeVoteGauge(j, charVotes[j], charVotingGauge.Length);
             }
             await Task.Delay(TimeSpan.FromSeconds(1f));
         }
@@ -53,7 +56,7 @@ public class DebateVotingSystem : MonoBehaviour
         callback?.Invoke();
     }
 
-    void ChangeVoteGauge(int charIndex, int nowCharVote, int max, UnityAction callback = null)
+    public void ChangeVoteGauge(int charIndex, int nowCharVote, int max, UnityAction callback = null)
     {
         float _maxGauge = charVotingGauge[charIndex].parent.GetComponent<RectTransform>().rect.width;
         _maxGauge -= (charVotingGauge[charIndex].anchoredPosition.x * 2f);
@@ -67,10 +70,10 @@ public class DebateVotingSystem : MonoBehaviour
     public void ToggleSelectPanel(int index)
     {
         // 예외처리
-        if (index <= 0 || index >= charVotingGauge.Length)
+        if (index < 0 || index >= charVotingGauge.Length)
             return;
         // 죽은사람 투표X
-        if (charVotingGauge[index].transform.parent.parent.GetChild(0).GetChild(0).gameObject.activeSelf)
+        if (IsDeadedSlot(index))
             return;
 
         GameObject selectObj = charVotingGauge[index].transform.parent.parent.GetChild(0).GetChild(1).gameObject;
@@ -84,9 +87,17 @@ public class DebateVotingSystem : MonoBehaviour
         deadObj.SetActive(!deadObj.activeSelf);
     }
 
+    public bool IsDeadedSlot(int index)
+    {
+        if (index < 0 || index >= charVotingGauge.Length)
+            return false;
+        GameObject selectObj = charVotingGauge[index].transform.parent.parent.GetChild(0).GetChild(0).gameObject;
+        return selectObj.activeSelf;
+    }
+
     public int IsSelectedCharacter()
     {
-        for(int i=0;i<charVotingGauge.Length;i++)
+        for (int i = 0; i < charVotingGauge.Length; i++)
         {
             GameObject selectObj = charVotingGauge[i].transform.parent.parent.GetChild(0).GetChild(1).gameObject;
 
@@ -97,10 +108,18 @@ public class DebateVotingSystem : MonoBehaviour
         return -1; // 선택된 캐릭터가 없음
     }
 
+    public bool IsSelectedSlot(int index)
+    {
+        if (index < 0 || index >= charVotingGauge.Length)
+            return false;
+        GameObject selectObj = charVotingGauge[index].transform.parent.parent.GetChild(0).GetChild(1).gameObject;
+        return selectObj.activeSelf;
+    }
+
+
+
     public void TempVoteAction()
     {
-        ToggleDeadPanel(0);
-
         AddVoteToCharacters(tempVote, () =>
         {
             int index = tempVote.Max();

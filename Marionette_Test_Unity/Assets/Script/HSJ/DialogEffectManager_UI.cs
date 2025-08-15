@@ -292,7 +292,7 @@ public class DialogEffectManager_UI : MonoBehaviour
         //target.color = new Color(color.r, color.g, color.b, 1f);
 
         target.color = new Color(target.color.r, target.color.g, target.color.b, 0f);
-        target.DOFade(1f, fadeDuration).OnComplete(() => callback?.Invoke());
+        //target.DOFade(1f, fadeDuration).OnComplete(() => callback?.Invoke());
         yield break;
     }
 

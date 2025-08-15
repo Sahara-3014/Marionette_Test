@@ -1,11 +1,11 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
 using System.Collections;
 using System.Net.NetworkInformation;
-public class PrintText : MonoBehaviour
+public class Debate3GameManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Debate3ChoiceButton[] choiceButton;
@@ -22,12 +22,13 @@ public class PrintText : MonoBehaviour
     public int[] roundStartDialogueStartNum, roundStartDialogueEndNum, choiceDialogueStartNum, choiceDialogueEndNum;
     public string[] ProText1, ProText2, ProText3;
     public TMP_Text OppTextBox, ProTextBox, ProText1Box, ProText2Box, ProText3Box, TimerTextBox;
-    private bool roundStart, choiceAppear;
+    public static bool roundStart;
     private bool c1, c2, c3;
     public float timeLimit;
     private float currenttime;
     public Animator TimerUIanimator;
     public Animator BGanimator;
+    public Animator ChoiceButtonsAnimator;
 
     public float textdelay;
     public float linedelay;
@@ -42,7 +43,7 @@ public class PrintText : MonoBehaviour
         currenttime = timeLimit;
         NextRound = true;
         roundStart = true;
-        choiceAppear = false;
+        
         c1 = true; c2 = true; c3 = true;
         
     }
@@ -55,10 +56,6 @@ public class PrintText : MonoBehaviour
         {
             TimerUIanimator.enabled = false;
             BGanimator.SetBool("Intro", false);
-            if (choiceAppear)
-                ShowAllChoiceButtons();
-            else
-                HideAllChoiceButtons();
 
             if (NextRound == true)
             {
@@ -67,17 +64,10 @@ public class PrintText : MonoBehaviour
                 {
                     roundStart = false;
                     StartCoroutine(RoundStartDialogue());
-                    
                 }
-                
-
 
                 Debug.Log("Round:" + CurrentRound);
 
-                /*OppTextBox.text = OppText[CurrentRound];
-                 ProTextBox.text = ProText[CurrentRound];*/
-
-            
                 string myString = Mathf.FloorToInt(currenttime).ToString();
                 if (currenttime < 0)
                     TimerTextBox.text = "0";
@@ -90,19 +80,23 @@ public class PrintText : MonoBehaviour
                     {
                         ChoicedAnswer = i;
                         
-                        if (NextRound == true)
+                        //if (NextRound == true)
                             StartCoroutine(ChoiceDialogue());
 
                         
                     }
                 }
+
+                if (currenttime > 0)
+                    currenttime -= Time.deltaTime;
+                else if (currenttime < 0)
+                {
+                    Debug.Log("신뢰도 소모"); //신뢰도 소모 추가
+                    currenttime = 30; //다시 30초로
+                }
+                    
             }
-
-            if (currenttime > 0)
-                currenttime -= Time.deltaTime;
-            else if (currenttime < 0)
-                currenttime = 0;
-
+            
         }
 
     }
@@ -110,14 +104,19 @@ public class PrintText : MonoBehaviour
 
     public void CheckAnswer()
     {
-        
         if (choiceButton[CorrectAnswer[CurrentRound]].thischoiceButtonSelected == true)
         {
             Debug.Log("Round" + CurrentRound + " 정답!");
             if (CurrentRound < MaxRound)
+            {
                 CurrentRound++;
+            }
+            else
+            {
+                Debug.Log("현 논쟁 파트 완료"); //다음 논쟁 파트로
+            }
 
-            DeselectAllChoiceButtons();
+                DeselectAllChoiceButtons();
             currenttime = timeLimit;
 
             c1 = true; c2 = true; c3 = true;
@@ -129,6 +128,7 @@ public class PrintText : MonoBehaviour
         else
         {
             Debug.Log("Round" + CurrentRound + " 오답!");
+            Debug.Log("신뢰도 소모"); //신뢰도 소모 추가
 
             switch (ChoicedAnswer)
             {
@@ -143,10 +143,9 @@ public class PrintText : MonoBehaviour
                     break;
             }
 
-
             DeselectAllChoiceButtons();
             currenttime = timeLimit;
-            choiceAppear = true;
+            ShowAllChoiceButtons(); //choiceAppear = true;
             NextRound = true;
         }
     }
@@ -161,7 +160,9 @@ public class PrintText : MonoBehaviour
     }
     public void ShowAllChoiceButtons()
     {
-        if(c1 == true)
+        ChoiceButtonsAnimator.Play("ChoiceButton_Appear");
+
+        if (c1 == true)
             choicebutton0.gameObject.SetActive(true);
 
         if (c2 == true)
@@ -169,6 +170,7 @@ public class PrintText : MonoBehaviour
 
         if (c3 == true)
             choicebutton2.gameObject.SetActive(true);
+        
     }
     public void HideAllChoiceButtons()
     {
@@ -179,7 +181,7 @@ public class PrintText : MonoBehaviour
 
     public IEnumerator RoundStartDialogue()
     {
-        choiceAppear = false;
+        HideAllChoiceButtons();
         // 대사 해야하는 게 라운드 시작 때 그리고 답 선택 때
         for (int i = roundStartDialogueStartNum[CurrentRound]; i <= roundStartDialogueEndNum[CurrentRound]; i++)
         {
@@ -194,15 +196,15 @@ public class PrintText : MonoBehaviour
         ProText2Box.text = ProText2[CurrentRound];
         ProText3Box.text = ProText3[CurrentRound];
 
-        choiceAppear = true;
+        ShowAllChoiceButtons();
     }
 
     public IEnumerator ChoiceDialogue()
     {
-        choiceAppear = false;
+        HideAllChoiceButtons();
         NextRound = false;
         int i = CurrentRound * 3 + ChoicedAnswer;
-        for (int j = choiceDialogueStartNum[i]; j <= choiceDialogueEndNum[i]; j++)
+        for(int j = choiceDialogueStartNum[i]; j <= choiceDialogueEndNum[i]; j++)
         {
             Debug.Log("Print ChoiceDialogue Text" + j);
             yield return StartCoroutine(PrintingText(OppText[j], OppTextBox));
@@ -216,7 +218,7 @@ public class PrintText : MonoBehaviour
     IEnumerator PrintingText(string printText, TMP_Text TextBox)
     {
         TextBox.text = "";
-        foreach (char letter in printText.ToCharArray())
+        foreach(char letter in printText.ToCharArray())
         {
             if (letter == '\\')
             {
@@ -229,4 +231,6 @@ public class PrintText : MonoBehaviour
             yield return new WaitForSeconds(textdelay);
         }
     }
+
+
 }

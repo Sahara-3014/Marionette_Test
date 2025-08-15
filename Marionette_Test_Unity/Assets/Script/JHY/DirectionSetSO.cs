@@ -18,8 +18,10 @@ public class DirectionSetSO : ScriptableObject
 {
 
 
-    [Header("이 세트에 포함될 이펙트 목록")]
+    [Header("구 버전 (단순 재생)")]
     public List<EffectType> particlesToPlay;
+    [Header("신 버전 (파라미터 오버라이드 지원)")]
+    public List<EffectExecutionData> effectsToPlayWithOverrides;
     public List<PostProcessingEffectType> postProcessingsToEnable;
 
     [Header("효과 전환 시간")]
