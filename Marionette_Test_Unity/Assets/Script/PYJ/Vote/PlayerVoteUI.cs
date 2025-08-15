@@ -14,6 +14,11 @@ public class PlayerVoteUI : MonoBehaviour
     private VoteManager voteManager;
     private Button backgroundButton;
 
+
+
+
+
+
     /// <summary>
     /// 플레이어 투표 UI 세팅
     /// </summary>
@@ -50,9 +55,10 @@ public class PlayerVoteUI : MonoBehaviour
             voteManager.OnVoteButtonClicked(playerName);
         });
 
-        // 자기 자신은 클릭 못 하게 할 수도 있음 (선택사항)
-        // if (isSelf) backgroundButton.interactable = false;
     }
+
+
+
 
     /// <summary>
     /// 투표 가능 상태로 변경
@@ -62,6 +68,10 @@ public class PlayerVoteUI : MonoBehaviour
         if (backgroundButton != null)
             backgroundButton.interactable = true;
     }
+
+
+
+
 
     /// <summary>
     /// 투표 수 증가 및 UI 반영
@@ -79,6 +89,8 @@ public class PlayerVoteUI : MonoBehaviour
         if (backgroundButton != null)
             backgroundButton.interactable = false;
     }
+
+
 
     public void SetVoteCount(int count)
     {

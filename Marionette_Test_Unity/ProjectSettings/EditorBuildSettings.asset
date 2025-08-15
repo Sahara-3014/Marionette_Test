@@ -18,8 +18,11 @@ EditorBuildSettings:
     path: Assets/Scenes/HSJ/HSJ_CWJ_Investigate.unity
     guid: 8f84c520ebbd84144aad04a8301d9065
   - enabled: 1
-    path: Assets/Scenes/CWJ/CWJ_Debate.unity
+    path: Assets/Scenes/CWJ/CWJ_Debate3.unity
     guid: 2f6ca4a2c1b2bc44695914f49735e41c
+  - enabled: 1
+    path: Assets/Scenes/CWJ/CWJ_Debate4.unity
+    guid: f8181e3997b7f5d4c8c9dfc3881ecdd8
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
