@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -14,6 +15,10 @@ public class HSJ_LobbyManager : MonoBehaviour
 
     [SerializeField] string startSceneName = "Intro"; // The name of the scene to load
     [SerializeField] string loadSceneName = "Intro"; // The name of the scene to load
+
+    AudioMixerGroup audioMixerGroup;
+    AudioMixer audioMixer;
+    DialogSoundManager soundManager;
 
     private void Start()
     {
@@ -125,6 +130,23 @@ public class HSJ_LobbyManager : MonoBehaviour
         
         int value = Mathf.FloorToInt(slider.value * 100);
         label.text = $"{value}%";
+
+        var mixer = GetAudioMixer();
+        mixer.SetFloat(isBGM ? AudioMixerType.BGM.ToString() : AudioMixerType.SFX.ToString(), Mathf.Log10(isBGM ? setting.BGMVolume : setting.SFXVolume)*20);
+
+        if (soundManager == null)
+            soundManager = DialogSoundManager.Instance;
+        if (isBGM)
+        {
+            if (!soundManager.bgmSource.isPlaying)
+                soundManager.bgmSource.Play();
+        }
+        else
+        {
+            if (soundManager.seSource2.isPlaying)
+                soundManager.seSource2.Stop();
+            soundManager.seSource2.Play();
+        }
     }
 
     public void OpenSavePanel(bool isNew)
@@ -155,5 +177,14 @@ public class HSJ_LobbyManager : MonoBehaviour
     {
         panels[0].SetActive(true);
         panels[2].SetActive(false);
+    }
+
+    public AudioMixer GetAudioMixer()
+    {
+        if(audioMixerGroup == null)
+            audioMixerGroup = Resources.Load<AudioMixerGroup>("MasterAudioMixer");
+        if (audioMixer == null)
+            audioMixer = audioMixerGroup.audioMixer;
+        return audioMixer;
     }
 }
