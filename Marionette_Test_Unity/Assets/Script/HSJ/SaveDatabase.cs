@@ -19,6 +19,7 @@ public class SaveDatabase : MonoBehaviour
     private Dictionary<int, DialogueData[]> dialogs;
     private Dictionary<int, InteractiveDebate_DialogueData[]> interactiveDebateDialogs;
     private Dictionary<int, ConfrontationDebate_DialogueData[]> confrontationDebateDialogs;
+    private Dictionary<int, Investigate_DialogueData[]> investigateDialogs;
 
 
     #region 씬 이동 이벤트
@@ -80,25 +81,52 @@ public class SaveDatabase : MonoBehaviour
         dayCycleSystem?.RigisterDayChangeEvent(SaveData_SetDayNum);
         dayCycleSystem?.RigisterTimeChangeEvent(SaveData_SetGameTime);
 
+        // intro start chapter1
         string dialogStr = TextLoad("Dialog");
         try
         {
-            dialogs = JsonConvert.DeserializeObject<Dictionary<int, DialogueData[]>>(dialogStr);
+            dialogs = JsonUtility.FromJson<Dictionary<int, DialogueData[]>>(dialogStr);
         }
         catch (Exception e)
         {
             Debug.Log("대화 데이터 로드 실패: " + e.Message);
             dialogs = null;
         }
-        string interactiveDebateStr = TextLoad("Dialog_InteractiveDebate");
+
+        // 탐색
+        string investigateStr = TextLoad("Dialog_Investigate");
         try
         {
-            interactiveDebateDialogs = JsonConvert.DeserializeObject<Dictionary<int, InteractiveDebate_DialogueData[]>>(interactiveDebateStr);
+            investigateDialogs = JsonUtility.FromJson<Dictionary<int, Investigate_DialogueData[]>>(investigateStr);
         }
         catch (Exception e)
         {
-            Debug.Log("논쟁 대화 데이터 로드 실패: " + e.Message);
+            Debug.Log("탐색 대화 데이터 로드 실패: " + e.Message);
+            investigateDialogs = null;
+        }
+
+        // 논쟁1.2
+        string interactiveDebateStr = TextLoad("Dialog_InteractiveDebate");
+        try
+        {
+            interactiveDebateDialogs = JsonUtility.FromJson<Dictionary<int, InteractiveDebate_DialogueData[]>>(interactiveDebateStr);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("논쟁1.2 대화 데이터 로드 실패: " + e.Message);
             interactiveDebateDialogs = null;
+        }
+
+        // 논쟁3
+        string confrontationDebateStr = TextLoad("Dialog_ConfrontationDebate");
+        try
+        {
+            confrontationDebateDialogs = JsonUtility.FromJson<Dictionary<int, ConfrontationDebate_DialogueData[]>>(interactiveDebateStr);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("논쟁3 대화 데이터 로드 실패: " + e.Message);
+            confrontationDebateDialogs = null;
         }
     }
 
@@ -116,7 +144,7 @@ public class SaveDatabase : MonoBehaviour
 
             try
             {
-                var dic = JsonConvert.DeserializeObject<Dictionary<int, DialogueData[]>>(text);
+                var dic = JsonUtility.FromJson<Dictionary<int, DialogueData[]>>(text);
 
                 dialogs = dic;
             }
@@ -147,27 +175,22 @@ public class SaveDatabase : MonoBehaviour
 
     public void Set_Dialogs(Dictionary<int, DialogueData[]> dialogs)
     {
-        //if(this.dialogs != null)
-        //{
-        //    foreach(var dialog in dialogs)
-        //    {
-        //        if (this.dialogs.ContainsKey(dialog.Key) == false)
-        //            this.dialogs.Add(dialog.Key, dialog.Value);
-        //        else
-        //        {
-        //            if (this.dialogs[dialog.Key].Length != dialog.Value.Length)
-        //                this.dialogs[dialog.Key] = dialog.Value;
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    this.dialogs = dialogs;
-        //}
+        if(this.dialogs != null)
+        {
+            foreach (var dialog in dialogs)
+            {
+                if (this.dialogs.ContainsKey(dialog.Key) == false)
+                    this.dialogs.Add(dialog.Key, dialog.Value);
+                else
+                    this.dialogs[dialog.Key] = dialog.Value;
+            }
+        }
+        else
+        {
+            this.dialogs = dialogs;
+        }
 
-        this.dialogs = dialogs;
-
-        TextSave("Dialog.json", JsonConvert.SerializeObject(this.dialogs));
+        TextSave("Dialog.json", JsonUtility.ToJson(this.dialogs));
     }
 
     public Dictionary<int, DialogueData[]> GetDialogs() => dialogs;
@@ -184,7 +207,7 @@ public class SaveDatabase : MonoBehaviour
 
             try
             {
-                var dic = JsonConvert.DeserializeObject<Dictionary<int, InteractiveDebate_DialogueData[]>>(text);
+                var dic = JsonUtility.FromJson<Dictionary<int, InteractiveDebate_DialogueData[]>>(text);
 
                 interactiveDebateDialogs = dic;
             }
@@ -198,7 +221,6 @@ public class SaveDatabase : MonoBehaviour
 
         if (interactiveDebateDialogs.ContainsKey(id))
             return interactiveDebateDialogs[id];
-
         else
             return null;
     }
@@ -216,24 +238,22 @@ public class SaveDatabase : MonoBehaviour
 
     public void Set_InteractiveDebateDialogs(Dictionary<int, InteractiveDebate_DialogueData[]> dialogs)
     {
-        //if (this.interactiveDebateDialogs != null)
-        //{
-        //    foreach (var dialog in dialogs)
-        //    {
-        //        if (this.interactiveDebateDialogs.ContainsKey(dialog.Key) == false)
-        //            this.interactiveDebateDialogs.Add(dialog.Key, dialog.Value);
-        //        else
-        //            this.interactiveDebateDialogs[dialog.Key] = dialog.Value;
-        //    }
-        //}
-        //else
-        //{
-        //    this.interactiveDebateDialogs = dialogs;
-        //}
+        if (this.interactiveDebateDialogs != null)
+        {
+            foreach (var dialog in dialogs)
+            {
+                if (this.interactiveDebateDialogs.ContainsKey(dialog.Key) == false)
+                    this.interactiveDebateDialogs.Add(dialog.Key, dialog.Value);
+                else
+                    this.interactiveDebateDialogs[dialog.Key] = dialog.Value;
+            }
+        }
+        else
+        {
+            this.interactiveDebateDialogs = dialogs;
+        }
 
-        this.interactiveDebateDialogs = dialogs;
-
-        TextSave("Dialog_InteractiveDebate.json", JsonConvert.SerializeObject(this.interactiveDebateDialogs));
+        TextSave("Dialog_InteractiveDebate.json", JsonUtility.ToJson(this.interactiveDebateDialogs));
     }
 
     public ConfrontationDebate_DialogueData[] Get_ConfrontationDebateDialogs_NeedID(int id)
@@ -244,7 +264,7 @@ public class SaveDatabase : MonoBehaviour
             if (text == null)
                 return null;
 
-            var dic = JsonConvert.DeserializeObject<Dictionary<int, ConfrontationDebate_DialogueData[]>>(text);
+            var dic = JsonUtility.FromJson<Dictionary<int, ConfrontationDebate_DialogueData[]>>(text);
 
             confrontationDebateDialogs = dic;
         }
@@ -274,9 +294,9 @@ public class SaveDatabase : MonoBehaviour
             foreach (var dialog in dialogs)
             {
                 if (this.confrontationDebateDialogs.ContainsKey(dialog.Key) == false)
-                    dialogs.Add(dialog.Key, dialog.Value);
+                    this.confrontationDebateDialogs.Add(dialog.Key, dialog.Value);
                 else
-                    dialogs[dialog.Key] = dialog.Value;
+                    this.confrontationDebateDialogs[dialog.Key] = dialog.Value;
             }
         }
         else
@@ -284,7 +304,58 @@ public class SaveDatabase : MonoBehaviour
             this.confrontationDebateDialogs = dialogs;
         }
 
-        TextSave("Dialog_ConfrontationDebate.json", JsonConvert.SerializeObject(this.confrontationDebateDialogs));
+        TextSave("Dialog_ConfrontationDebate.json", JsonUtility.ToJson(this.confrontationDebateDialogs));
+    }
+
+    public Investigate_DialogueData[] Get_InvestigateDialogs_NeedID(int id)
+    {
+        if (investigateDialogs == null)
+        {
+            string text = TextLoad("Dialog_Investigate");
+            if (text == null)
+                return null;
+
+            var dic = JsonUtility.FromJson<Dictionary<int, Investigate_DialogueData[]>>(text);
+
+            investigateDialogs = dic;
+        }
+
+        if (investigateDialogs.ContainsKey(id))
+            return investigateDialogs[id];
+
+        else
+            return null;
+    }
+
+    public void Add_InvestigateDialogs_NeedID(int id, Investigate_DialogueData[] data)
+    {
+        if (investigateDialogs == null)
+            investigateDialogs = new();
+
+        if (investigateDialogs.ContainsKey(id) == false)
+            investigateDialogs.Add(id, data);
+        else
+            investigateDialogs[id] = data;
+    }
+
+    public void Set_InvestigateDialogs(Dictionary<int, Investigate_DialogueData[]> dialogs)
+    {
+        if (this.investigateDialogs != null)
+        {
+            foreach (var dialog in dialogs)
+            {
+                if (this.investigateDialogs.ContainsKey(dialog.Key) == false)
+                    dialogs.Add(dialog.Key, dialog.Value);
+                else
+                    dialogs[dialog.Key] = dialog.Value;
+            }
+        }
+        else
+        {
+            this.investigateDialogs = dialogs;
+        }
+
+        TextSave("Dialog_Investigate.json", JsonUtility.ToJson(this.investigateDialogs));
     }
     #endregion
 

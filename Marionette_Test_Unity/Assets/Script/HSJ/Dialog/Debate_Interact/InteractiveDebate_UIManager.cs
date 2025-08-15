@@ -148,7 +148,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         int index = scrollSnap.NumberOfPanels;
         scrollSnap.Add(dialogPrefab, index, true);
         GameObject dialogObj = scrollSnap.Content.GetChild(index).gameObject;
-        TextMeshProUGUI nameLabel = dialogObj.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI nameLabel = dialogObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI dialogLabel = dialogObj.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         
         nameLabel.text = name;

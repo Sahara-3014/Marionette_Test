@@ -139,7 +139,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
 
         if (debateData.BGM != null)
         {
-            bool isBGMEqual = (bgmAudio.clip == null ? "" : bgmAudio.clip.name) == (debateData.BGM == null ? "" : debateData.BGM.clip == null ? "" : debateData.BGM.clip.name);
+            bool isBGMEqual = (bgmAudio.clip == null ? "" : bgmAudio.clip.name) == (debateData.BGM == null ? "" : debateData.BGM.dialogSE.clip == null ? "" : debateData.BGM.dialogSE.clip.name);
             switch (debateData.BGM_EFFECT)
             {
                 // 1
@@ -148,8 +148,8 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
                         bgmAudio.loop = false;
                     if (bgmAudio.isPlaying)
                         bgmAudio.Stop();
-                    bgmAudio.clip = debateData.BGM.clip;
-                    bgmAudio.volume = debateData.BGM.volume;
+                    bgmAudio.clip = debateData.BGM.dialogSE.clip;
+                    bgmAudio.volume = debateData.BGM.dialogSE.volume;
                     bgmAudio.Play();
                     break;
 
@@ -159,7 +159,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
                         bgmAudio.loop = false;
                     if (bgmAudio.isPlaying)
                         bgmAudio.Stop();
-                    bgmAudio.clip = debateData.BGM.clip;
+                    bgmAudio.clip = debateData.BGM.dialogSE.clip;
                     bgmAudio.volume = 0f;
                     bgmAudio.Play();
                     bgmAudio.DOFade(bgmAudio.volume, .5f);
@@ -174,7 +174,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
                         bgmAudio.DOFade(0f, .5f).OnComplete(() =>
                         {
                             bgmAudio.Stop();
-                            bgmAudio.clip = debateData.BGM.clip;
+                            bgmAudio.clip = debateData.BGM.dialogSE.clip;
                             bgmAudio.Play();
                             bgmAudio.DOFade(bgmAudio.volume, .5f);
                         });
@@ -182,7 +182,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
                     else
                     {
                         bgmAudio.volume = 0f;
-                        bgmAudio.clip = debateData.BGM.clip;
+                        bgmAudio.clip = debateData.BGM.dialogSE.clip;
                         bgmAudio.Play();
                         bgmAudio.DOFade(bgmAudio.volume, .5f);
                     }
@@ -192,12 +192,12 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
                     if (bgmAudio.isPlaying)
                         bgmAudio.Stop();
                     bgmAudio.loop = true;
-                    bgmAudio.volume = debateData.BGM.volume;
-                    bgmAudio.clip = debateData.BGM.clip;
+                    bgmAudio.volume = debateData.BGM.dialogSE.volume;
+                    bgmAudio.clip = debateData.BGM.dialogSE.clip;
                     bgmAudio.Play();
                     break;
             }
-            bgmAudio.clip = debateData.BGM.clip;
+            bgmAudio.clip = debateData.BGM.dialogSE.clip;
 
             if (nextProductionCoroutine == null)
                 nextProductionCoroutine = new Coroutine[4];
@@ -233,7 +233,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         Debug.Log($"debateData: {nextProductionCoroutine[0] == null}");
 
         // TODO se1재생
-        SEPlayEffect(se1Audio, debateData.SE1, debateData.SE1_EFFECT);
+        SEPlayEffect(se1Audio, debateData.SE1.dialogSE, debateData.SE1_EFFECT);
         // TODO 기다리고 바로 실행하기
         while(!isComplete)
         {
@@ -260,7 +260,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answer));
 
         // TODO se2재생
-        SEPlayEffect(se2Audio, debateData.SE2, debateData.SE2_EFFECT);
+        SEPlayEffect(se2Audio, debateData.SE2.dialogSE, debateData.SE2_EFFECT);
 
         // TODO 기다리고 바로 실행하기
         Debug.Log("Step3 Waiting");

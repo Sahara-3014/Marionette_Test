@@ -177,6 +177,9 @@ public class HSJ_LobbyManager : MonoBehaviour
     {
         panels[0].SetActive(true);
         panels[2].SetActive(false);
+
+        if(soundManager.bgmSource.isPlaying)
+            soundManager.bgmSource.Stop();
     }
 
     public AudioMixer GetAudioMixer()

@@ -2,7 +2,7 @@ using SimpleJSON;
 using System;
 using UnityEngine;
 
-public class InteractiveDebate_DialogueData
+public class ConfrontationDebate_DialogueData
 {
     enum SheetIndex
     {
@@ -78,7 +78,7 @@ public class InteractiveDebate_DialogueData
 
     #region First Action
     /// <summary> BGM </summary>
-    public DialogSE BGM { get; protected set; }
+    public SoundAsset BGM { get; protected set; }
     /// <summary> BGM 효과 </summary>
     public DialogSoundPlayType BGM_EFFECT { get; protected set; }
     #endregion
@@ -92,7 +92,7 @@ public class InteractiveDebate_DialogueData
     public Sprite CG { get; protected set; }
 
     /// <summary> 화자 대화 시작시 효과음 </summary>
-    public DialogSE SE1 { get; protected set; }
+    public SoundAsset SE1 { get; protected set; }
     /// <summary>  </summary>
     public int SE1_EFFECT { get; protected set; } = 1;
     public float SE1_Delay { get; protected set; } = default; // SE1 재생 딜레이
@@ -122,7 +122,7 @@ public class InteractiveDebate_DialogueData
     public Dialog_CharEffect CH3_EFFECT { get; protected set; } = Dialog_CharEffect.None; // 캐릭터3 효과
 
     // 효과음
-    public DialogSE SE2 { get; protected set; }
+    public SoundAsset SE2 { get; protected set; }
     public int SE2_EFFECT { get; protected set; } = 1;
     public float SE2_Delay { get; protected set; } = default; // SE1 재생 딜레이
     #endregion
@@ -139,13 +139,13 @@ public class InteractiveDebate_DialogueData
 
     #endregion
 
-    public InteractiveDebate_DialogueData(JSONNode nod)
+    public ConfrontationDebate_DialogueData(JSONNode nod)
     {
         this.node = nod;
         SetProperty();
     }
 
-    public InteractiveDebate_DialogueData(string[] row)
+    public ConfrontationDebate_DialogueData(string[] row)
     {
         //for(int i=0;i<row.Length; i++) 
         //    Debug.Log($"{i} : {row[i]}");
@@ -156,95 +156,45 @@ public class InteractiveDebate_DialogueData
 
     void SetProperty()
     {
-        int _index = 0;
-        try
-        {
-            this.ID = int.Parse(GetText(_index));
-            _index += 1;
-            this.INDEX = int.Parse(GetText(_index));
-            _index += 1;
+        this.ID = int.Parse(GetText(0));
+        this.INDEX = int.Parse(GetText(1));
 
-            if (!int.TryParse(GetText(_index), out int nextId))
-                this.NEXT_ID = -100; // 예외 발생시 기본값 0으로 설정
-            _index += 1;
+        if (!int.TryParse(GetText(2), out int nextId))
+            this.NEXT_ID = -100; // 예외 발생시 기본값 0으로 설정
 
-            this.TARGET_NAME = GetText(_index);
-            _index += 1;
-            this.TARGET_EMOTION = GetText(_index);
-            _index += 1;
-            this.TARGET_INTERACT = GetText(_index);
-            _index += 1;
-            this.TARGET_EFFECT = (Dialog_CharEffect)int.Parse(GetText(_index) == "" ? "1" : GetText(_index));
-            _index += 1;
 
-            this.SPEAKER = GetText(_index);
-            _index += 1;
-            this.DIALOGUE = GetText(_index);
-            _index += 1;
+        this.TARGET_NAME = GetText(3);
+        this.TARGET_EMOTION = GetText(4);
+        this.TARGET_INTERACT = GetText(5);
+        this.TARGET_EFFECT = (Dialog_CharEffect)int.Parse(GetText(6) == "" ? "1" : GetText(6));
 
-            this.BGM = new(type: SEType.BGM, clip: GetText(_index) == "" ? null : LoadAudioClipByName(GetText(_index)));
-            _index += 1;
-            this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
+        this.SPEAKER = GetText(7);
+        this.DIALOGUE = GetText(8);
 
-            this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
-            this.CG = GetText(_index) != "" ? Resources.Load<Sprite>($"CG/{GetText(_index)}") : null;
-            _index += 1;
-            this.BG = GetText(_index);
-            _index += 1;
-            this.SE1 = new(type: SEType.SE, clip: GetText(_index) == "" ? null : LoadAudioClipByName(GetText(_index)));
-            _index += 1;
-            this.SE1_EFFECT = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
-            this.SE1_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
+        this.BGM = LoadAudioAssetByName(GetText(9));
+        this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(10) == "" ? "0" : GetText(10));
 
-            this.CH1_NAME = GetText(_index);
-            _index += 1;
-            this.CH1_EMOTION = GetText(_index);
-            _index += 1;
-            this.CH1_EFFECT = (Dialog_CharEffect)int.Parse(GetText(_index) == "" ? "1" : GetText(_index));
-            _index += 1;
-            //this.CH2_NAME = GetText(_index);
-            //_index += 1;
-            //this.CH2_EMOTION = GetText(_index);
-            //_index += 1;
-            //this.CH2_EFFECT = (Dialog_CharEffect)int.Parse(GetText(_index) == "" ? "1" : GetText(_index));
-            //_index += 1;
-            //this.CH3_NAME = GetText(_index);
-            //_index += 1;
-            //this.CH3_EMOTION = GetText(_index);
-            //_index += 1;
-            //this.CH3_EFFECT = (Dialog_CharEffect)int.Parse(GetText(25) == "" ? "1" : GetText(_index));
-            //_index += 1;
+        this.screenEffect = (Dialog_ScreenEffect)int.Parse(GetText(11) == "" ? "0" : GetText(11));
+        this.CG = GetText(12) != "" ? Resources.Load<Sprite>($"CG/{GetText(12)}") : null;
+        this.BG = GetText(13);
+        this.SE1 = LoadAudioAssetByName(GetText(14));
+        this.SE1_EFFECT = int.Parse(GetText(15) == "" ? "0" : GetText(15));
+        this.SE1_Delay = float.Parse(GetText(16) == "" ? "0" : GetText(16));
 
-            this.SE2 = new(type: SEType.SE, clip: GetText(_index) == "" ? null : LoadAudioClipByName(GetText(_index)));
-            _index += 1;
-            this.SE2_EFFECT = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
-            this.SE2_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
+        this.CH1_NAME = GetText(17);
+        this.CH1_EMOTION = GetText(18);
+        this.CH1_EFFECT = (Dialog_CharEffect)int.Parse(GetText(19) == "" ? "1" : GetText(19));
 
-            this.CHOICE1_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
-            this.CHOICE1_TEXT = GetText(_index);
-            _index += 1;
-            this.CHOICE2_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
-            this.CHOICE2_TEXT = GetText(_index);
-            _index += 1;
-            this.CHOICE3_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
-            this.CHOICE3_TEXT = GetText(_index);
-            _index += 1;
-        }
-        catch (Exception e)
-        {
-            Debug.Log($"[SetProperty Error] Row Data: {this.ID}:{this.INDEX} → {_index} = data : {GetText(_index)}\n{e.Message}");
-            throw; // 예외를 다시 던져서 호출자에게 알림
-        }
+        this.SE2 = LoadAudioAssetByName(GetText(20));
+        this.SE2_EFFECT = int.Parse(GetText(21) == "" ? "0" : GetText(21));
+        this.SE2_Delay = float.Parse(GetText(22) == "" ? "0" : GetText(22));
 
+        this.CHOICE1_ID = int.Parse(GetText(23) == "" ? "0" : GetText(23));
+        this.CHOICE1_TEXT = GetText(24);
+        this.CHOICE2_ID = int.Parse(GetText(25) == "" ? "0" : GetText(25));
+        this.CHOICE2_TEXT = GetText(26);
+        this.CHOICE3_ID = int.Parse(GetText(27) == "" ? "0" : GetText(27));
+        this.CHOICE3_TEXT = GetText(28);
     }
 
     protected string GetText(int index) => 
@@ -253,6 +203,7 @@ public class InteractiveDebate_DialogueData
 
     protected AudioClip LoadAudioClipByName(string clipName) =>
          Resources.Load<AudioClip>($"Audio/{clipName}");
-    
+    protected SoundAsset LoadAudioAssetByName(string clipName) =>
+         Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
 
 }
