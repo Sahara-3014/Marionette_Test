@@ -8,11 +8,13 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
+    public static DialogueManager Instance;
     private Dictionary<(int ID, int index), DialogueData> dialogueDictByIDAndIndex;
     public bool isAuto = false;  // 자동 진행 모드 여부
-    public float autoDelay = 2f; // 자동으로 다음 대사 넘어가기까지 대기 시간
-
+    public float autoDelay = 1f; // 자동으로 다음 대사 넘어가기까지 대기 시간
     private float autoTimer = 0f;
+
+
 
     [System.Serializable]
     public class CharacterStatus
@@ -24,22 +26,19 @@ public class DialogueManager : MonoBehaviour
         public Dialog_CharPos position;
     }
 
-    [SerializeField] private GoogleSheetLoader sheetLoader;  // 에디터에서 할당 필요
-    [SerializeField] private GameObject cutsceneImageObject; // UI Image or SpriteRenderer
+    [SerializeField] private GoogleSheetLoader sheetLoader;
+    [SerializeField] private GameObject cutsceneImageObject;
     [SerializeField] private SpriteRenderer[] characterRenderers;
     [SerializeField] private TextMeshProUGUI dialogueText;
 
     [SerializeField] private DialogEffectManager effectManager;
     [SerializeField] private DialogSoundManager soundManager;
 
-    // 예: 0 = Left, 1 = Center, 2 = Right
     [SerializeField] private SpriteRenderer[] sprite_Heads;  // 머리
     [SerializeField] private SpriteRenderer[] sprite_Bodies; // 몸
 
     [SerializeField] private SpriteRenderer sprite_BG;
-    [SerializeField] private SpriteRenderer sprite_DialogueBox;
-    [SerializeField] private SpriteRenderer sprite_CharacterNameBox;
-
+    [SerializeField] private Image sprite_DialogueBox;
     [SerializeField] private TextMeshProUGUI txt_Dialogue;
     [SerializeField] private TextMeshProUGUI txt_CharacterName;
 
@@ -51,12 +50,30 @@ public class DialogueManager : MonoBehaviour
 
 
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
-{
-    { "김주한", "JUHAN" },
-    { "미래", "MIRAE" },
-    { "계란", "EGG" }
-    // 필요한 만큼 추가
+    {
+{ "김주한", "JUHAN" },
+{ "설은비", "EUNBI" },
+{ "한아영", "AHYOUNG" },
+{ "하서하", "SEOHA" },
+{ "유무구", "MUGU" },
+{ "정해온", "HAEWON" },
+{ "도민결", "MINGYEOL" },
+{ "배수경", "SUKYUNG" },
+{ "권하루", "HARU" },
+{ "박세진", "SEJIN" },
+{ "백이후", "IHU" },
+{ "강세령", "SERYEONG" },
+{ "최범식", "BEOMSIK" },
+{ "나율", "YUL" },
+{ "이시아", "SIA" }
+
+        // 필요한 만큼 추가
 };
+
+
+
+
+
     [SerializeField] private GameObject choicePanel;        // 선택지 전체 UI
     [SerializeField] private Button[] choiceButtons;          // 선택지 버튼들
     [SerializeField] private TextMeshProUGUI[] choiceButtonTexts; // 버튼 텍스트
@@ -78,7 +95,10 @@ public class DialogueManager : MonoBehaviour
     private void Awake()
     {
 
-
+        if (Instance == null)
+        {
+            Instance = this;
+        }
         backgroundSpriteDict = new Dictionary<string, Sprite>();
         foreach (var bg in backgroundSprites)
         {
@@ -162,10 +182,10 @@ public class DialogueManager : MonoBehaviour
                             {
                                 soundManager.PlayBGM();
                             }
-                            else if (currentData.bgm != null && currentData.bgm.clip != null)
+                            else if (currentData.bgm != null && currentData.bgm.dialogSE.clip != null)
                             {
                                 // 만약 clip도 없으면, 현재 데이터에 있는 bgm으로 PlayBGM 호출
-                                soundManager.PlayBGM(currentData.bgm);
+                                soundManager.PlayBGM(currentData.bgm.dialogSE);
                             }
                         }
                         soundManager.SetBGMSpeed(0.5f);
@@ -324,8 +344,18 @@ public class DialogueManager : MonoBehaviour
 
         if (!dialogueDictByIDAndIndex.TryGetValue((currentID, currentIndex), out var currentDialogue) || currentDialogue == null)
         {
-            OnOff(false);
-            return;
+            SetDialogue(SaveDatabase.Instance.Get_Dialogs_NeedID(currentID));
+
+            if (!dialogueDictByIDAndIndex.TryGetValue((currentID, currentIndex), out currentDialogue) || currentDialogue == null)
+            {
+
+                OnOff(false);
+                return;
+            }
+            else
+            {
+                ShowDialogue(currentID, currentIndex);
+            }
         }
 
 
@@ -434,11 +464,11 @@ public class DialogueManager : MonoBehaviour
 
         // 사운드
         if (currentDialogue.bgm != null)
-            soundManager.PlayDialogSE(currentDialogue.bgm);
+            soundManager.PlayDialogSE(currentDialogue.bgm.dialogSE);
         if (currentDialogue.se1 != null)
-            soundManager.PlayDialogSE(currentDialogue.se1);
+            soundManager.PlayDialogSE(currentDialogue.se1.dialogSE);
         if (currentDialogue.se2 != null)
-            soundManager.PlayDialogSE(currentDialogue.se2);
+            soundManager.PlayDialogSE(currentDialogue.se2.dialogSE);
 
 
         ShowDialogue(currentID, currentIndex);
@@ -461,8 +491,8 @@ public class DialogueManager : MonoBehaviour
                 nextDialogueID = currentDialogue.nextID;
 
                 // 만약 nextSheet 값이 있으면 시트 전환
-                if(!string.IsNullOrEmpty(currentDialogue.nextSheet?.Trim()))
-{
+                if (!string.IsNullOrEmpty(currentDialogue.nextSheet?.Trim()))
+                {
                     string nextSheetName = currentDialogue.nextSheet.Trim();
                     Debug.Log($"다음 시트로 전환: {nextSheetName}");
 
@@ -598,7 +628,6 @@ public class DialogueManager : MonoBehaviour
         }
 
         txt_Dialogue.gameObject.SetActive(flag);
-        sprite_CharacterNameBox.gameObject.SetActive(flag);
         txt_CharacterName.gameObject.SetActive(flag);
         sprite_BG.gameObject.SetActive(true);
 
@@ -618,7 +647,6 @@ public class DialogueManager : MonoBehaviour
     {
         if (isPaused) return;
 
-        // Auto 모드일 때
         if (isAuto)
         {
             // 타이핑 중이면 자동 진행 안 함
@@ -903,36 +931,33 @@ public class DialogueManager : MonoBehaviour
             Debug.Log($"nextID가 0 이하, currentID 유지, currentIndex 증가: {currentIndex}");
         }
 
-        NextDialogue(); 
+        NextDialogue();
     }
-
-
-
     void Start()
     {
         sheetLoader = GoogleSheetLoader.Instance;
         sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
+
+        sheetLoader.usingBranching = true; // ✅ 분기 모드로 바로 설정
+        sheetLoader.LoadNextSheet("INTRO");
+
+        soundManager = DialogSoundManager.Instance;
+    }
+
+
+    private void OnSheetLoadedHandler()
+    {
+        // 첫 대사 시작
+        currentID = sheetLoader.firstIDOfCurrentSheet; // 예: 1000
+        currentIndex = 1;
+        NextDialogue();
     }
 
     void OnDestroy()
     {
-        sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
+        if (sheetLoader != null)
+            sheetLoader.OnSheetLoaded -= OnSheetLoadedHandler;
     }
-
-    private void OnSheetLoadedHandler()
-    {
-        // 새 시트 로드가 완료되면 호출됨
-        int firstID = sheetLoader.firstIDOfCurrentSheet;
-
-        currentID = firstID;
-        currentIndex = 1;
-
-        ShowDialogue(currentID, currentIndex);
-        NextDialogue();
-    }
-    // ShowChoices 함수에 인자 추가 (27번 열 효과음 이름)
-
-
 
 
     private void ShowChoices(DialogueChoice[] choices, string choiceSoundEffectName)
@@ -1077,13 +1102,6 @@ public class DialogueManager : MonoBehaviour
     }
     // 현재 대화 위치부터 이후 대사들 중 선택지가 있는 첫 위치 반환
 
-    private int GetMaxDialogueIndex(int id)
-    {
-        // 해당 ID에 속한 대사들 중 가장 큰 index 반환
-        return dialogueDictByIDAndIndex.Keys
-            .Where(k => k.ID == id)
-            .Max(k => k.index);
-    }
     private (int id, int index)? FindNextChoicePosition(int startID, int startIndex)
     {
         // 모든 대사를 ID → index 순으로 정렬

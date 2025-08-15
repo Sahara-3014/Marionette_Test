@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(EffectTester))]
 public class EffectTesterEditor : Editor
 {
@@ -143,3 +144,4 @@ public class EffectTesterEditor : Editor
         return true;
     }
 }
+#endif

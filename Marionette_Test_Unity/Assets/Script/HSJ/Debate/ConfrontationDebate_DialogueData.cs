@@ -78,7 +78,7 @@ public class ConfrontationDebate_DialogueData
 
     #region First Action
     /// <summary> BGM </summary>
-    public DialogSE BGM { get; protected set; }
+    public SoundAsset BGM { get; protected set; }
     /// <summary> BGM 효과 </summary>
     public DialogSoundPlayType BGM_EFFECT { get; protected set; }
     #endregion
@@ -92,7 +92,7 @@ public class ConfrontationDebate_DialogueData
     public Sprite CG { get; protected set; }
 
     /// <summary> 화자 대화 시작시 효과음 </summary>
-    public DialogSE SE1 { get; protected set; }
+    public SoundAsset SE1 { get; protected set; }
     /// <summary>  </summary>
     public int SE1_EFFECT { get; protected set; } = 1;
     public float SE1_Delay { get; protected set; } = default; // SE1 재생 딜레이
@@ -122,7 +122,7 @@ public class ConfrontationDebate_DialogueData
     public Dialog_CharEffect CH3_EFFECT { get; protected set; } = Dialog_CharEffect.None; // 캐릭터3 효과
 
     // 효과음
-    public DialogSE SE2 { get; protected set; }
+    public SoundAsset SE2 { get; protected set; }
     public int SE2_EFFECT { get; protected set; } = 1;
     public float SE2_Delay { get; protected set; } = default; // SE1 재생 딜레이
     #endregion
@@ -171,13 +171,13 @@ public class ConfrontationDebate_DialogueData
         this.SPEAKER = GetText(7);
         this.DIALOGUE = GetText(8);
 
-        this.BGM = new(type: SEType.BGM, clip: GetText(9) == "" ? null : LoadAudioClipByName(GetText(9)));
+        this.BGM.dialogSE = new DialogSE(type: SEType.BGM, clip: GetText(9) == "" ? null : LoadAudioClipByName(GetText(9)));
         this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(10) == "" ? "0" : GetText(10));
 
         this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(11) == "" ? "0" : GetText(11));
         this.CG = GetText(12) != "" ? Resources.Load<Sprite>($"CG/{GetText(12)}") : null;
         this.BG = GetText(13);
-        this.SE1 = new(type: SEType.SE, clip: GetText(144) == "" ? null : LoadAudioClipByName(GetText(14)));
+        this.SE1.dialogSE = new DialogSE(type: SEType.SE, clip: GetText(144) == "" ? null : LoadAudioClipByName(GetText(14)));
         this.SE1_EFFECT = int.Parse(GetText(15) == "" ? "0" : GetText(15));
         this.SE1_Delay = float.Parse(GetText(16) == "" ? "0" : GetText(16));
 
@@ -191,7 +191,7 @@ public class ConfrontationDebate_DialogueData
         this.CH3_EMOTION = GetText(24);
         this.CH3_EFFECT = (Dialog_CharEffect)int.Parse(GetText(25) == "" ? "1" : GetText(25));
 
-        this.SE2 = new(type: SEType.SE, clip: GetText(26) == "" ? null : LoadAudioClipByName(GetText(26)));
+        this.SE2.dialogSE = new DialogSE(type: SEType.SE, clip: GetText(26) == "" ? null : LoadAudioClipByName(GetText(26)));
         this.SE2_EFFECT = int.Parse(GetText(27) == "" ? "0" : GetText(27));
         this.SE2_Delay = float.Parse(GetText(28) == "" ? "0" : GetText(28));
 
