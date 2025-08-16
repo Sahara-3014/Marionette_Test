@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      HALLWAY__0: 8256397267352927536
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

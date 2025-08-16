@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      PRAYROOM__0: -6646353372423910726
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
