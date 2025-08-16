@@ -290,14 +290,18 @@ public class DialogueManager : MonoBehaviour
             if (container != null)
             {
                 container.position = basePos;
-                // 머리와 몸의 localPosition은 인스펙터에서 조절한 값 유지됨
+
+                // 머리와 몸 localPosition을 초기값으로 고정
+                headRenderer.transform.localPosition = Vector3.zero;
+                bodyRenderer.transform.localPosition = Vector3.zero;
             }
-            else
+
+            else//
             {
                 Debug.LogWarning("머리 스프라이트에 부모 컨테이너가 없습니다. 위치가 이상할 수 있습니다.");
                 // 부모 없으면 기존 방식 유지 (긴급 대비)
-                headRenderer.transform.position = basePos + headRenderer.transform.localPosition;
-                bodyRenderer.transform.position = basePos + bodyRenderer.transform.localPosition;
+                headRenderer.transform.position = basePos;
+                bodyRenderer.transform.position = basePos;
             }
         }
 
@@ -936,7 +940,8 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         sheetLoader = GoogleSheetLoader.Instance;
-        sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
+        if(SaveDatabase.Instance.GetNowSceneName().Contains("PYJ_Dialogue"))
+            sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
 
         sheetLoader.usingBranching = true; // ✅ 분기 모드로 바로 설정
         sheetLoader.LoadNextSheet("INTRO");
@@ -955,7 +960,7 @@ public class DialogueManager : MonoBehaviour
 
     void OnDestroy()
     {
-        if (sheetLoader != null)
+        if (sheetLoader != null && SaveDatabase.Instance.GetNowSceneName().Contains("PYJ_Dialogue"))
             sheetLoader.OnSheetLoaded -= OnSheetLoadedHandler;
     }
 
