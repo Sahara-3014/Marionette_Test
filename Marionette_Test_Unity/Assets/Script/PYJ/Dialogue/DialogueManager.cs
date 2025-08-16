@@ -940,7 +940,8 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         sheetLoader = GoogleSheetLoader.Instance;
-        sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
+        if(SaveDatabase.Instance.GetNowSceneName().Contains("PYJ_Dialogue"))
+            sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
 
         sheetLoader.usingBranching = true; // ✅ 분기 모드로 바로 설정
         sheetLoader.LoadNextSheet("INTRO");
@@ -959,7 +960,7 @@ public class DialogueManager : MonoBehaviour
 
     void OnDestroy()
     {
-        if (sheetLoader != null)
+        if (sheetLoader != null && SaveDatabase.Instance.GetNowSceneName().Contains("PYJ_Dialogue"))
             sheetLoader.OnSheetLoaded -= OnSheetLoadedHandler;
     }
 
