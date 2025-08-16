@@ -368,7 +368,12 @@ public class GoogleSheetLoader : MonoBehaviour
 
     async public void LoadInvestigate2()
     {
-        string range = "CH1_Investigate2!A3:S175";
+        while(IsInvoking(nameof(LoadInvestigate)))
+        {
+            await System.Threading.Tasks.Task.Yield();
+        }
+
+        string range = "CH1_Investigate_2!A3:S175";
         // Google Sheets URL 설정
         string url = //$"https://docs.google.com/spreadsheets/d/{spreadsheetId}/export?format=csv&id={spreadsheetId}";
             $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
