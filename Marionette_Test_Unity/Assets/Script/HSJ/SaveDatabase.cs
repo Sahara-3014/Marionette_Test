@@ -262,6 +262,8 @@ public class SaveDatabase : MonoBehaviour
         TextSave("Dialog_InteractiveDebate.json", JsonUtility.ToJson(this.interactiveDebateDialogs));
     }
 
+    public Dictionary<int, InteractiveDebate_DialogueData[]> Get_InteractiveDebateDialogs() => interactiveDebateDialogs;
+
     public ConfrontationDebate_DialogueData[] Get_ConfrontationDebateDialogs_NeedID(int id)
     {
         if (confrontationDebateDialogs == null)
@@ -313,6 +315,8 @@ public class SaveDatabase : MonoBehaviour
         TextSave("Dialog_ConfrontationDebate.json", JsonUtility.ToJson(this.confrontationDebateDialogs));
     }
 
+    public Dictionary<int, ConfrontationDebate_DialogueData[]> Get_ConfrontationDebateDialogs()=> confrontationDebateDialogs;
+
     public Investigate_DialogueData[] Get_InvestigateDialogs_NeedID(int id)
     {
         if (investigateDialogs == null)
@@ -351,9 +355,9 @@ public class SaveDatabase : MonoBehaviour
             foreach (var dialog in dialogs)
             {
                 if (this.investigateDialogs.ContainsKey(dialog.Key) == false)
-                    dialogs.Add(dialog.Key, dialog.Value);
+                    this.investigateDialogs.Add(dialog.Key, dialog.Value);
                 else
-                    dialogs[dialog.Key] = dialog.Value;
+                    this.investigateDialogs[dialog.Key] = dialog.Value;
             }
         }
         else
@@ -363,6 +367,8 @@ public class SaveDatabase : MonoBehaviour
 
         TextSave("Dialog_Investigate.json", JsonUtility.ToJson(this.investigateDialogs));
     }
+
+    public Dictionary<int, Investigate_DialogueData[]> Get_InvestigateDialogs() => investigateDialogs;
     #endregion
 
 

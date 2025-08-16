@@ -168,8 +168,9 @@ public class InteractiveDebate_DialogueData
             this.INDEX = int.Parse(GetText(_index));
             _index += 1;
 
-            if (!int.TryParse(GetText(_index), out int nextId))
+            if (!int.TryParse(GetText(_index) == "" ? "0" : GetText(_index), out int nextId))
                 this.NEXT_ID = -100; // 예외 발생시 기본값 0으로 설정
+            else this.NEXT_ID = nextId;
             _index += 1;
 
             this.TARGET_NAME = GetText(_index);
