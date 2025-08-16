@@ -106,20 +106,6 @@ public class Investigate_DialogManager : MonoBehaviour
         SetDialogs(id, isIndexInit: true, isPlaying: true);
     }
 
-    public void UI_Active(bool isActive = true, bool isSFXOFF = true)
-    {
-        Debug.Log($"{isActive} : {isSFXOFF}");
-         //foreach(Image img in charsImg)
-         //   img.gameObject.SetActive(isActive);
-        dialogBG.gameObject.SetActive(isActive);
-        nameLabel.gameObject.SetActive(isActive);
-        dialogLabel.gameObject.SetActive(isActive);
-        //cutscene.gameObject.SetActive(isActive);
-
-        if (isActive == false || isSFXOFF)
-            SFX_OFF();
-    }
-
     public void SFX_OFF()
     {
         if(bgmAudio.isPlaying)
@@ -132,23 +118,24 @@ public class Investigate_DialogManager : MonoBehaviour
 
     private void Update()
     {
-        if (dialogs != null && currentIndex >= dialogs.Length)
-            return;
-
-        if (Input.GetKeyUp(KeyCode.Space))
+        if(dialogBG.gameObject.activeSelf)
         {
-            keyDowning = 0f;
-        }
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            keyDowning += Time.deltaTime;
-            if(keyDowning >= nextDialogAutoDelay)
+            if (Input.GetKeyUp(KeyCode.Space))
             {
                 keyDowning = 0f;
-                Play();
+            }
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                keyDowning += Time.deltaTime;
+                if (keyDowning >= nextDialogAutoDelay)
+                {
+                    keyDowning = 0f;
+                    Play();
+                }
             }
         }
+        
 
         
 
@@ -160,19 +147,13 @@ public class Investigate_DialogManager : MonoBehaviour
     {
         if (id == -2)
         {
-            UI_Active(false);
             return;
         }
 
         //data = database.GetDialogs_NeedID(id);
         dialogs = database.Get_InvestigateDialogs_NeedID(id);
-        //var dd = database == null ? null : database.Get_InvestigateDialogs();
-        //Debug.Log($"{id} list ({database == null}) : {dd?.Count} : {JsonUtility.ToJson(dd)}");
-        //var d = dialogs == null ? "null" : dialogs.Length.ToString();
-        //Debug.Log($"data ({d}) : {JsonUtility.ToJson(dialogs)}");
         if (isIndexInit)
             currentIndex = 0;
-        Debug.Log($"{id} : {isPlaying}");
         if (isPlaying)
         {
             currentIndex = 0;
@@ -182,8 +163,14 @@ public class Investigate_DialogManager : MonoBehaviour
 
     public void Play()
     {
-        Debug.Log($"Play : {currentIndex} / {dialogs.Length}");
-        if(skipAction != null)
+        if (dialogs != null && currentIndex >= dialogs.Length - 1 && dialogBG.gameObject.activeSelf)
+        {
+            dialogBG.gameObject.SetActive(false);
+            SFX_OFF();
+            return;
+        }
+
+        if (skipAction != null)
         {
             skipAction?.Invoke();
             return;
@@ -196,8 +183,6 @@ public class Investigate_DialogManager : MonoBehaviour
         //if (uiManager.IsChoicePanelOpened())
         //    return;
         data = dialogs[currentIndex];
-
-        Debug.Log($"Play_Next : {data.ToString()}");
 
         onNextProductionAcion = Step1;
         onNextProductionAcion.Invoke();
@@ -386,20 +371,15 @@ public class Investigate_DialogManager : MonoBehaviour
         onNextProductionAcion = null;
 
         // 다음 id가 설정되어있는경우 다음꺼 보여주기
-        if (data.NEXT_ID != -1 && data.NEXT_ID != 0)
+        if (data.NEXT_ID > 0)
         {
             SetDialogs(data.NEXT_ID, isIndexInit: true, isPlaying: true);
         }
         // 다음대사 실행하기
         // TODO 다음대사 없고 할당이 안되어있으면 에러날듯
-        else if(dialogs.Length > currentIndex + 1)
+        else if(dialogs.Length - 1 > currentIndex)
         {
             currentIndex += 1;
-        }
-        else
-        {
-            //TODO OFF
-            UI_Active(false);
         }
     }
 
