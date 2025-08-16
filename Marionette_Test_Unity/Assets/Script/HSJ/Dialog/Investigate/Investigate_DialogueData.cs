@@ -121,12 +121,13 @@ public class Investigate_DialogueData
                 this.CH1_POS = pos1;
             else
                 this.CH1_POS = 1;
+            _index += 1;
+            if (Enum.TryParse(GetText(_index), out this.CH1_EFFECT) == false)
+                this.CH1_EFFECT = Dialog_CharEffect.None;
+            _index += 1;
             this.STATE_HEAD_1 = GetText(_index);
             _index += 1;
             this.STATE_BODY_1 = GetText(_index);
-            _index += 1;
-            if(Enum.TryParse(GetText(_index), out this.CH1_EFFECT) == false)
-                this.CH1_EFFECT = Dialog_CharEffect.None;
             _index += 1;
 
 
@@ -137,12 +138,13 @@ public class Investigate_DialogueData
             else
                 this.CH2_POS = 1;
             _index += 1;
+            if (Enum.TryParse(GetText(_index), out this.CH2_EFFECT) == false)
+                this.CH2_EFFECT = Dialog_CharEffect.None;
+            _index += 1;
             this.STATE_HEAD_2 = GetText(_index);
             _index += 1;
             this.STATE_BODY_2 = GetText(_index);
             _index += 1;
-            if (Enum.TryParse(GetText(_index), out this.CH2_EFFECT) == false)
-                this.CH2_EFFECT = Dialog_CharEffect.None;
 
 
             this.DIALOGUE = GetText(_index);
