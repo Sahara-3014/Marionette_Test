@@ -61,14 +61,14 @@ public class Investigate_DialogueData
     #region Third Action
     // 캐릭터1
     public string CH1_NAME { get; protected set; } = null; // 캐릭터1 이름
-    public int CH1_POS { get; protected set; } = 1; // 캐릭터1 위치
+    public int CH1_POS { get; protected set; } = -1; // 캐릭터1 위치
     public string STATE_HEAD_1 { get; protected set; } = null;
     public string STATE_BODY_1 { get; protected set; } = null;
     public Dialog_CharEffect CH1_EFFECT = Dialog_CharEffect.None;
 
     // 캐릭터2
     public string CH2_NAME { get; protected set; } = null; // 캐릭터2 이름
-    public int CH2_POS { get; protected set; } = 1; // 캐릭터2 위치
+    public int CH2_POS { get; protected set; } = -1; // 캐릭터2 위치
     public string STATE_HEAD_2 { get; protected set; } = null;
     public string STATE_BODY_2 { get; protected set; } = null;
     public Dialog_CharEffect CH2_EFFECT = Dialog_CharEffect.None;

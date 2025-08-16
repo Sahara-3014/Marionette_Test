@@ -36,6 +36,26 @@ public class Investigate_DialogManager : MonoBehaviour
     Coroutine[] nextProductionCoroutine = null;
     
     public Investigate_DialogueData data { get; protected set; }
+    private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
+    {
+        { "김주한", "JUHAN" },
+        { "설은비", "EUNBI" },
+        { "한아영", "AHYOUNG" },
+        { "하서하", "SEOHA" },
+        { "유무구", "MUGU" },
+        { "정해온", "HAEWON" },
+        { "도민결", "MINGYEOL" },
+        { "배수경", "SUKYUNG" },
+        { "권하루", "HARU" },
+        { "박세진", "SEJIN" },
+        { "백이후", "IHU" },
+        { "강세령", "SERYEONG" },
+        { "최범식", "BEOMSIK" },
+        { "나율", "YUL" },
+        { "이시아", "SIA" }
+
+                // 필요한 만큼 추가
+    };
 
     [Space(10)]
     [Header("Effect Values")]
@@ -44,6 +64,7 @@ public class Investigate_DialogManager : MonoBehaviour
     [SerializeField] AudioSource se2Audio;
     [SerializeField] DialogEffectManager_UI uiEffectManager;
     InteractiveDebate_UIManager uiManager;
+    //[SerializeField] CharacterPositionManager characterPositionManager;
 
     private void Awake()
     {
@@ -213,6 +234,49 @@ public class Investigate_DialogManager : MonoBehaviour
             nextProductionCoroutine = new Coroutine[4];
 
         // TODO 캐릭터연출 재생 <- 타입에 따라서 프레임에 먹일 이펙트/캐릭터에 먹일 이펙트 분리해야함
+
+        bool[] posUsed = new bool[charsImg.Length];
+
+
+        if(data.CH1_POS > -1 && data.CH1_POS < charsImg.Length)
+        {
+            ShowCharacter(data.CH1_NAME, data.STATE_HEAD_1, data.STATE_BODY_1, data.CH1_POS, data.CH1_EFFECT);
+        }
+        else
+        {
+            charsImg[0].sprite = null;
+            var img = charsImg[0].transform.GetChild(0).GetComponent<Image>();
+            img.sprite = null;
+            img.gameObject.SetActive(false);
+            charsImg[0].gameObject.SetActive(false);
+        }
+
+        if (data.CH2_POS > -1 && data.CH2_POS < charsImg.Length)
+        {
+            ShowCharacter(data.CH2_NAME, data.STATE_HEAD_2, data.STATE_BODY_2, data.CH2_POS, data.CH2_EFFECT);
+        }
+        else
+        {
+            charsImg[1].sprite = null;
+            var img = charsImg[1].transform.GetChild(0).GetComponent<Image>();
+            img.sprite = null;
+            img.gameObject.SetActive(false);
+            charsImg[1].gameObject.SetActive(false);
+        }
+
+
+        for (int i = 0; i < charsImg.Length; i++)
+        {
+            if (!posUsed[i])
+            {
+                charsImg[i].sprite = null;
+                var img = charsImg[i].transform.GetChild(0).GetComponent<Image>();
+                img.sprite = null;
+                img.gameObject.SetActive(false);
+                charsImg[i].gameObject.SetActive(false);
+            }
+        }
+
         nextProductionCoroutine[0] = StartCoroutine(uiEffectManager.RunCharacterEffect(data.CH1_EFFECT, uiManager.answer));
         nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(data.CH2_EFFECT, uiManager.answer));
 
@@ -285,6 +349,88 @@ public class Investigate_DialogManager : MonoBehaviour
             //TODO OFF
             UI_Active(false);
         }
+    }
+
+    private void ShowCharacter(string name, string head, string body, int pos, Dialog_CharEffect effect)
+    {
+        int posIndex = (int)pos;
+        if (posIndex < 0 || posIndex >= charsImg.Length) return;
+
+        var headRenderer = charsImg[posIndex];
+        var bodyRenderer = charsImg[posIndex].transform.GetChild(0).GetComponent<Image>();
+
+        string englishName = characterNameMap.ContainsKey(name) ? characterNameMap[name] : name;
+
+        string headSpriteName = $"{head}";
+        Sprite headSprite = LoadSpriteForSpeaker(name, headSpriteName);
+        if (headSprite != null)
+        {
+            headRenderer.sprite = headSprite;
+            headRenderer.gameObject.SetActive(true);
+        }
+        else
+        {
+            headRenderer.sprite = null;
+            headRenderer.gameObject.SetActive(false);
+            Debug.LogWarning($"[머리 스프라이트 미적용] {headSpriteName}를 {name} 폴더에서 못 찾음");
+        }
+
+        string bodySpriteName = $"{body}";
+        Sprite bodySprite = LoadSpriteForSpeaker(name, bodySpriteName);
+        if (bodySprite != null)
+        {
+            bodyRenderer.sprite = bodySprite;
+            bodyRenderer.gameObject.SetActive(true);
+        }
+        else
+        {
+            bodyRenderer.sprite = null;
+            bodyRenderer.gameObject.SetActive(false);
+            Debug.LogWarning($"[몸통 스프라이트 미적용] {bodySpriteName}를 {name} 폴더에서 못 찾음");
+        }
+
+        //if (characterPositionManager != null)
+        //{
+        //    Vector3 basePos = characterPositionManager.GetPositionByCharPos((Dialog_CharPos)pos);
+
+        //    // 머리와 몸의 부모 컨테이너가 동일하다고 가정
+        //    Transform container = headRenderer.transform.parent;
+        //    if (container != null)
+        //    {
+        //        container.position = basePos;
+        //        // 머리와 몸의 localPosition은 인스펙터에서 조절한 값 유지됨
+        //    }
+        //    else
+        //    {
+        //        Debug.LogWarning("머리 스프라이트에 부모 컨테이너가 없습니다. 위치가 이상할 수 있습니다.");
+        //        // 부모 없으면 기존 방식 유지 (긴급 대비)
+        //        //headRenderer.transform.position = basePos + headRenderer.transform.localPosition;
+        //        //bodyRenderer.transform.position = basePos + bodyRenderer.transform.localPosition;
+        //    }
+        //}
+
+        //if (effect != Dialog_CharEffect.None)
+        //{
+        //    StartCoroutine(uiEffectManager.RunCharacterEffect(effect, headRenderer));
+        //    StartCoroutine(uiEffectManager.RunCharacterEffect(effect, bodyRenderer));
+        //}
+    }
+
+    private Sprite LoadSpriteForSpeaker(string speakerName, string spriteName)
+    {
+        string folderName = speakerName;
+        if (characterNameMap.ContainsKey(speakerName))
+        {
+            folderName = characterNameMap[speakerName];
+        }
+
+        string path = $"Sprites/Characters/{folderName}/{spriteName}";
+        Sprite sprite = Resources.Load<Sprite>(path);
+        if (sprite == null)
+        {
+            Debug.LogWarning($"[LoadSpriteForSpeaker] 스프라이트를 찾지 못함: {path}");
+        }
+        return sprite;
     }
 
     void SEPlayEffect(AudioSource audio, DialogSE se)

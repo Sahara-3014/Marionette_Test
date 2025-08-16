@@ -35,7 +35,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     public UnityAction skipAction = null;
 
     bool isKeyDowning = false;
-    public float autoPlayDelay = 0.05f; // 자동 재생 딜레이
+    public float autoPlayDelay = 0.1f; // 자동 재생 딜레이
     float autoPlayTimer = 0f;
 
     private void Awake()
@@ -73,10 +73,13 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         #if UNITY_STANDALONE_WIN
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("KeyDown");
             isKeyDowning = true;
         }
-        else
+        
+        if(Input.GetKeyUp(KeyCode.Space))
         {
+            Debug.Log("KeyUp");
             isKeyDowning = false;
             autoPlayTimer = 0f; // 자동 재생 타이머 초기화
         }

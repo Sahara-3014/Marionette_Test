@@ -233,7 +233,8 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         Debug.Log($"debateData: {nextProductionCoroutine[0] == null}");
 
         // TODO se1재생
-        SEPlayEffect(se1Audio, debateData.SE1.dialogSE, debateData.SE1_EFFECT);
+        if(debateData.SE1 != null)
+            SEPlayEffect(se1Audio, debateData.SE1.dialogSE, debateData.SE1_EFFECT);
         // TODO 기다리고 바로 실행하기
         while(!isComplete)
         {
@@ -260,7 +261,8 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answer));
 
         // TODO se2재생
-        SEPlayEffect(se2Audio, debateData.SE2.dialogSE, debateData.SE2_EFFECT);
+        if(debateData.SE2 != null)
+            SEPlayEffect(se2Audio, debateData.SE2.dialogSE, debateData.SE2_EFFECT);
 
         // TODO 기다리고 바로 실행하기
         Debug.Log("Step3 Waiting");
@@ -301,7 +303,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         // TODO 대사 출력
         if (debateData.DIALOGUE != null)
         {
-            uiManager.AddDialog(name: debateData.SPEAKER, text: debateData.DIALOGUE);
+            uiManager.AddDialog(name: debateData.SPEAKER, text: debateData.DIALOGUE, ()=>onNextProductionAcion.Invoke());
         }
     }
 
