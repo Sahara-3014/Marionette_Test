@@ -12,8 +12,8 @@ EditorBuildSettings:
     path: Assets/Scenes/HSJ/HSJ_Lobby.unity
     guid: 92518de98ed24114688b9a40140b057b
   - enabled: 1
-    path: Assets/Scenes/HSJ/HSJ_PYJ_Dialogue.unity
-    guid: 1602428d2029ed646b90eb1ea0d406c3
+    path: Assets/Scenes/HSJ/HSJ_PYJ_Dialogue_1.unity
+    guid: 2cf88108b717a6d42b9a69050f23908d
   - enabled: 1
     path: Assets/Scenes/HSJ/HSJ_CWJ_Investigate.unity
     guid: 8f84c520ebbd84144aad04a8301d9065
