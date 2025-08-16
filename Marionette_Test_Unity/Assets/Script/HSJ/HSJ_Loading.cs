@@ -60,7 +60,8 @@ public class HSJ_Loading : MonoBehaviour
             sheetLoader.LoadDialoguesFromSheet(sheetLoader.fixedSheetSequence[i]);
         }
         // 탐색
-        sheetLoader.LoadInvestigate();
+        sheetLoader.LoadInvestigate(); 
+        sheetLoader.LoadInvestigate2();
         // 논쟁1.2
         sheetLoader.LoadInteractiveDebate();
         // 논쟁3
