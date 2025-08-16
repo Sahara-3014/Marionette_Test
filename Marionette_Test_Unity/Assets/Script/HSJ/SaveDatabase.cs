@@ -432,7 +432,7 @@ public class SaveDatabase : MonoBehaviour
             return new();
         CharAttributeData charData = saveData.charsData[key];
 
-        if(gauge == CharAttributeData.CharAttributeType.TRUST || gauge == CharAttributeData.CharAttributeType.SUSPICION)
+        if(gauge == CharAttributeData.CharAttributeType.TRUST || gauge == CharAttributeData.CharAttributeType.SUSPICTION)
             return charData.trust;
         else if(gauge == CharAttributeData.CharAttributeType.MENTAL || gauge == CharAttributeData.CharAttributeType.LIKE)
             return charData.mental;
@@ -456,7 +456,7 @@ public class SaveDatabase : MonoBehaviour
             saveData.charsData.Add(key, new CharAttributeData());
         CharAttributeData charData = saveData.charsData[key];
 
-        if (gauge == CharAttributeData.CharAttributeType.TRUST || gauge == CharAttributeData.CharAttributeType.SUSPICION)
+        if (gauge == CharAttributeData.CharAttributeType.TRUST || gauge == CharAttributeData.CharAttributeType.SUSPICTION)
             charData.trust.value = value;
         else if (gauge == CharAttributeData.CharAttributeType.MENTAL || gauge == CharAttributeData.CharAttributeType.LIKE)
             charData.mental.value = value;
@@ -626,10 +626,14 @@ public class CharAttributeData
 {
     public enum CharAttributeType
     {
-        TRUST = 1,       // 신뢰도
-        SUSPICION = 3,   // 의심도
-        MENTAL = 0,      // 정신력
-        LIKE = 2         // 호감도
+        /// <summary> 신뢰도 </summary>
+        TRUST = 0,
+        /// <summary> 의심도 </summary>
+        SUSPICTION = 0,
+        /// <summary> 정신력 </summary>
+        MENTAL = 1,
+        /// <summary> 호감도 </summary>
+        LIKE = 1
     }
     /// <summary> 신뢰도 </summary>
     public GaugeInt trust = new();

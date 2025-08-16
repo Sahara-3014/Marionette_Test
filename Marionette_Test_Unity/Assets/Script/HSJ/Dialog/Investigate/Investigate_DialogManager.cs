@@ -34,6 +34,8 @@ public class Investigate_DialogManager : MonoBehaviour
     UnityAction onNextProductionAcion = null;
     /// <summary> null이면 Play메서드 실행 </summary>
     Coroutine[] nextProductionCoroutine = null;
+    float keyDowning = 0f;
+    [SerializeField] float nextDialogAutoDelay = 0.1f;
     
     public Investigate_DialogueData data { get; protected set; }
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
@@ -127,6 +129,27 @@ public class Investigate_DialogManager : MonoBehaviour
             se1Audio.Stop();
         if(se2Audio.isPlaying)
             se2Audio.Stop();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            keyDowning = 0f;
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            keyDowning += Time.deltaTime;
+            if(keyDowning >= nextDialogAutoDelay)
+            {
+                keyDowning = 0f;
+                Play();
+            }
+        }
+
+        
+
     }
 
 
@@ -340,7 +363,7 @@ public class Investigate_DialogManager : MonoBehaviour
         }
         // 다음대사 실행하기
         // TODO 다음대사 없고 할당이 안되어있으면 에러날듯
-        else if(dialogs.Length <= currentIndex + 1)
+        else if(dialogs.Length > currentIndex + 1)
         {
             currentIndex += 1;
         }

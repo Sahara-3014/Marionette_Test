@@ -232,7 +232,7 @@ public class GoogleSheetLoader : MonoBehaviour
             var jsonData = JSON.Parse(www.downloadHandler.text);
             var values = jsonData["values"];
 
-            for (int i = 2; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 var row = values[i];
                 InteractiveDebate_DialogueData d = new InteractiveDebate_DialogueData(row);
@@ -338,7 +338,7 @@ public class GoogleSheetLoader : MonoBehaviour
             var jsonData = JSON.Parse(www.downloadHandler.text);
             var values = jsonData["values"];
 
-            for (int i = 2; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 var row = values[i];
                 InteractiveDebate_DialogueData d = new InteractiveDebate_DialogueData(row);
@@ -444,7 +444,7 @@ public class GoogleSheetLoader : MonoBehaviour
             var jsonData = JSON.Parse(www.downloadHandler.text);
             var values = jsonData["values"];
 
-            for (int i = 2; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 var row = values[i];
                 ConfrontationDebate_DialogueData d = new ConfrontationDebate_DialogueData(row);

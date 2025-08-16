@@ -77,6 +77,8 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
     {
         //data = database.GetDialogs_NeedID(id);
         dialogs = database.Get_DebateDialogs_NeedID(id);
+        for (int i = 0; i < dialogs.Length; i++)
+            Debug.Log(dialogs[i].ToString());
         if (isIndexInit)
             currentIndex = 0;
 
@@ -95,10 +97,11 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
             onNextProductionAcion.Invoke();
             return;
         }
-        //if (uiManager.IsChoicePanelOpened())
-        //    return;
+        if (uiManager.IsChoicePanelOpened())
+            return;
         Debug.Log("Play_Next");
         debateData = dialogs[currentIndex];
+        Debug.Log($"data [{currentIndex}] : {debateData.ToString()}");
 
         onNextProductionAcion = Step1;
         onNextProductionAcion.Invoke();
@@ -303,7 +306,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         // TODO 대사 출력
         if (debateData.DIALOGUE != null)
         {
-            uiManager.AddDialog(name: debateData.SPEAKER, text: debateData.DIALOGUE, ()=>onNextProductionAcion.Invoke());
+            uiManager.AddDialog(name: debateData.SPEAKER, text: debateData.DIALOGUE, ()=>onNextProductionAcion?.Invoke());
         }
     }
 
@@ -318,7 +321,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
 
             string[] interact = debateData.TARGET_INTERACT.Split('/');
 
-            CharAttributeData.CharAttributeType interactType = (CharAttributeData.CharAttributeType)Enum.Parse(typeof(CharAttributeData.CharAttributeType), interact[0], true);
+            CharAttributeData.CharAttributeType interactType = (CharAttributeData.CharAttributeType)Enum.Parse(typeof(CharAttributeData.CharAttributeType), interact[0]);
             int value = int.Parse(interact[1]);
             int nowValue = database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interactType).value;
 
@@ -328,6 +331,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
 
 
         // 선택지 보여주기
+        Debug.Log($"select id : {debateData.CHOICE1_ID} / next : {debateData.NEXT_ID} / {dialogs.Length <= currentIndex + 1}");
         if (debateData.CHOICE1_ID != 0)
         {
             List<(int, string)> choices = new();
@@ -346,7 +350,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         }
         // 다음대사 실행하기
         // TODO 다음대사 없고 할당이 안되어있으면 에러날듯
-        else if(dialogs.Length <= currentIndex + 1)
+        else if(dialogs.Length > currentIndex + 1)
         {
             currentIndex += 1;
         }

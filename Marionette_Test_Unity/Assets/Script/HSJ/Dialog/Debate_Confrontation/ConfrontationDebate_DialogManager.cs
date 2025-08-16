@@ -344,7 +344,7 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
         }
         // 다음대사 실행하기
         // TODO 다음대사 없고 할당이 안되어있으면 에러날듯
-        else if(dialogs.Length <= currentIndex + 1)
+        else if(dialogs.Length > currentIndex + 1)
         {
             currentIndex += 1;
         }

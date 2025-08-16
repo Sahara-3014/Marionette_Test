@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using SimpleJSON;
 using System;
 using UnityEngine;
@@ -205,5 +206,11 @@ public class ConfrontationDebate_DialogueData
          Resources.Load<AudioClip>($"Audio/{clipName}");
     protected SoundAsset LoadAudioAssetByName(string clipName) =>
          Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+
+    public override string ToString()
+    {
+        //return base.ToString();
+        return JsonConvert.SerializeObject(this);
+    }
 
 }

@@ -34,7 +34,6 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     [HideInInspector]
     public UnityAction skipAction = null;
 
-    bool isKeyDowning = false;
     public float autoPlayDelay = 0.1f; // 자동 재생 딜레이
     float autoPlayTimer = 0f;
 
@@ -70,23 +69,16 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     private void FixedUpdate()
     {
         //인풋처리
-        #if UNITY_STANDALONE_WIN
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("KeyDown");
-            isKeyDowning = true;
-        }
-        
-        if(Input.GetKeyUp(KeyCode.Space))
+#if UNITY_STANDALONE_WIN
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             Debug.Log("KeyUp");
-            isKeyDowning = false;
             autoPlayTimer = 0f; // 자동 재생 타이머 초기화
         }
-        
-        
-        if(isKeyDowning)
+
+        if (Input.GetKey(KeyCode.Space))
         {
+            Debug.Log("KeyDown");
             autoPlayTimer += Time.fixedDeltaTime;
             if (autoPlayTimer >= autoPlayDelay)
             {
@@ -94,13 +86,10 @@ public class InteractiveDebate_UIManager : MonoBehaviour
                 autoPlayTimer = 0f; // 자동 재생 타이머 초기화
             }
         }
+        
+        
 
 #endif
-    }
-
-    private void OnDisable()
-    {
-        isKeyDowning = false;
     }
 
     /// <summary> Load했을때 이전 데이터 뿌려주기 </summary>
