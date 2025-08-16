@@ -76,6 +76,12 @@ public class SaveDatabase : MonoBehaviour
             sceneChangeEvent.Add(sceneName, action);
     }
 
+    public string GetNowSceneName()
+    {
+        var scene = SceneManager.GetActiveScene();
+        return scene.name;
+    }
+
     private void Initalize()
     {
         dayCycleSystem?.RigisterDayChangeEvent(SaveData_SetDayNum);
