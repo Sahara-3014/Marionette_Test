@@ -160,8 +160,10 @@ public class ConfrontationDebate_DialogueData
         this.ID = int.Parse(GetText(0));
         this.INDEX = int.Parse(GetText(1));
 
-        if (!int.TryParse(GetText(2), out int nextId))
+        if (!int.TryParse(GetText(2) == "" ? "0" : GetText(2), out int nextId))
             this.NEXT_ID = -100; // 예외 발생시 기본값 0으로 설정
+        else 
+            this.NEXT_ID = nextId;
 
 
         this.TARGET_NAME = GetText(3);

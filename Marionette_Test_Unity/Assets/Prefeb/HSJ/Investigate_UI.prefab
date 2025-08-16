@@ -274,7 +274,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 100
+  m_SortingOrder: 20
   m_TargetDisplay: 0
 --- !u!114 &6846828729018082277
 MonoBehaviour:
@@ -559,7 +559,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &194955946940728413
 RectTransform:
   m_ObjectHideFlags: 0
@@ -750,7 +750,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7795739137610776972
 RectTransform:
   m_ObjectHideFlags: 0
@@ -830,6 +830,7 @@ MonoBehaviour:
   nameLabel: {fileID: 686583943365053636}
   dialogLabel: {fileID: 6674869664967493942}
   cutscene: {fileID: 353991977988114327}
+  nextDialogAutoDelay: 0.1
   bgmAudio: {fileID: 0}
   se1Audio: {fileID: 0}
   se2Audio: {fileID: 0}

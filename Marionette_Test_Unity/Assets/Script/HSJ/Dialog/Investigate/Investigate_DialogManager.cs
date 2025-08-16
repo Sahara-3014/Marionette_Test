@@ -29,7 +29,7 @@ public class Investigate_DialogManager : MonoBehaviour
     [SerializeField] Image cutscene;
 
 
-
+    UnityAction skipAction = null;
     /// <summary> null이면 Play메서드 실행 </summary>
     UnityAction onNextProductionAcion = null;
     /// <summary> null이면 Play메서드 실행 </summary>
@@ -65,7 +65,6 @@ public class Investigate_DialogManager : MonoBehaviour
     [SerializeField] AudioSource se1Audio;
     [SerializeField] AudioSource se2Audio;
     [SerializeField] DialogEffectManager_UI uiEffectManager;
-    InteractiveDebate_UIManager uiManager;
     //[SerializeField] CharacterPositionManager characterPositionManager;
 
     private void Awake()
@@ -85,14 +84,13 @@ public class Investigate_DialogManager : MonoBehaviour
     {
         effectManager = EffectManager.Instance;
         database = SaveDatabase.Instance;
-        uiManager = GetComponent<InteractiveDebate_UIManager>();
         currentIndex = 0;
 
-        if (bgmAudio == null)
+        if (bgmAudio == null && DialogSoundManager.Instance != null)
             bgmAudio = DialogSoundManager.Instance.bgmSource;
-        if (se1Audio == null)
+        if (se1Audio == null && DialogSoundManager.Instance != null)
             se1Audio = DialogSoundManager.Instance.seSource1;
-        if (se2Audio == null)
+        if (se2Audio == null && DialogSoundManager.Instance != null)
             se2Audio = DialogSoundManager.Instance.seSource2;
 
         if(bgmAudio == null)
@@ -110,14 +108,15 @@ public class Investigate_DialogManager : MonoBehaviour
 
     public void UI_Active(bool isActive = true, bool isSFXOFF = true)
     {
-         foreach(Image img in charsImg)
-            img.gameObject.SetActive(isActive);
+        Debug.Log($"{isActive} : {isSFXOFF}");
+         //foreach(Image img in charsImg)
+         //   img.gameObject.SetActive(isActive);
         dialogBG.gameObject.SetActive(isActive);
         nameLabel.gameObject.SetActive(isActive);
         dialogLabel.gameObject.SetActive(isActive);
-        cutscene.gameObject.SetActive(isActive);
+        //cutscene.gameObject.SetActive(isActive);
 
-        if (isActive == false)
+        if (isActive == false || isSFXOFF)
             SFX_OFF();
     }
 
@@ -133,6 +132,9 @@ public class Investigate_DialogManager : MonoBehaviour
 
     private void Update()
     {
+        if (dialogs != null && currentIndex >= dialogs.Length)
+            return;
+
         if (Input.GetKeyUp(KeyCode.Space))
         {
             keyDowning = 0f;
@@ -156,21 +158,36 @@ public class Investigate_DialogManager : MonoBehaviour
 
     public void SetDialogs(int id, bool isIndexInit = false, bool isPlaying = false)
     {
+        if (id == -2)
+        {
+            UI_Active(false);
+            return;
+        }
+
         //data = database.GetDialogs_NeedID(id);
         dialogs = database.Get_InvestigateDialogs_NeedID(id);
+        //var dd = database == null ? null : database.Get_InvestigateDialogs();
+        //Debug.Log($"{id} list ({database == null}) : {dd?.Count} : {JsonUtility.ToJson(dd)}");
+        //var d = dialogs == null ? "null" : dialogs.Length.ToString();
+        //Debug.Log($"data ({d}) : {JsonUtility.ToJson(dialogs)}");
         if (isIndexInit)
             currentIndex = 0;
-
+        Debug.Log($"{id} : {isPlaying}");
         if (isPlaying)
         {
-            currentIndex = 0; 
+            currentIndex = 0;
             Play();
         }
     }
 
     public void Play()
     {
-        Debug.Log("Play");
+        Debug.Log($"Play : {currentIndex} / {dialogs.Length}");
+        if(skipAction != null)
+        {
+            skipAction?.Invoke();
+            return;
+        }
         if (onNextProductionAcion != null)
         {
             onNextProductionAcion.Invoke();
@@ -178,8 +195,9 @@ public class Investigate_DialogManager : MonoBehaviour
         }
         //if (uiManager.IsChoicePanelOpened())
         //    return;
-        Debug.Log("Play_Next");
         data = dialogs[currentIndex];
+
+        Debug.Log($"Play_Next : {data.ToString()}");
 
         onNextProductionAcion = Step1;
         onNextProductionAcion.Invoke();
@@ -241,6 +259,10 @@ public class Investigate_DialogManager : MonoBehaviour
             cutscene.gameObject.SetActive(false);
             onNextProductionAcion?.Invoke();
         }
+        else
+        {
+            onNextProductionAcion?.Invoke();
+        }
 
     }
 
@@ -300,14 +322,18 @@ public class Investigate_DialogManager : MonoBehaviour
             }
         }
 
-        nextProductionCoroutine[0] = StartCoroutine(uiEffectManager.RunCharacterEffect(data.CH1_EFFECT, uiManager.answer));
-        nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(data.CH2_EFFECT, uiManager.answer));
+        if(data.CH1_EFFECT != Dialog_CharEffect.None)
+            nextProductionCoroutine[0] = StartCoroutine(uiEffectManager.RunCharacterEffect(data.CH1_EFFECT, charsImg[0]));
+        if(data.CH2_EFFECT != Dialog_CharEffect.None)
+            nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(data.CH2_EFFECT, charsImg[1]));
 
         // TODO se2재생
-        SEPlayEffect(se2Audio, data.SE2.dialogSE);
+        if(data.SE2 != null)
+            SEPlayEffect(se2Audio, data.SE2.dialogSE);
 
         // TODO 기다리고 바로 실행하기
         Debug.Log("Step3 Waiting");
+        if(nextProductionCoroutine.Length > 0)
         await Task.Delay(TimeSpan.FromSeconds(uiEffectManager.duration));
         onNextProductionAcion?.Invoke();
     }
@@ -319,10 +345,10 @@ public class Investigate_DialogManager : MonoBehaviour
         // TOOD 다음 대사로 넘어가기
         onNextProductionAcion = ()=>
         {
-            if(uiManager.skipAction != null)
+            if(skipAction != null)
             {
-                uiManager.skipAction.Invoke();
-                uiManager.skipAction = null;
+                skipAction.Invoke();
+                skipAction = null;
             }
             else
             {
@@ -343,7 +369,9 @@ public class Investigate_DialogManager : MonoBehaviour
         // TODO 대사 출력
         if (data.DIALOGUE != null)
         {
-            uiManager.AddDialog(name: data.SPEAKER, text: data.DIALOGUE, () => onNextProductionAcion?.Invoke());
+            if(dialogBG.gameObject.activeSelf == false)
+            dialogBG.gameObject.SetActive(true);
+            AddDialog(name: data.SPEAKER, text: data.DIALOGUE, () => onNextProductionAcion?.Invoke());
         }
         else
         {
@@ -354,6 +382,7 @@ public class Investigate_DialogManager : MonoBehaviour
     /// <summary> 감정 게이지 보여주기 </summary>
     void Step5()
     {
+        Debug.Log("Step5");
         onNextProductionAcion = null;
 
         // 다음 id가 설정되어있는경우 다음꺼 보여주기
@@ -372,6 +401,35 @@ public class Investigate_DialogManager : MonoBehaviour
             //TODO OFF
             UI_Active(false);
         }
+    }
+
+    public void AddDialog(string name, string text, UnityAction callback = null)
+    {
+        // 대화 프리팹 생성
+        if(dialogBG.gameObject.activeSelf == false)
+            dialogBG.gameObject.SetActive(true);
+
+        nameLabel.text = name;
+        dialogLabel.text = string.Empty; // 초기화
+        TextTypingEffect(dialogLabel, text, callback: () => callback?.Invoke());
+    }
+
+    async void TextTypingEffect(TextMeshProUGUI tmp, string text, float lettersDelay = .02f, UnityAction callback = null)
+    {
+        skipAction = () =>
+        {
+            CancelInvoke(nameof(TextTypingEffect)); // 텍스트 타이핑 중지
+            tmp.text = text;
+            skipAction = null; // 스킵 액션 초기화
+        };
+        TimeSpan delay = TimeSpan.FromSeconds(lettersDelay);
+        for (int i = 0; i <= text.Length; i++)
+        {
+            tmp.text = text.Substring(0, i);
+            await Task.Delay(delay);
+        }
+        skipAction = null;
+        callback?.Invoke();
     }
 
     private void ShowCharacter(string name, string head, string body, int pos, Dialog_CharEffect effect)
@@ -480,5 +538,18 @@ public class Investigate_DialogManager : MonoBehaviour
             action.Invoke();
         if (coroutine != null)
             StopCoroutine(coroutine);
+    }
+
+    public bool IsRunning()
+    {
+        if (skipAction != null)
+            return true;
+        else if(onNextProductionAcion != null)
+            return true;
+        else if(nextProductionCoroutine != null)
+            return true;
+        else if(dialogBG.gameObject.activeSelf)
+            return true;
+        return false;
     }
 }
