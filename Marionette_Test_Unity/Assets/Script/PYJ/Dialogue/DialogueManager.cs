@@ -57,7 +57,7 @@ public class DialogueManager : MonoBehaviour
 { "하서하", "SEOHA" },
 { "유무구", "MUGU" },
 { "정해온", "HAEWON" },
-{ "도민결", "MINGYEOL" },
+{ "도민결", "MINKYEOL" },
 { "배수경", "SUKYUNG" },
 { "권하루", "HARU" },
 { "박세진", "SEJIN" },
@@ -290,14 +290,18 @@ public class DialogueManager : MonoBehaviour
             if (container != null)
             {
                 container.position = basePos;
-                // 머리와 몸의 localPosition은 인스펙터에서 조절한 값 유지됨
+
+                // 머리와 몸 localPosition을 초기값으로 고정
+                headRenderer.transform.localPosition = Vector3.zero;
+                bodyRenderer.transform.localPosition = Vector3.zero;
             }
-            else
+
+            else//
             {
                 Debug.LogWarning("머리 스프라이트에 부모 컨테이너가 없습니다. 위치가 이상할 수 있습니다.");
                 // 부모 없으면 기존 방식 유지 (긴급 대비)
-                headRenderer.transform.position = basePos + headRenderer.transform.localPosition;
-                bodyRenderer.transform.position = basePos + bodyRenderer.transform.localPosition;
+                headRenderer.transform.position = basePos;
+                bodyRenderer.transform.position = basePos;
             }
         }
 
