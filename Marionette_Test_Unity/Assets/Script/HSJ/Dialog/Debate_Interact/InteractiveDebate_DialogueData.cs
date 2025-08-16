@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using SimpleJSON;
 using System;
 using UnityEngine;
@@ -78,7 +79,7 @@ public class InteractiveDebate_DialogueData
 
     #region First Action
     /// <summary> BGM </summary>
-    public DialogSE BGM { get; protected set; }
+    public SoundAsset BGM { get; protected set; }
     /// <summary> BGM 효과 </summary>
     public DialogSoundPlayType BGM_EFFECT { get; protected set; }
     #endregion
@@ -92,10 +93,10 @@ public class InteractiveDebate_DialogueData
     public Sprite CG { get; protected set; }
 
     /// <summary> 화자 대화 시작시 효과음 </summary>
-    public DialogSE SE1 { get; protected set; }
+    public SoundAsset SE1 { get; protected set; }
     /// <summary>  </summary>
     public int SE1_EFFECT { get; protected set; } = 1;
-    public float SE1_Delay { get; protected set; } = default; // SE1 재생 딜레이
+    //public float SE1_Delay { get; protected set; } = default; // SE1 재생 딜레이
     #endregion
 
     #region Target's Values
@@ -122,9 +123,9 @@ public class InteractiveDebate_DialogueData
     public Dialog_CharEffect CH3_EFFECT { get; protected set; } = Dialog_CharEffect.None; // 캐릭터3 효과
 
     // 효과음
-    public DialogSE SE2 { get; protected set; }
+    public SoundAsset SE2 { get; protected set; }
     public int SE2_EFFECT { get; protected set; } = 1;
-    public float SE2_Delay { get; protected set; } = default; // SE1 재생 딜레이
+    //public float SE2_Delay { get; protected set; } = default; // SE1 재생 딜레이
     #endregion
 
     #region Choice Values
@@ -138,6 +139,9 @@ public class InteractiveDebate_DialogueData
     public string CHOICE3_TEXT { get; protected set; } = null; // 선택지 3 텍스트
 
     #endregion
+
+    public int EVIDENCE_ID { get; protected set; } = 0;
+    public int EVIDENCE_NEXT_ID { get; protected set; } = 0;
 
     public InteractiveDebate_DialogueData(JSONNode nod)
     {
@@ -182,7 +186,7 @@ public class InteractiveDebate_DialogueData
             this.DIALOGUE = GetText(_index);
             _index += 1;
 
-            this.BGM = new(type: SEType.BGM, clip: GetText(_index) == "" ? null : LoadAudioClipByName(GetText(_index)));
+            this.BGM = LoadAudioAssetByName(GetText(_index));
             _index += 1;
             this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
@@ -193,12 +197,12 @@ public class InteractiveDebate_DialogueData
             _index += 1;
             this.BG = GetText(_index);
             _index += 1;
-            this.SE1 = new(type: SEType.SE, clip: GetText(_index) == "" ? null : LoadAudioClipByName(GetText(_index)));
+            this.SE1 = LoadAudioAssetByName(GetText(_index));
             _index += 1;
             this.SE1_EFFECT = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
-            this.SE1_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
+            //this.SE1_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
+            //_index += 1;
 
             this.CH1_NAME = GetText(_index);
             _index += 1;
@@ -219,12 +223,12 @@ public class InteractiveDebate_DialogueData
             //this.CH3_EFFECT = (Dialog_CharEffect)int.Parse(GetText(25) == "" ? "1" : GetText(_index));
             //_index += 1;
 
-            this.SE2 = new(type: SEType.SE, clip: GetText(_index) == "" ? null : LoadAudioClipByName(GetText(_index)));
+            this.SE2 = LoadAudioAssetByName(GetText(_index));
             _index += 1;
             this.SE2_EFFECT = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
-            this.SE2_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
+            //this.SE2_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
+            //_index += 1;
 
             this.CHOICE1_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
@@ -238,11 +242,15 @@ public class InteractiveDebate_DialogueData
             _index += 1;
             this.CHOICE3_TEXT = GetText(_index);
             _index += 1;
+
+            this.EVIDENCE_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
+            _index += 1;
+            this.EVIDENCE_NEXT_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
+            _index += 1;
         }
         catch (Exception e)
         {
             Debug.Log($"[SetProperty Error] Row Data: {this.ID}:{this.INDEX} → {_index} = data : {GetText(_index)}\n{e.Message}");
-            throw; // 예외를 다시 던져서 호출자에게 알림
         }
 
     }
@@ -253,6 +261,13 @@ public class InteractiveDebate_DialogueData
 
     protected AudioClip LoadAudioClipByName(string clipName) =>
          Resources.Load<AudioClip>($"Audio/{clipName}");
-    
 
+    protected SoundAsset LoadAudioAssetByName(string clipName) =>
+         Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+
+    public override string ToString()
+    {
+        //return base.ToString();
+        return JsonConvert.SerializeObject(this);
+    }
 }

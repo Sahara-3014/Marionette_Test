@@ -177,6 +177,9 @@ public class HSJ_LobbyManager : MonoBehaviour
     {
         panels[0].SetActive(true);
         panels[2].SetActive(false);
+
+        if(soundManager.bgmSource.isPlaying)
+            soundManager.bgmSource.Stop();
     }
 
     public AudioMixer GetAudioMixer()
@@ -186,5 +189,16 @@ public class HSJ_LobbyManager : MonoBehaviour
         if (audioMixer == null)
             audioMixer = audioMixerGroup.audioMixer;
         return audioMixer;
+    }
+
+    public void ExitGame()
+    {
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        //#elif UNITY_WEBPLAYER
+        //        Application.OpenURL(webplayerQuitURL);
+        #else
+                Application.Quit();
+        #endif
     }
 }

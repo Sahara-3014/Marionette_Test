@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using SimpleJSON;
 using System;
 using UnityEngine;
@@ -171,36 +172,30 @@ public class ConfrontationDebate_DialogueData
         this.SPEAKER = GetText(7);
         this.DIALOGUE = GetText(8);
 
-        this.BGM.dialogSE = new DialogSE(type: SEType.BGM, clip: GetText(9) == "" ? null : LoadAudioClipByName(GetText(9)));
+        this.BGM = LoadAudioAssetByName(GetText(9));
         this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(10) == "" ? "0" : GetText(10));
 
-        this.BGM_EFFECT = (DialogSoundPlayType)int.Parse(GetText(11) == "" ? "0" : GetText(11));
+        this.screenEffect = (Dialog_ScreenEffect)int.Parse(GetText(11) == "" ? "0" : GetText(11));
         this.CG = GetText(12) != "" ? Resources.Load<Sprite>($"CG/{GetText(12)}") : null;
         this.BG = GetText(13);
-        this.SE1.dialogSE = new DialogSE(type: SEType.SE, clip: GetText(144) == "" ? null : LoadAudioClipByName(GetText(14)));
+        this.SE1 = LoadAudioAssetByName(GetText(14));
         this.SE1_EFFECT = int.Parse(GetText(15) == "" ? "0" : GetText(15));
         this.SE1_Delay = float.Parse(GetText(16) == "" ? "0" : GetText(16));
 
         this.CH1_NAME = GetText(17);
         this.CH1_EMOTION = GetText(18);
         this.CH1_EFFECT = (Dialog_CharEffect)int.Parse(GetText(19) == "" ? "1" : GetText(19));
-        this.CH2_NAME = GetText(20);
-        this.CH2_EMOTION = GetText(21);
-        this.CH2_EFFECT = (Dialog_CharEffect)int.Parse(GetText(22) == "" ? "1" : GetText(22));
-        this.CH3_NAME = GetText(23);
-        this.CH3_EMOTION = GetText(24);
-        this.CH3_EFFECT = (Dialog_CharEffect)int.Parse(GetText(25) == "" ? "1" : GetText(25));
 
-        this.SE2.dialogSE = new DialogSE(type: SEType.SE, clip: GetText(26) == "" ? null : LoadAudioClipByName(GetText(26)));
-        this.SE2_EFFECT = int.Parse(GetText(27) == "" ? "0" : GetText(27));
-        this.SE2_Delay = float.Parse(GetText(28) == "" ? "0" : GetText(28));
+        this.SE2 = LoadAudioAssetByName(GetText(20));
+        this.SE2_EFFECT = int.Parse(GetText(21) == "" ? "0" : GetText(21));
+        this.SE2_Delay = float.Parse(GetText(22) == "" ? "0" : GetText(22));
 
-        this.CHOICE1_ID = int.Parse(GetText(29) == "" ? "0" : GetText(29));
-        this.CHOICE1_TEXT = GetText(30);
-        this.CHOICE2_ID = int.Parse(GetText(31) == "" ? "0" : GetText(31));
-        this.CHOICE2_TEXT = GetText(32);
-        this.CHOICE3_ID = int.Parse(GetText(33) == "" ? "0" : GetText(33));
-        this.CHOICE3_TEXT = GetText(34);
+        this.CHOICE1_ID = int.Parse(GetText(23) == "" ? "0" : GetText(23));
+        this.CHOICE1_TEXT = GetText(24);
+        this.CHOICE2_ID = int.Parse(GetText(25) == "" ? "0" : GetText(25));
+        this.CHOICE2_TEXT = GetText(26);
+        this.CHOICE3_ID = int.Parse(GetText(27) == "" ? "0" : GetText(27));
+        this.CHOICE3_TEXT = GetText(28);
     }
 
     protected string GetText(int index) => 
@@ -209,6 +204,13 @@ public class ConfrontationDebate_DialogueData
 
     protected AudioClip LoadAudioClipByName(string clipName) =>
          Resources.Load<AudioClip>($"Audio/{clipName}");
-    
+    protected SoundAsset LoadAudioAssetByName(string clipName) =>
+         Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+
+    public override string ToString()
+    {
+        //return base.ToString();
+        return JsonConvert.SerializeObject(this);
+    }
 
 }

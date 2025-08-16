@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 
-public class ConfrontationDebate_DialogManager : MonoBehaviour
+public class OLD_InteractiveDebate_DialogManager : MonoBehaviour
 {
-    public static ConfrontationDebate_DialogManager instance;
+    public static OLD_InteractiveDebate_DialogManager instance;
 
     //Default Values
     SaveDatabase database;
     EffectManager effectManager;
 
 
-    ConfrontationDebate_DialogueData[] dialogs;
+    InteractiveDebate_DialogueData[] dialogs;
     DialogueData[] data; // 임시
     public int currentIndex = 0;
 
@@ -24,8 +24,10 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
     UnityAction onNextProductionAcion = null;
     /// <summary> null이면 Play메서드 실행 </summary>
     Coroutine[] nextProductionCoroutine = null;
+    /// <summary> 스킵시 원래 액션으로 돌아가기 위한 변수 </summary>
+    UnityAction onSkipToOriAction = null;
     
-    public ConfrontationDebate_DialogueData debateData { get; protected set; }
+    public InteractiveDebate_DialogueData debateData { get; protected set; }
 
     [Space(10)]
     [Header("Effect Values")]
@@ -34,26 +36,16 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
     [SerializeField] AudioSource se2Audio;
     [SerializeField] DialogEffectManager dialogEffectManager;
     [SerializeField] DialogEffectManager_UI uiEffectManager;
-    ConfrontationDebate_UIManager uiManager;
+    OLD_InteractiveDebate_UIManager uiManager;
 
-    private void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
+
 
     private void Start()
     {
         effectManager = EffectManager.Instance;
         database = SaveDatabase.Instance;
-        uiManager = GetComponent<ConfrontationDebate_UIManager>();
+        uiManager = GetComponent<OLD_InteractiveDebate_UIManager>();
+        instance = this;
         currentIndex = 0;
 
         if(bgmAudio == null)
@@ -76,7 +68,7 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
     public void SetDialogs(int id, bool isIndexInit = false, bool isPlaying = false)
     {
         //data = database.GetDialogs_NeedID(id);
-        dialogs = database.Get_ConfrontationDebateDialogs_NeedID(id);
+        dialogs = database.Get_DebateDialogs_NeedID(id);
         if (isIndexInit)
             currentIndex = 0;
 
@@ -95,8 +87,8 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
             onNextProductionAcion.Invoke();
             return;
         }
-        //if (uiManager.IsChoicePanelOpened())
-        //    return;
+        if (uiManager.IsChoicePanelOpened())
+            return;
         Debug.Log("Play_Next");
         debateData = dialogs[currentIndex];
 
@@ -115,21 +107,21 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
         switch (debateData.BGM_EFFECT)
         {
             // -3
-            case ConfrontationDebate_DialogueData.DialogSoundPlayType.Continue:
+            case InteractiveDebate_DialogueData.DialogSoundPlayType.Continue:
                 bgmAudio.UnPause();
                 break;
             // -2
-            case ConfrontationDebate_DialogueData.DialogSoundPlayType.Pause:
+            case InteractiveDebate_DialogueData.DialogSoundPlayType.Pause:
                 if (bgmAudio.isPlaying)
                     bgmAudio.Pause();
                 break;
             // -1
-            case ConfrontationDebate_DialogueData.DialogSoundPlayType.Stop:
+            case InteractiveDebate_DialogueData.DialogSoundPlayType.Stop:
                 if (bgmAudio.isPlaying)
                     bgmAudio.Stop();
                 break;
             // 12
-            case ConfrontationDebate_DialogueData.DialogSoundPlayType.FadeOut:
+            case InteractiveDebate_DialogueData.DialogSoundPlayType.FadeOut:
                 isWait = true;
                 if (bgmAudio.loop)
                     bgmAudio.loop = false;
@@ -143,7 +135,7 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
             switch (debateData.BGM_EFFECT)
             {
                 // 1
-                case ConfrontationDebate_DialogueData.DialogSoundPlayType.PlayOnShot:
+                case InteractiveDebate_DialogueData.DialogSoundPlayType.PlayOnShot:
                     if (bgmAudio.loop)
                         bgmAudio.loop = false;
                     if (bgmAudio.isPlaying)
@@ -154,7 +146,7 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
                     break;
 
                 // 11
-                case ConfrontationDebate_DialogueData.DialogSoundPlayType.FadeIn:
+                case InteractiveDebate_DialogueData.DialogSoundPlayType.FadeIn:
                     if (bgmAudio.loop)
                         bgmAudio.loop = false;
                     if (bgmAudio.isPlaying)
@@ -166,7 +158,7 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
 
                     break;
                 // 13
-                case ConfrontationDebate_DialogueData.DialogSoundPlayType.FadeOutToIn:
+                case InteractiveDebate_DialogueData.DialogSoundPlayType.FadeOutToIn:
                     if (bgmAudio.loop)
                         bgmAudio.loop = false;
                     if (bgmAudio.isPlaying)
@@ -188,7 +180,8 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
                     }
                     break;
                 // 0
-                case ConfrontationDebate_DialogueData.DialogSoundPlayType.PlayLoop:
+                //case case InteractiveDebate_DialogueData.DialogSoundPlayType.PlayLoop:
+                default:
                     if (bgmAudio.isPlaying)
                         bgmAudio.Stop();
                     bgmAudio.loop = true;
@@ -255,16 +248,22 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
         if (nextProductionCoroutine == null)
             nextProductionCoroutine = new Coroutine[4];
 
+        int count = 0;
+        int maxCount = 4;
         // TODO 캐릭터연출 재생 <- 타입에 따라서 프레임에 먹일 이펙트/캐릭터에 먹일 이펙트 분리해야함
-        nextProductionCoroutine[0] = StartCoroutine(dialogEffectManager.RunCharacterEffect(debateData.TARGET_EFFECT, uiManager.target));
-        nextProductionCoroutine[1] = StartCoroutine(dialogEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answer));
+        nextProductionCoroutine[0] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.TARGET_EFFECT, uiManager.target, ()=> count++));
+        nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answers[0], ()=> count++));
+        nextProductionCoroutine[2] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH2_EFFECT, uiManager.answers[1], () => count++));
+        nextProductionCoroutine[3] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH3_EFFECT, uiManager.answers[2], () => count++));
 
         // TODO se2재생
         SEPlayEffect(se2Audio, debateData.SE2.dialogSE, debateData.SE2_EFFECT);
-
         // TODO 기다리고 바로 실행하기
-        Debug.Log("Step3 Waiting");
-        await Task.Delay(TimeSpan.FromSeconds(uiEffectManager.duration));
+        while(count < maxCount)
+        {
+            Debug.Log("Step3 Waiting");
+            await Task.Yield();
+        }
         onNextProductionAcion.Invoke();
     }
 
@@ -273,20 +272,7 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
     {
         Debug.Log("Step4");
         // TOOD 다음 대사로 넘어가기
-        onNextProductionAcion = ()=>
-        {
-            if(uiManager.skipAction != null)
-            {
-                uiManager.skipAction.Invoke();
-                uiManager.skipAction = null;
-            }
-            else
-            {
-                Step5();
-            }
-        };
-
-        //이전 스텝 변수 초기화
+        onNextProductionAcion = Step5;
         if(nextProductionCoroutine != null)
         {
             if (nextProductionCoroutine[1] != null)
@@ -301,31 +287,39 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
         // TODO 대사 출력
         if (debateData.DIALOGUE != null)
         {
-            uiManager.AddDialog(name: debateData.SPEAKER, text: debateData.DIALOGUE);
+            if(debateData.TARGET_NAME == debateData.SPEAKER)
+                uiManager.Add_TargetText(debateData.DIALOGUE, ()=>onNextProductionAcion.Invoke());
+            else
+                uiManager.Add_OtherAnswerText($"{debateData.SPEAKER}", $"{debateData.DIALOGUE}", () => onNextProductionAcion.Invoke());
+            onSkipToOriAction = uiManager.skipAction;
+        }
+        else
+        {
+            onNextProductionAcion.Invoke();
+            onNextProductionAcion = null;
         }
     }
 
-    /// <summary> 감정 게이지 보여주기 </summary>
     void Step5()
     {
         onNextProductionAcion = null;
+        onSkipToOriAction = null;
 
-        //if (debateData.TARGET_INTERACT != null && debateData.TARGET_INTERACT != "")
-        //{
-        //    Debug.Log("Last");
+        if (debateData.TARGET_INTERACT != null)
+        {
+            Debug.Log("Last");
 
-        //    string[] interact = debateData.TARGET_INTERACT.Split('/');
+            string[] interact = debateData.TARGET_INTERACT.Split('/');
 
-        //    CharAttributeData.CharAttributeType interactType = (CharAttributeData.CharAttributeType)Enum.Parse(typeof(CharAttributeData.CharAttributeType), interact[0], true);
-        //    int value = int.Parse(interact[1]);
-        //    int nowValue = database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interactType).value;
+            CharAttributeData.CharAttributeType interactType = (CharAttributeData.CharAttributeType)Enum.Parse(typeof(CharAttributeData.CharAttributeType), interact[0], true);
+            int value = int.Parse(interact[1]);
 
-        //    database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interactType, nowValue + value);
-        //    uiManager.ChangeAbilityGauge(interactType);
-        //}
+            database.SaveData_SetCharData_SetGauge(debateData.TARGET_NAME, interactType,
+                    database.SaveData_GetCharData_GetGauge(debateData.TARGET_NAME, interactType).value + value);
+            uiManager.ChangeAbilityGauge(interactType);
+        }
 
 
-        // 선택지 보여주기
         if (debateData.CHOICE1_ID != 0)
         {
             List<(int, string)> choices = new();
@@ -337,14 +331,11 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
 
             uiManager.OpenChoicePanel(choices);
         }
-        // 다음 id가 설정되어있는경우 다음꺼 보여주기
         else if (debateData.NEXT_ID != -1 && debateData.NEXT_ID != 0)
         {
             SetDialogs(debateData.NEXT_ID, isIndexInit: true, isPlaying: true);
         }
-        // 다음대사 실행하기
-        // TODO 다음대사 없고 할당이 안되어있으면 에러날듯
-        else if(dialogs.Length <= currentIndex + 1)
+        else
         {
             currentIndex += 1;
         }
@@ -433,7 +424,7 @@ public class ConfrontationDebate_DialogManager : MonoBehaviour
                     for (int i = 1; i < effect; i++)
                     {
                         audio.Play();
-                        await Task.Delay(TimeSpan.FromSeconds(debateData.SE2_Delay));
+                        await Task.Delay(TimeSpan.FromSeconds(se.clip.length+0.1f));
                     }
                     //isWait = false;
                     break;

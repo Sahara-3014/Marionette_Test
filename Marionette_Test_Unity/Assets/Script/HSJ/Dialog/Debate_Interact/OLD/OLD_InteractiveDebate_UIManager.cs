@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class InteractiveDebate_UIManager_OLD : MonoBehaviour
+public class OLD_InteractiveDebate_UIManager : MonoBehaviour
 {
     SaveDatabase database;
     DayCycleSystem dayCycleSystem;

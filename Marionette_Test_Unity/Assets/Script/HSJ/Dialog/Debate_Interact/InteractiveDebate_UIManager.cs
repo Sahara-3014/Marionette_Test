@@ -34,8 +34,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     [HideInInspector]
     public UnityAction skipAction = null;
 
-    bool isKeyDowning = false;
-    public float autoPlayDelay = 0.05f; // 자동 재생 딜레이
+    public float autoPlayDelay = 0.1f; // 자동 재생 딜레이
     float autoPlayTimer = 0f;
 
     private void Awake()
@@ -70,20 +69,16 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     private void FixedUpdate()
     {
         //인풋처리
-        #if UNITY_STANDALONE_WIN
-        if (Input.GetKeyDown(KeyCode.Space))
+#if UNITY_STANDALONE_WIN
+        if (Input.GetKeyUp(KeyCode.Space))
         {
-            isKeyDowning = true;
-        }
-        else
-        {
-            isKeyDowning = false;
+            Debug.Log("KeyUp");
             autoPlayTimer = 0f; // 자동 재생 타이머 초기화
         }
-        
-        
-        if(isKeyDowning)
+
+        if (Input.GetKey(KeyCode.Space))
         {
+            Debug.Log("KeyDown");
             autoPlayTimer += Time.fixedDeltaTime;
             if (autoPlayTimer >= autoPlayDelay)
             {
@@ -91,13 +86,10 @@ public class InteractiveDebate_UIManager : MonoBehaviour
                 autoPlayTimer = 0f; // 자동 재생 타이머 초기화
             }
         }
+        
+        
 
 #endif
-    }
-
-    private void OnDisable()
-    {
-        isKeyDowning = false;
     }
 
     /// <summary> Load했을때 이전 데이터 뿌려주기 </summary>
@@ -148,7 +140,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         int index = scrollSnap.NumberOfPanels;
         scrollSnap.Add(dialogPrefab, index, true);
         GameObject dialogObj = scrollSnap.Content.GetChild(index).gameObject;
-        TextMeshProUGUI nameLabel = dialogObj.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI nameLabel = dialogObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI dialogLabel = dialogObj.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         
         nameLabel.text = name;
