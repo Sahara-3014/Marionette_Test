@@ -857,9 +857,6 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-
-
-
     private void ShowCutscene(string cutsceneName)
     {
         if (cutsceneImageObject == null)
@@ -868,10 +865,10 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        var sr = cutsceneImageObject.GetComponent<SpriteRenderer>();
-        if (sr == null)
+        var img = cutsceneImageObject.GetComponent<Image>();
+        if (img == null)
         {
-            Debug.LogError("cutsceneImageObject에 SpriteRenderer 컴포넌트가 없습니다!");
+            Debug.LogError("cutsceneImageObject에 Image 컴포넌트가 없습니다!");
             return;
         }
 
@@ -889,7 +886,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         cutsceneImageObject.SetActive(true);
-        sr.sprite = cutsceneSprite;
+        img.sprite = cutsceneSprite;
     }
 
 
