@@ -916,28 +916,28 @@ MonoBehaviour:
   itemDatabase:
   - id: 0
     itemName: "\uCC22\uC5B4\uC9C4 \uC885\uC774 \uC870\uAC01"
-    itemSprite: {fileID: 1346292839, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 770048837864621900, guid: 3def8d7471b17cf479dfd644470a7db0, type: 3}
     ItemDescription: "\uD5EC\uC2A4\uC7A5 \uAD6C\uC11D\uC5D0 \uB5A8\uC5B4\uC838 \uC788\uB358
       \uC885\uC774 \uD55C \uC870\uAC01.\n\u201C\uB108\uB294 \uB450 \uBC88 \uB208\uC744
       \uAC10\uAC8C \uB420 \uAC70\uC57C.\n\uADF8\uB9AC\uACE0 \uACB0\uAD6D \uC78A\uD600\uC9C0\uACA0\uC9C0.\n-\uB9B4-\u201D\n\uB77C\uB294
       \uBB38\uC7A5\uC774 \uC801\uD600\uC788\uB2E4."
   - id: 1
     itemName: "\uBD89\uAC8C \uC5BC\uB8E9\uC9C4 \uC218\uAC74"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: -4945009116824377339, guid: fef0a2fec76eb9b43b85ad53984904a8, type: 3}
     ItemDescription: "\uC5EC\uC790 \uC0E4\uC6CC\uC2E4 \uBE68\uB798\uD1B5\uC5D0 \uB4E4\uC5B4\uC788\uB358
       \uC218\uAC74.\n\uC218\uAC74\uC758 \uD55C \uBAA8\uC11C\uB9AC\uAC00 \uD76C\uBBF8\uD55C
       \uBD89\uC740 \uC5BC\uB8E9\uC73C\uB85C\n\uBC88\uC838 \uC788\uB2E4.\n... \uD574\uC628
       \uC120\uBC30\uC758 \uD53C\uC77C\uAE4C?."
   - id: 2
     itemName: "\uB5A8\uC5B4\uC838 \uB098\uAC04 \uC904\uB118\uAE30 \uC190\uC7A1\uC774"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: -7127850746087877644, guid: 2258235e8089e2f468d4a69fff881dd4, type: 3}
     ItemDescription: "\uC904\uC774 \uC5C6\uB294 \uC904\uB118\uAE30\uC758 \uC190\uC7A1\uC774
       \uD558\uB098\uAC00 \uC4F0\uB808\uAE30\uD1B5 \uC548\uC5D0 \uCC98\uBC15\uD600
       \uC788\uB2E4.\n\uB0B4\uAC00 \uCC98\uC74C\uC5D0 \uBC1B\uC558\uB358 \uAC83\uACFC
       \uB3D9\uC77C\uD55C \uAC83\uC73C\uB85C \uBCF4\uC778\uB2E4."
   - id: 3
     itemName: "\uAC00\uC8FD \uCE7C\uC9D1"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 8014755525439481770, guid: 84a42bbdc2304b6418e7c51d25dfe029, type: 3}
     ItemDescription: "\uAC15\uC138\uB839\uC758 \uC218\uB0A9\uC7A5 \uC548\uC5D0\uC11C
       \uBC1C\uACAC\uB41C \uACE0\uAE09\uC2A4\uB7EC\uC6B4 \uAC00\uC8FD \uCE7C\uC9D1\uC774\uB2E4.\n\uC791\uAC8C
       'K.S.R' \uC774\uB77C\uB294 \uC774\uB2C8\uC15C\uC774 \uC801\uD600\uC788\uB2E4.\n\uBC94\uD589
@@ -945,13 +945,13 @@ MonoBehaviour:
       \uC54C\uB9DE\uB294 \uD06C\uAE30."
   - id: 4
     itemName: "\uBE48 \uC218\uBA74\uC81C \uBD09\uD22C"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: -5266718770459313909, guid: 8690e83db2de18943b3018477e7c740b, type: 3}
     ItemDescription: "\uBC14 \uC4F0\uB808\uAE30\uD1B5\uC5D0\uC11C \uBC1C\uACAC.\n\uBD09\uD22C
       \uD45C\uBA74\uC5D0 \uC131\uBD84\uC774 \uC801\uD600 \uC788\uB2E4.\n\uC878\uD53C\uB380
       \uC131\uBD84\uC758 \uC218\uBA74 \uC720\uB3C4\uC81C."
   - id: 5
     itemName: "\uBC29\uC1A1\uC2E4 \uC791\uB3D9 \uAE30\uB85D\uC9C0"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 69463261601322666, guid: 4f3410568d03972408352de799484418, type: 3}
     ItemDescription: "\uBC29\uC1A1\uC2E4 \uCF58\uC194 \uB0B4\uBD80\uC5D0\uC11C \uBC1C\uACAC\uB41C
       \uAE30\uB85D\uC9C0.\n18:35. \uC2DC\uC2A4\uD15C \uC218\uB3D9 \uC791\uB3D9 \uAE30\uB85D.\n\u2018\uC625\uC0C1
       \uC815\uC6D0\uC73C\uB85C \uC774\uB3D9 \uC548\uB0B4 \uBC29\uC1A1\u2019\uB9CC
@@ -959,7 +959,7 @@ MonoBehaviour:
       \uBC29\uC1A1\uC5D0\uC11C \uC81C\uC678\uB418\uC5B4 \uC788\uB2E4.\n"
   - id: 6
     itemName: "\uBE44\uC5B4\uC788\uB294 \uCE75\uD14C\uC77C \uC794"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 4721623886674587064, guid: 9633fc7d2557b9546ae9e23557f3c7a2, type: 3}
     ItemDescription: "\uB098\uC640 \uD574\uC628\uC120\uBC30\uAC00 \uB9C8\uC168\uB358
       \uCE75\uD14C\uC77C \uC794\uC73C\uB85C \uBCF4\uC778\uB2E4.\n\uC120\uBC30\uB294
       \uC220\uC744 \uC798 \uB9C8\uC168\uB358 \uAC83 \uAC19\uB2E4. \uBB3C\uB860 \uB09C
@@ -968,13 +968,13 @@ MonoBehaviour:
       \uBBFF\uAE30\uC9C0 \uC54A\uB294\uB2E4."
   - id: 7
     itemName: "\uBC18 \uC815\uB3C4 \uCC28 \uC788\uB294 \uBB3C\uC794"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: -6047221916759813181, guid: b9d8c032bf4e9e74eb470b9fd2a5edbc, type: 3}
     ItemDescription: "\uD574\uC628 \uC120\uBC30\uAC00 \uC92C\uB358 \uBB3C\uC794.
       \uC774 \uBB3C\uC744 \uB9C8\uC2DC\uACE0 \uC815\uC2E0\uC744 \uC783\uC5C8\uB2E4.\n\uCEF5
       \uBC14\uB2E5\uC5D0 \uD770 \uAC00\uB8E8\uAC00 \uAC00\uB77C\uC549\uC544 \uC788\uB2E4."
   - id: 8
     itemName: "\uBCF5\uB3C4 \uBC14\uB2E5 \uB9C8\uCC30 \uD754\uC801"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 142893676951614155, guid: f952c636bf2b0384fb9f4889e51bc45e, type: 3}
     ItemDescription: "\uBCF5\uB3C4 \uBC14\uB2E5\uC5D0\uB294 \uAE38\uAC8C \uB04C\uB9B0
       \uD754\uC801\uC774 \uB0A8\uC544 \uC788\uB2E4.\n\uBB34\uC5B8\uAC00 \uBB34\uAC70\uC6B4
       \uAC83\uC744 \uC9C8\uC9C8 \uB04C\uACE0 \uAC04 \uB4EF\uD55C \uC790\uAD6D.\n2\uCE35\uACFC
@@ -982,7 +982,7 @@ MonoBehaviour:
       \uB0B4 \uBC29 \uC55E\uC5D0\uC11C \uBA48\uCDB0\uC788\uC5C8\uB2E4."
   - id: 9
     itemName: "\uBAA9 \uC55E\uCABD \uC790\uC0C1"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 142893676951614155, guid: f952c636bf2b0384fb9f4889e51bc45e, type: 3}
     ItemDescription: "\uD574\uC628 \uC120\uBC30\uC758 \uBAA9 \uC55E\uCABD\uC5D0 \uAE4A\uC740
       \uC790\uC0C1\uC774 \uB0A8\uC544 \uC788\uB2E4. \n\uB3C4\uB824\uB0B4\uB4EF \uC5EC\uB7EC
       \uCC28\uB840 \uBC18\uBCF5\uB41C \uD754\uC801\uC774 \uD655\uC778\uB41C\uB2E4.\n...
@@ -990,13 +990,13 @@ MonoBehaviour:
       \uBAA8\uC2B5\uC774\uB2E4."
   - id: 10
     itemName: "\uBAA9 \uB4A4\uCABD \uC790\uAD6D"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 879241847246245952, guid: 26426bed72a9cd84f9732fa1465e44f0, type: 3}
     ItemDescription: "\uD574\uC628 \uC120\uBC30\uC758 \uBAA9 \uB4B7\uBD80\uBD84\uC5D0
       \uC788\uB358 \uD754\uC801.\n\uAC00\uB294 \uBD89\uC740 \uC120\uCC98\uB7FC \uBCF4\uC774\uB294
       \uC790\uAD6D\uACFC \uBA4D\uC774 \uB0A8\uC544 \uC788\uB2E4."
   - id: 11
     itemName: "\uC67C\uCABD \uAC00\uC2B4 \uCABD \uC790\uC0C1"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 527963563933611466, guid: 2c0f2563befffd3499dbfcd5e60ad469, type: 3}
     ItemDescription: "\uC2EC\uC7A5 \uBC14\uB85C \uC606, \uC67C\uCABD \uD749\uBD80\uC5D0
       \uAE4A\uACE0 \uC815\uD655\uD55C \uC790\uC0C1\uC774 \uC788\uB2E4. \n\uB0A0\uC758
       \uAC01\uB3C4, \uAE4A\uC774, \uCC0C\uB978 \uC704\uCE58 \uBAA8\uB450\uAC00 \uC218\uC0C1\uD560
@@ -1008,13 +1008,13 @@ MonoBehaviour:
       \uAC83\uC73C\uB85C \uBCF4\uC778\uB2E4."
   - id: 12
     itemName: "\uC904\uB118\uAE30"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: -3436014747272813526, guid: 397ce769ce3edbe448f71fa56055df80, type: 3}
     ItemDescription: "\uCD08\uBC18\uC5D0 \uB0B4\uAC8C \uC8FC\uC5B4\uC84C\uB358 \uC904\uB118\uAE30.
       \n\uD574\uC628 \uC120\uBC30\uC758 \uB450 \uD314\uC744 \uACB0\uBC15\uD558\uB294\uB370
       \uC4F0\uC600\uB2E4."
   - id: 13
     itemName: "\uD574\uC628\uC758 \uB300\uBCF8\uC9D1"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: -5844153892373833149, guid: a3c0d4c65f7c4a340bff2dc9c1644852, type: 3}
     ItemDescription: "\uD574\uC628 \uC120\uBC30 \uCE68\uB300 \uC606 \uC11C\uB78D\uC5D0
       \uC788\uC5C8\uB358 \uB300\uBCF8\uC9D1.\n\uC5F0\uADF9\u300A\uB2EC\uC758 \uB05D\uC5D0\uC11C
       \uB098\uB97C \uBD80\uB974\uAC70\uB4E0\u300B\uB300\uBCF8 \uC77C\uBD80\uAC00
@@ -1026,14 +1026,14 @@ MonoBehaviour:
       \uB098\uC758 \uAC83, \uB2E4\uB978 \uD558\uB098\uB294 \uADF8\uB4E4\uC758 \uAC83\uC77C\uD14C\uB2E4."
   - id: 14
     itemName: "\uAC70\uC6B8 \uC870\uAC01"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: 4350274700565910587, guid: 90824188e8a595347a52d330a0ba6bfe, type: 3}
     ItemDescription: "\uD574\uC628 \uC120\uBC30\uC758 \uC637\uC5D0 \uBD99\uC5B4 \uC788\uB358
       \uC544\uC8FC \uC791\uC740 \uAC70\uC6B8 \uC870\uAC01\uC774\uB2E4.\n\uC624\uB978\uCABD
       \uC5B4\uAE68 \uBD80\uBD84\uC5D0 \uBD99\uC5B4 \uC788\uC5C8\uB2E4."
   - id: 15
     itemName: "\uB9DD\uAC00\uC9C4 \uBC29 \uC190\uC7A1\uC774\uC640 \uD480\uC5B4\uC9C4
       \uB098\uC0AC"
-    itemSprite: {fileID: -585654175, guid: fd070597c78f09443bde82792466fb16, type: 3}
+    itemSprite: {fileID: -6729465587762570521, guid: a3811f1b2875a384b9cab62ba4fecdf1, type: 3}
     ItemDescription: "\uB098\uC640 \uD574\uC628 \uC120\uBC30\uC758 \uBC29\uC5D0 \uC788\uB358
       \uBB38 \uC190\uC7A1\uC774\uAC00 \uACE0\uC7A5\uB098 \uC788\uB2E4.\n\uB098\uC0AC\uB97C
       \uB204\uAD70\uAC00\uAC00 \uC758\uB3C4\uC801\uC73C\uB85C \uD47C \uBAA8\uC591\uC774\uB2E4.\n\uB0B4\uAC00
@@ -5450,6 +5450,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3000532601403896184, guid: b8fd1dbbd30c6924c90cfb29af80fb66, type: 3}
+      propertyPath: InventoryIcon
+      value: 
+      objectReference: {fileID: 345073423}
     - target: {fileID: 4916446962461514470, guid: b8fd1dbbd30c6924c90cfb29af80fb66, type: 3}
       propertyPath: m_Name
       value: Investigate_UI
@@ -8243,7 +8247,7 @@ MonoBehaviour:
   id: 0
   quantity: 1
   interactionRange: 0
-  dialog_id: 0
+  dialog_id: 4000
 --- !u!61 &1341940641
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11814,7 +11818,7 @@ MonoBehaviour:
   id: 0
   quantity: 1
   interactionRange: 0
-  dialog_id: 0
+  dialog_id: 4001
 --- !u!61 &1921021886
 BoxCollider2D:
   m_ObjectHideFlags: 0
