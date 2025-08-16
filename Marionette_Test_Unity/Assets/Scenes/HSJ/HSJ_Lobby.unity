@@ -9538,7 +9538,7 @@ MonoBehaviour:
   - {fileID: 1015437977}
   - {fileID: 1007313760}
   - {fileID: 238843600}
-  startSceneName: HSJ_PYJ_Dialogue
+  startSceneName: HSJ_PYJ_Dialogue_1
   loadSceneName: HSJ_CWJ_Investigate
 --- !u!4 &2134064852
 Transform:
