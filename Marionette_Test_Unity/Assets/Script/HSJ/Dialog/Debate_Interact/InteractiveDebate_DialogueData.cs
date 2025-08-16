@@ -96,7 +96,7 @@ public class InteractiveDebate_DialogueData
     public SoundAsset SE1 { get; protected set; }
     /// <summary>  </summary>
     public int SE1_EFFECT { get; protected set; } = 1;
-    public float SE1_Delay { get; protected set; } = default; // SE1 재생 딜레이
+    //public float SE1_Delay { get; protected set; } = default; // SE1 재생 딜레이
     #endregion
 
     #region Target's Values
@@ -125,7 +125,7 @@ public class InteractiveDebate_DialogueData
     // 효과음
     public SoundAsset SE2 { get; protected set; }
     public int SE2_EFFECT { get; protected set; } = 1;
-    public float SE2_Delay { get; protected set; } = default; // SE1 재생 딜레이
+    //public float SE2_Delay { get; protected set; } = default; // SE1 재생 딜레이
     #endregion
 
     #region Choice Values
@@ -139,6 +139,9 @@ public class InteractiveDebate_DialogueData
     public string CHOICE3_TEXT { get; protected set; } = null; // 선택지 3 텍스트
 
     #endregion
+
+    public int EVIDENCE_ID { get; protected set; } = 0;
+    public int EVIDENCE_NEXT_ID { get; protected set; } = 0;
 
     public InteractiveDebate_DialogueData(JSONNode nod)
     {
@@ -198,8 +201,8 @@ public class InteractiveDebate_DialogueData
             _index += 1;
             this.SE1_EFFECT = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
-            this.SE1_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
+            //this.SE1_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
+            //_index += 1;
 
             this.CH1_NAME = GetText(_index);
             _index += 1;
@@ -224,8 +227,8 @@ public class InteractiveDebate_DialogueData
             _index += 1;
             this.SE2_EFFECT = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
-            this.SE2_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
-            _index += 1;
+            //this.SE2_Delay = float.Parse(GetText(_index) == "" ? "0" : GetText(_index));
+            //_index += 1;
 
             this.CHOICE1_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
@@ -238,6 +241,11 @@ public class InteractiveDebate_DialogueData
             this.CHOICE3_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
             this.CHOICE3_TEXT = GetText(_index);
+            _index += 1;
+
+            this.EVIDENCE_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
+            _index += 1;
+            this.EVIDENCE_NEXT_ID = int.Parse(GetText(_index) == "" ? "0" : GetText(_index));
             _index += 1;
         }
         catch (Exception e)

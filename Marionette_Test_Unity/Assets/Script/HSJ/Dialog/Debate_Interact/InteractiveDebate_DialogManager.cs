@@ -436,10 +436,11 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
                         audio.Stop();
                     audio.clip = se.clip;
                     //isWait = true;
+                    var time = TimeSpan.FromSeconds(se.clip.length + 0.1f);
                     for (int i = 1; i < effect; i++)
                     {
                         audio.Play();
-                        await Task.Delay(TimeSpan.FromSeconds(debateData.SE2_Delay));
+                        await Task.Delay(time);
                     }
                     //isWait = false;
                     break;
