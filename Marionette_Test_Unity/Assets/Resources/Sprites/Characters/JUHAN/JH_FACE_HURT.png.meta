@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3ccf26816784eb34da5cf576175e6f84
+guid: 81345c87199db6a4f86fa20e4061be6c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -679361976856131454
-    second: HURT_FACE_JH_0
+      213: 4350172047206878976
+    second: JH_FACE_HURT_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HURT_FACE_JH_0
+      name: JH_FACE_HURT_0
       rect:
         serializedVersion: 2
         x: 1675
@@ -108,15 +108,15 @@ TextureImporter:
         width: 1699
         height: 2421
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2884597a1eb6296f0800000000000000
-      internalID: -679361976856131454
+      spriteID: 00f8991cd6aee5c30800000000000000
+      internalID: 4350172047206878976
       vertices: []
       indices: 
       edges: []
@@ -126,7 +126,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      HURT_FACE_JH_0: -679361976856131454
+      JH_FACE_HURT_0: 4350172047206878976
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

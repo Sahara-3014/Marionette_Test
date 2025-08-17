@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b7c45cc86ba98e64683a4be985a85285
+guid: b06b5bc4d0076674cb79adbe492c1b94
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1540558954655129551
-    second: JH_FACE_CLOSE_0
+      213: -7678634663856951339
+    second: JH_FACE_ANGER_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: JH_FACE_CLOSE_0
+      name: JH_FACE_ANGER_0
       rect:
         serializedVersion: 2
         x: 1675
@@ -108,15 +108,15 @@ TextureImporter:
         width: 1699
         height: 2421
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fcf14cff43a216510800000000000000
-      internalID: 1540558954655129551
+      spriteID: 5df2ec4d472007590800000000000000
+      internalID: -7678634663856951339
       vertices: []
       indices: 
       edges: []
@@ -126,7 +126,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      JH_FACE_CLOSE_0: 1540558954655129551
+      JH_FACE_ANGER_0: -7678634663856951339
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

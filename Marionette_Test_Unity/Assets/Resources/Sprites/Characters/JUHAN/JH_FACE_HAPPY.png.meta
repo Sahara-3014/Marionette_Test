@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7ac6da32f1fc69142b58d8a452632fe1
+guid: 085eae4a82b3a464da58fe425c44da35
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9105459571571209427
-    second: JUHAN_FACE_HAPPY_0
+      213: -5708754853219290609
+    second: JH_FACE_HAPPY_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,50 +96,11 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: JUHAN_FACE_HAPPY_0
+      name: JH_FACE_HAPPY_0
       rect:
         serializedVersion: 2
         x: 1675
@@ -147,15 +108,15 @@ TextureImporter:
         width: 1699
         height: 2421
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d2b41df23c8e2a180800000000000000
-      internalID: -9105459571571209427
+      spriteID: f02b31015bd66c0b0800000000000000
+      internalID: -5708754853219290609
       vertices: []
       indices: 
       edges: []
@@ -165,7 +126,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -174,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      JUHAN_FACE_HAPPY_0: -9105459571571209427
+      JH_FACE_HAPPY_0: -5708754853219290609
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
