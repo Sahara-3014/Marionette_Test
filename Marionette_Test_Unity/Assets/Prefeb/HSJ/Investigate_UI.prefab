@@ -143,7 +143,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: DialogDialogDialogDialogDialogDialogDialogDialog
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 85de7223a9ddc964b8bfccaf8828933e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0013ed6ec7226f64ca878c8b674eaa9c, type: 2}
   m_sharedMaterial: {fileID: -87012955732395487, guid: 85de7223a9ddc964b8bfccaf8828933e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -830,7 +830,6 @@ MonoBehaviour:
   nameLabel: {fileID: 686583943365053636}
   dialogLabel: {fileID: 6674869664967493942}
   cutscene: {fileID: 353991977988114327}
-  nextDialogAutoDelay: 0.1
   bgmAudio: {fileID: 0}
   se1Audio: {fileID: 0}
   se2Audio: {fileID: 0}
@@ -1031,7 +1030,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 85de7223a9ddc964b8bfccaf8828933e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0013ed6ec7226f64ca878c8b674eaa9c, type: 2}
   m_sharedMaterial: {fileID: -87012955732395487, guid: 85de7223a9ddc964b8bfccaf8828933e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

@@ -445,8 +445,6 @@ public class GoogleSheetLoader : MonoBehaviour
                 Investigate_DialogueData d = new Investigate_DialogueData(row);
 
                 list.Add(d);
-                if (d.NEXT_ID == -100)
-                    break; // NEXT_ID가 -100인 경우 대화 종료
             }
         }
 
