@@ -19,10 +19,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
 
     [Header("Default UI Values")]
     public SpriteRenderer BG;
-    [SerializeField] TextMeshProUGUI timerLabel;
-    [SerializeField] InventoryManager inventoryManager;
     public SpriteRenderer target;
-    public Image answer;
+    public SpriteRenderer answer;
+    [SerializeField] InventoryManager inventoryManager;
     [SerializeField] RectTransform[] targetAbilityGauges;
 
     [Space(10)]
@@ -57,10 +56,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         dayCycleSystem = DayCycleSystem.Instance;
 
         CloseChoicePanel();
-        while(scrollSnap.Content.childCount > 0)
-        {
-            scrollSnap.Remove(0);
-        }
+        ClearDialog();
 
         // 데이터 셋팅
         Loaded_DataSet();
@@ -106,8 +102,6 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         //inventoryManager.itemSlot = null;
         Loaded_InventorySet();
 
-
-        RefreshTimer();
     }
 
     /// <summary> 대화 내용 뿌려주기 </summary>
@@ -131,6 +125,14 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         foreach (var item in items)
         {
             inventoryManager.AddItem(item.Key, item.Value);
+        }
+    }
+
+    public void ClearDialog()
+    {
+        while (scrollSnap.Content.childCount > 0)
+        {
+            scrollSnap.Remove(0);
         }
     }
 
@@ -188,14 +190,6 @@ public class InteractiveDebate_UIManager : MonoBehaviour
             Debug.LogError($"ChangeAbilityGauge Error: {e.Message}");
             return;
         }
-    }
-
-    /// <summary> 타이머 텍스트 </summary>
-    public void RefreshTimer()
-    {
-        if (dayCycleSystem == null) return;
-        int days = dayCycleSystem.GetDays();
-        timerLabel.text = $"D-{7-days}";
     }
 
     /// <summary> 선택지 UI 셋팅 </summary>
