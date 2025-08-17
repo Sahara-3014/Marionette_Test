@@ -474,7 +474,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8176294798969797337}
   - component: {fileID: 8642194720311110826}
-  - component: {fileID: 9144897634946297796}
   - component: {fileID: 8096340749939133081}
   m_Layer: 0
   m_Name: FX_BootSequence_Text
@@ -511,75 +510,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3643231761155671413}
   m_CullTransparentMesh: 1
---- !u!114 &9144897634946297796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3643231761155671413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2839f73e02057a409033b2a0c98d43b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textComponent: {fileID: 2928221493923946162}
-  scrollRect: {fileID: 4987233008808621822}
-  normalLines:
-  - "[System BIOS v3.7.92]  \r\nInitializing Neural Interface... OK  \r\nVerifying
-    Participant Data Integrity... OK  \r\nLoading Cognitive Profile... OK  \r\nScanning
-    Subconscious Layers... WARNING: Anomaly Detected  \r\nDecrypting Memory Blocks...
-    87%  \r\nInjecting Behavioral Protocols... COMPLETE  \r\n\r\n[Project TIAMAT
-    Secure Boot]  \r\nLaunching Marionette_Test.exe...  \r\nEstablishing Reality
-    Overlay... OK  \r\nSynchronizing Fear Index... 98%  \r\n"
-  errorLines:
-  - "----------------------------------------------------\r\nERROR#0x00A13: ObjRefNull%~[?]\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592 
-    \r\nARG_NULL_EXCP: 'Su\u2592\u2592\u2592\u2592bject' \u0272ot fou\u03B7d\r\nIDX_OUT_RANGE:
-    Arr@ay \u2593\u2593 index > 99999\r\nMISSING_CMPNT: '\u2588Key\u2588' attached
-    to <Stud\u03A3ent> not found\r\nMEMORY_FAULT: Accessing 0xFFFFFE... Segmentation
-    Collapse\r\n\r\n!!CRITICAL!! SYSTEM INTEGRITY \u2193\u2193\u2193 14% ... ERROR!!!\r\nReality
-    Boundary Breach Detected (\u03A3404: limit exceeded)\r\n\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\u2592\r\n\r\n----------------------------------------------------\r\nError:
-    NullReferenceException: Object ref...  \r\nError: NullReferenceException: Object
-    ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref...  \r\nError: NullReferenceException: Object ref...  \r\nError: NullReferenceException:
-    Object ref..."
-  normalCharsPerSecond: 2000
-  errorCharsPerSecond: 3000
-  delayBetweenLines: 0.5
-  delayBeforeErrors: 1
 --- !u!114 &8096340749939133081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,6 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxDuration: 3
+  isSelfDestroy: 0
 --- !u!1 &4316029935893880939
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,7 +663,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 15793.807}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &4808321441106740335

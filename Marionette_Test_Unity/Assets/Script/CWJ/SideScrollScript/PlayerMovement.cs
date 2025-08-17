@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Investigate_DialogManager.instance != null && Investigate_DialogManager.instance.IsRunning())
+            return;
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
         if(Input.GetButtonDown("Jump"))

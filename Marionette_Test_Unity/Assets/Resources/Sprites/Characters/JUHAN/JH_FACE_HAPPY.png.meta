@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 3e83d5f74a86f5648935f994ed70bef3
+guid: 7ac6da32f1fc69142b58d8a452632fe1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5708754853219290609
-    second: JH_FACE_HAPPY_0
-  - first:
-      213: 5372843852432340824
-    second: JH_FACE_HAPPY_1
+      213: -9105459571571209427
+    second: JUHAN_FACE_HAPPY_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,8 +49,8 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.6}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -75,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -142,45 +139,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: JH_FACE_HAPPY_0
+      name: JUHAN_FACE_HAPPY_0
       rect:
         serializedVersion: 2
-        x: 60
-        y: 168
-        width: 1746
-        height: 2279
+        x: 1675
+        y: 4314
+        width: 1699
+        height: 2421
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f02b31015bd66c0b0800000000000000
-      internalID: -5708754853219290609
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: JH_FACE_HAPPY_1
-      rect:
-        serializedVersion: 2
-        x: 442
-        y: 215
-        width: 297
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 857fed9640d209a40800000000000000
-      internalID: 5372843852432340824
+      spriteID: d2b41df23c8e2a180800000000000000
+      internalID: -9105459571571209427
       vertices: []
       indices: 
       edges: []
@@ -190,7 +165,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -199,8 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      JH_FACE_HAPPY_0: -5708754853219290609
-      JH_FACE_HAPPY_1: 5372843852432340824
+      JUHAN_FACE_HAPPY_0: -9105459571571209427
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

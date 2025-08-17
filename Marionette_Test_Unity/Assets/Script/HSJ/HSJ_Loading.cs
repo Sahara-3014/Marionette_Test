@@ -54,12 +54,18 @@ public class HSJ_Loading : MonoBehaviour
         CenterLabelAnim();
 
         
-        //sheetLoader.OnSheetLoaded = null;
+        // intro start chapter1
         for(int i=0;i<sheetLoader.fixedSheetSequence.Count;i++)
         {
             sheetLoader.LoadDialoguesFromSheet(sheetLoader.fixedSheetSequence[i]);
         }
+        // 탐색
+        sheetLoader.LoadInvestigate(); 
+        sheetLoader.LoadInvestigate2();
+        // 논쟁1.2
         sheetLoader.LoadInteractiveDebate();
+        // 논쟁3
+        sheetLoader.LoadConfrontationDebate();
     }
 
     private void Update()

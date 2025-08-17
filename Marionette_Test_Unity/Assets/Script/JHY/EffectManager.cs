@@ -112,6 +112,11 @@ public class EffectManager : MonoBehaviour
         }
     }
 
+    private void OnValidate()
+    {
+        InitializeEffects();
+    }
+
     #endregion
 
 
