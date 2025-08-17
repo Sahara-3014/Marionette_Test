@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0467acbe7b62a774a8c04b4f16a1783d
+guid: 0801550cf5aa6f74db9a6d5dbbfcd146
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7340307015925299945
-    second: Character_KimJuHan_Side_Idle_0
+      213: 1142458862245453975
+    second: eventCG0_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Character_KimJuHan_Side_Idle_0
+      name: eventCG0_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 4961
-        height: 7016
+        width: 3840
+        height: 2160
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9eaf88227520ed560800000000000000
-      internalID: 7340307015925299945
+      spriteID: 79023ae3844dadf00800000000000000
+      internalID: 1142458862245453975
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 737d9d7c30e90ef4fb7b5d9f39ae0b2c
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Character_KimJuHan_Side_Idle_0: 7340307015925299945
+      eventCG0_0: 1142458862245453975
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

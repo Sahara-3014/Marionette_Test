@@ -11818,7 +11818,7 @@ MonoBehaviour:
   id: 0
   quantity: 1
   interactionRange: 0
-  dialog_id: 4001
+  dialog_id: 4010
 --- !u!61 &1921021886
 BoxCollider2D:
   m_ObjectHideFlags: 0
