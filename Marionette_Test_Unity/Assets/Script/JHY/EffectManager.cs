@@ -24,7 +24,9 @@ public enum EffectType
     CameraMoving,
     CameraMoving2,
     Flash,
-    CameraShakeHorizontal
+    CameraShakeHorizontal,
+    Intro,
+    Excute
 }
 
 public enum PostProcessingEffectType
