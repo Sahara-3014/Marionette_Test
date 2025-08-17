@@ -846,6 +846,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (currentID >= 1000 && currentID < 2000) return "START";
         if (currentID >= 2000 && currentID < 3000) return "CHAPTER1";
+        if (currentID >= 3000 && currentID < 4000) return "BEFORE_CH1_DEBATE1.2";
         return null; // 더 이상 시트 없음
     }
 
@@ -909,12 +910,17 @@ public class DialogueManager : MonoBehaviour
     }
 
 
+    public AudioSource audioSource;
+    public AudioClip choiceSound;
 
     //
     // 선택지 선택 시 호출되는 함수
     //
     public void OnChoiceSelected(int nextID, int nextIndex)
     {
+        // 효과음 재생
+        audioSource.PlayOneShot(choiceSound);
+
         choicePanel.SetActive(false);
 
         if (nextID > 0)
@@ -940,10 +946,13 @@ public class DialogueManager : MonoBehaviour
             }
             nextDialogueID = currentID;
             Debug.Log($"nextID가 0 이하, currentID 유지, currentIndex 증가: {currentIndex}");
+
         }
 
         NextDialogue();
+
     }
+
     void Start()
     {
         sheetLoader = GoogleSheetLoader.Instance;

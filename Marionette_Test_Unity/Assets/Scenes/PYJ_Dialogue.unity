@@ -215,14 +215,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.40443406, g: 0.899371, b: 0.8025355, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: b50355c26beb44c498bc104d2bb4cf08, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -650,6 +650,7 @@ MonoBehaviour:
   - INTRO
   - START
   - CHAPTER1
+  - BEFORE_CH1_DEBATE1.2
   firstIDOfCurrentSheet: 0
   usingBranching: 0
   dialogueSystem: {fileID: 709040337}
@@ -2336,14 +2337,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.40443406, g: 0.899371, b: 0.8025355, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: b50355c26beb44c498bc104d2bb4cf08, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2818,14 +2819,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.40443406, g: 0.899371, b: 0.8025355, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: b50355c26beb44c498bc104d2bb4cf08, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3284,8 +3285,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 27552f2feb6cdf34c9a64e5b85709ae8, type: 3}
-  m_Resource: {fileID: 8300000, guid: 27552f2feb6cdf34c9a64e5b85709ae8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: caee7fcb22928d84f9bc5cdaf04c7480, type: 3}
+  m_Resource: {fileID: 8300000, guid: caee7fcb22928d84f9bc5cdaf04c7480, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3633,9 +3634,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 185775058}
     - target: {fileID: 618650078162537882, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 1586749084}
+    - target: {fileID: 618650078162537882, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: choicePanel
       value: 
       objectReference: {fileID: 1651014001}
+    - target: {fileID: 618650078162537882, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
+      propertyPath: choiceSound
+      value: 
+      objectReference: {fileID: 8300000, guid: caee7fcb22928d84f9bc5cdaf04c7480, type: 3}
     - target: {fileID: 618650078162537882, guid: 7de0b1132eaaa2845a25c72e968f33b0, type: 3}
       propertyPath: sheetLoader
       value: 
