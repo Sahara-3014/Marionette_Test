@@ -82,6 +82,8 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
         if (isIndexInit)
             currentIndex = 0;
 
+        uiManager.ClearDialog();
+
         if (isPlaying)
         {
             currentIndex = 0; 
@@ -261,7 +263,7 @@ public class InteractiveDebate_DialogManager : MonoBehaviour
 
         // TODO 캐릭터연출 재생 <- 타입에 따라서 프레임에 먹일 이펙트/캐릭터에 먹일 이펙트 분리해야함
         nextProductionCoroutine[0] = StartCoroutine(dialogEffectManager.RunCharacterEffect(debateData.TARGET_EFFECT, uiManager.target));
-        nextProductionCoroutine[1] = StartCoroutine(uiEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answer));
+        nextProductionCoroutine[1] = StartCoroutine(dialogEffectManager.RunCharacterEffect(debateData.CH1_EFFECT, uiManager.answer));
 
         // TODO se2재생
         if(debateData.SE2 != null)
