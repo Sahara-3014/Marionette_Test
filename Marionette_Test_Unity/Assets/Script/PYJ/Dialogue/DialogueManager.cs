@@ -466,6 +466,16 @@ public class DialogueManager : MonoBehaviour
         //    StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         //}
 
+
+        if (currentDialogue.commands == "BGM_OFF")
+            soundManager.StopBGM();
+        if (soundManager.seSource1.isPlaying)
+            soundManager.seSource1.Stop();
+        if (soundManager.seSource2.isPlaying)
+            soundManager.seSource2.Stop();
+
+
+
         // 사운드
         if (currentDialogue.bgm != null)
             soundManager.PlayDialogSE(currentDialogue.bgm.dialogSE);
