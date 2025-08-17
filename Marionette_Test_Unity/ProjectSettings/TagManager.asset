@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interaction
   - Character
+  - EventManager
   layers:
   - Default
   - TransparentFX
