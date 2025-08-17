@@ -619,6 +619,7 @@ GameObject:
   - component: {fileID: 5231782472966312848}
   - component: {fileID: 8741799307708878365}
   - component: {fileID: 4704521255510017868}
+  - component: {fileID: 7593972947257353498}
   m_Layer: 0
   m_Name: FullDiveTimeline
   m_TagString: Untagged
@@ -692,6 +693,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39de1944e7f187744bbb2a29aa1dbfc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7593972947257353498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5395881397376621146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fb874a9b7e023c49b35ea1ee56192e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6551261861636778387
