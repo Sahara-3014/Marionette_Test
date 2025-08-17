@@ -466,6 +466,16 @@ public class DialogueManager : MonoBehaviour
         //    StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         //}
 
+
+        if (currentDialogue.commands == "BGM_OFF")
+            soundManager.StopBGM();
+        if (soundManager.seSource1.isPlaying)
+            soundManager.seSource1.Stop();
+        if (soundManager.seSource2.isPlaying)
+            soundManager.seSource2.Stop();
+
+
+
         // 사운드
         if (currentDialogue.bgm != null)
             soundManager.PlayDialogSE(currentDialogue.bgm.dialogSE);
@@ -857,9 +867,6 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-
-
-
     private void ShowCutscene(string cutsceneName)
     {
         if (cutsceneImageObject == null)
@@ -868,10 +875,10 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        var sr = cutsceneImageObject.GetComponent<SpriteRenderer>();
-        if (sr == null)
+        var img = cutsceneImageObject.GetComponent<Image>();
+        if (img == null)
         {
-            Debug.LogError("cutsceneImageObject에 SpriteRenderer 컴포넌트가 없습니다!");
+            Debug.LogError("cutsceneImageObject에 Image 컴포넌트가 없습니다!");
             return;
         }
 
@@ -889,7 +896,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         cutsceneImageObject.SetActive(true);
-        sr.sprite = cutsceneSprite;
+        img.sprite = cutsceneSprite;
     }
 
 
