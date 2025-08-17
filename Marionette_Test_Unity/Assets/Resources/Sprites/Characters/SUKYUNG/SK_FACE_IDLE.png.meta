@@ -8,6 +8,12 @@ TextureImporter:
   - first:
       213: 985481105078163931
     second: SK_FACE_IDLE_1
+  - first:
+      213: 7570091372119206126
+    second: SK_FACE_IDLE_2
+  - first:
+      213: -3998635498140266706
+    second: SK_FACE_IDLE_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,7 +55,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -75,7 +81,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -106,10 +112,10 @@ TextureImporter:
       name: SK_FACE_IDLE_0
       rect:
         serializedVersion: 2
-        x: 1364
-        y: 0
-        width: 2270
-        height: 5648
+        x: 2680
+        y: 5600
+        width: 17
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,10 +134,10 @@ TextureImporter:
       name: SK_FACE_IDLE_1
       rect:
         serializedVersion: 2
-        x: 4421
-        y: 5356
-        width: 17
-        height: 48
+        x: 1703
+        y: 4945
+        width: 6
+        height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,11 +152,55 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SK_FACE_IDLE_2
+      rect:
+        serializedVersion: 2
+        x: 1733
+        y: 4135
+        width: 1347
+        height: 1456
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee82a60befd5e0960800000000000000
+      internalID: 7570091372119206126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SK_FACE_IDLE_3
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 4951
+        width: 24
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2f051b333ef188c0800000000000000
+      internalID: -3998635498140266706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -162,6 +212,8 @@ TextureImporter:
     nameFileIdTable:
       SK_FACE_IDLE_0: 364120748246506786
       SK_FACE_IDLE_1: 985481105078163931
+      SK_FACE_IDLE_2: 7570091372119206126
+      SK_FACE_IDLE_3: -3998635498140266706
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
