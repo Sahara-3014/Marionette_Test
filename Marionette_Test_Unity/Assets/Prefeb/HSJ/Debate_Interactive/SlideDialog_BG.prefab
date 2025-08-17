@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10}
+  m_AnchoredPosition: {x: 0, y: -12}
   m_SizeDelta: {x: 150, y: 10}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &297402258335666925
@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 85de7223a9ddc964b8bfccaf8828933e, type: 2}
-  m_sharedMaterial: {fileID: -87012955732395487, guid: 85de7223a9ddc964b8bfccaf8828933e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0013ed6ec7226f64ca878c8b674eaa9c, type: 2}
+  m_sharedMaterial: {fileID: -1972486583737614331, guid: 0013ed6ec7226f64ca878c8b674eaa9c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6
-  m_fontSizeBase: 6
+  m_fontSize: 8
+  m_fontSizeBase: 8
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 15
+  m_PixelsPerUnitMultiplier: 12
 --- !u!1 &2771421848814847781
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,8 +250,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -4}
-  m_SizeDelta: {x: -20, y: -22}
+  m_AnchoredPosition: {x: 0, y: -6.5}
+  m_SizeDelta: {x: -50, y: -27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6719826685076463334
 CanvasRenderer:
@@ -281,10 +281,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DialogDialogDialogDialogDialogDialogDialog
+  m_text: 'DialogDialogDialogDialogDialogDialogDialog
+
+    DialogDialogDialogDialogDialogDialogDialog
+
+    DialogDialogDialogDialogDialogDialogDialog
+
+    DialogDialogDialogDialogDialogDialogDialog'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 85de7223a9ddc964b8bfccaf8828933e, type: 2}
-  m_sharedMaterial: {fileID: -87012955732395487, guid: 85de7223a9ddc964b8bfccaf8828933e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0013ed6ec7226f64ca878c8b674eaa9c, type: 2}
+  m_sharedMaterial: {fileID: -1972486583737614331, guid: 0013ed6ec7226f64ca878c8b674eaa9c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -320,7 +326,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -20
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
