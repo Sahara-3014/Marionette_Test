@@ -37,9 +37,9 @@ public class Debate4GameManager : MonoBehaviour
             for (int i = 0; i < tileButton.Length; i++)
             {
                 if (tileButton[i].thistileButtonSelected == true)
-                    ChoicedAnswer[i + (CurrentRound*25)] = true;
+                    ChoicedAnswer[i + (CurrentRound*29)] = true;
                 else
-                    ChoicedAnswer[i + (CurrentRound * 25)] = false;
+                    ChoicedAnswer[i + (CurrentRound * 29)] = false;
             }
 
             if(confirmButton.confirmButtonSelected == true)
@@ -53,7 +53,7 @@ public class Debate4GameManager : MonoBehaviour
         bool Wrong = false;
         for (int i = 0; i < tileButton.Length; i++)
         {
-            if (CorrectAnswer[i + (CurrentRound * 25)] != tileButton[i].thistileButtonSelected)
+            if (CorrectAnswer[i + (CurrentRound * 29)] != tileButton[i].thistileButtonSelected)
             {
                 Wrong = true;
             }
