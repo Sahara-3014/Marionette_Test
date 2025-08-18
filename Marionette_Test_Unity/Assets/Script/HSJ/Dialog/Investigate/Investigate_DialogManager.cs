@@ -67,6 +67,8 @@ public class Investigate_DialogManager : MonoBehaviour
     [SerializeField] DialogEffectManager_UI uiEffectManager;
     //[SerializeField] CharacterPositionManager characterPositionManager;
 
+    public GameObject InventoryIcon;
+
     private void Awake()
     {
         if(instance == null)
@@ -118,26 +120,16 @@ public class Investigate_DialogManager : MonoBehaviour
 
     private void Update()
     {
-        if(dialogBG.gameObject.activeSelf)
+        if (dialogBG.gameObject.activeSelf)
         {
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                keyDowning = 0f;
-            }
-
-            if (Input.GetKey(KeyCode.Space))
-            {
-                keyDowning += Time.deltaTime;
-                if (keyDowning >= nextDialogAutoDelay)
-                {
-                    keyDowning = 0f;
-                    Play();
-                }
+                Play();
             }
         }
-        
 
-        
+
+
 
     }
 
@@ -166,9 +158,12 @@ public class Investigate_DialogManager : MonoBehaviour
         if (dialogs != null && currentIndex >= dialogs.Length - 1 && dialogBG.gameObject.activeSelf)
         {
             dialogBG.gameObject.SetActive(false);
+            InventoryIcon.SetActive(true);
             SFX_OFF();
             return;
         }
+        else
+            InventoryIcon.SetActive(false);
 
         if (skipAction != null)
         {
@@ -186,6 +181,8 @@ public class Investigate_DialogManager : MonoBehaviour
 
         onNextProductionAcion = Step1;
         onNextProductionAcion.Invoke();
+
+        
     }
 
     /// <summary> BGM 재생 </summary>

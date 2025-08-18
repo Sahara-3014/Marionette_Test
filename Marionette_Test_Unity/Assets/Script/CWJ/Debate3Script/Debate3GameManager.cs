@@ -220,12 +220,6 @@ public class Debate3GameManager : MonoBehaviour
         TextBox.text = "";
         foreach(char letter in printText.ToCharArray())
         {
-            if (letter == '\\')
-            {
-                TextBox.text += '\n';
-                yield return new WaitForSeconds(linedelay);
-            }
-            else
                 TextBox.text += letter;
             
             yield return new WaitForSeconds(textdelay);

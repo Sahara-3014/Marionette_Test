@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6e1ce56fe36abfd4bb12ff9ee01a1d74
+guid: d899dbd5586ef854f8ce07a82f0762ea
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9218577290197446786
-    second: IH_FACE_IDLE_0
+      213: 2323773847033634742
+    second: IH_FACE_IDLE 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,11 +46,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.4}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IH_FACE_IDLE_0
+      name: IH_FACE_IDLE 1_0
       rect:
         serializedVersion: 2
-        x: 1344
-        y: 0
-        width: 2565
-        height: 6015
+        x: 1616
+        y: 4123
+        width: 1444
+        height: 1865
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 280b3bc0437feef70800000000000000
-      internalID: 9218577290197446786
+      spriteID: 6bf58c28004bf3020800000000000000
+      internalID: 2323773847033634742
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      IH_FACE_IDLE_0: 9218577290197446786
+      IH_FACE_IDLE 1_0: 2323773847033634742
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
