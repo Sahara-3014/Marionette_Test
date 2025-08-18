@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      twinroom_0: 2106298096131350279
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
