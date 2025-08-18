@@ -26,7 +26,8 @@ public enum EffectType
     Flash,
     CameraShakeHorizontal,
     Intro,
-    Excute
+    Excute,
+    CameraCutscene
 }
 
 public enum PostProcessingEffectType

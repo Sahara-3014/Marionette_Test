@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f292a048e2dc27542944316d1b5e8c78, type: 3}
   m_Name: Electric_InvertColor_Shake
   m_EditorClassIdentifier: 
-  particlesToPlay: 0c00000004000000
+  particlesToPlay: 0c00000014000000
+  effectsToPlayWithOverrides: []
   postProcessingsToEnable: 06000000
   fadeDuration: 1
   useFadeIn: 1
