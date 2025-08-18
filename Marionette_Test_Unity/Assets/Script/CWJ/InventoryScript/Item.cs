@@ -15,6 +15,7 @@ public class Item : MonoBehaviour
     private InventoryManager inventoryManager;
     private InteractionIcon interactionIcon;
     public bool interactionRange;
+    public bool isAcquisition = true;
     public int dialog_id;
 
     void Start()
@@ -27,12 +28,17 @@ public class Item : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && interactionRange)
         {
-            inventoryManager.AddItem(id, quantity);
-            if(dialog_id != 0)
+            if(Investigate_DialogManager.instance != null && Investigate_DialogManager.instance.IsRunning() == false)
             {
-                Investigate_DialogManager.instance.SetDialogs(dialog_id, isPlaying: true);
+                if(dialog_id != 0)
+                    Investigate_DialogManager.instance.SetDialogs(dialog_id, isPlaying: true);
+                if (isAcquisition)
+                {
+                    inventoryManager.AddItem(id, quantity);
+                    Destroy(gameObject);
+                }
             }
-            Destroy(gameObject);
+            
         }
     }
 

@@ -23,9 +23,11 @@ public class InteractiveDebate_UIManager : MonoBehaviour
     public SpriteRenderer answer;
     [SerializeField] InventoryManager inventoryManager;
     [SerializeField] RectTransform[] targetAbilityGauges;
+    [SerializeField] Button itemUploadBtn;
 
     [Space(10)]
     [SerializeField] SimpleScrollSnap scrollSnap;
+    [SerializeField] GameObject[] scrollSnapArrows;
     [SerializeField] GameObject choicePanel;
     [SerializeField] List<InteractiveDebate_ChoiceBtn> choiceBtns;
     [SerializeField] GameObject dialogPrefab;
@@ -35,6 +37,27 @@ public class InteractiveDebate_UIManager : MonoBehaviour
 
     public float autoPlayDelay = 0.1f; // 자동 재생 딜레이
     float autoPlayTimer = 0f;
+
+    private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
+    {
+        { "김주한", "JUHAN" },
+        { "설은비", "EUNBI" },
+        { "한아영", "AHYOUNG" },
+        { "하서하", "SEOHA" },
+        { "유무구", "MUGU" },
+        { "정해온", "HAEWON" },
+        { "도민결", "MINKYEOL" },
+        { "배수경", "SUKYUNG" },
+        { "권하루", "HARU" },
+        { "박세진", "SEJIN" },
+        { "백이후", "IHU" },
+        { "강세령", "SERYEONG" },
+        { "최범식", "BEOMSIK" },
+        { "나율", "YUL" },
+        { "이시아", "SIA" }
+
+            // 필요한 만큼 추가
+    };
 
     private void Awake()
     {
@@ -49,11 +72,19 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         }
     }
 
+    public void AddItem(int id)
+    {
+        InventoryManager.Instance?.AddItem(id, 1);
+    }
+
     private void Start()
     {
         // 초기화
         database = SaveDatabase.Instance;
         dayCycleSystem = DayCycleSystem.Instance;
+        inventoryManager = InventoryManager.Instance;
+
+        SnapScrollArrowActive(false);
 
         CloseChoicePanel();
         ClearDialog();
@@ -170,6 +201,11 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         callback?.Invoke();
     }
 
+    public void ActiveAbilityGauge(bool isActive)
+    {
+        targetAbilityGauges[0].parent.parent.parent.parent.gameObject.SetActive(isActive);
+    }
+
     /// <summary> 타겟의 감정 게이지 </summary>
     /// <param name="gaugeType"></param>
     public void ChangeAbilityGauge(CharAttributeData.CharAttributeType attributeType)
@@ -178,7 +214,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         max -= targetAbilityGauges[(int)attributeType].localPosition.x * 2f;
         try 
         { 
-            float value = database.SaveData_GetCharData_GetGauge(dialogManager.debateData.TARGET_NAME, attributeType).value;
+            float value = database.SaveData_GetCharData_GetGauge(dialogManager.data.TARGET_NAME, attributeType).value;
 
             targetAbilityGauges[(int)attributeType].DOKill();
             Vector2 delta = targetAbilityGauges[(int)attributeType].sizeDelta;
@@ -227,6 +263,73 @@ public class InteractiveDebate_UIManager : MonoBehaviour
             Debug.Log($"OpenChoicePanel foreach onClick");
             _index++;
         }
+    }
+
+    public void ChangeCharacter(bool isTarget, string _name, string _head = null, string _body = null)
+    {
+        SpriteRenderer body = isTarget ? target : answer;
+        SpriteRenderer head = body.transform.GetChild(0).GetComponent<SpriteRenderer>();
+
+        string folderName = _name;
+        if (characterNameMap.ContainsKey(_name))
+            folderName = characterNameMap[_name];
+
+        string path = "";
+
+
+        // 이름이 비었는데 할당하려고 하는경우
+        if((_name == null || _name == "") && (_head != null || _head != "") || (_body != null || _body != ""))
+        {
+            if (body != null && body.sprite != null)
+            {
+                _name = body.sprite.name;
+                _name = _name.Split('_')[0];
+            }
+            else if (head != null && head.sprite != null)
+            {
+                _name = head.sprite.name;
+                _name = _name.Split('_')[0];
+            }
+            else
+            {
+                body.sprite = null;
+                head.sprite = null;
+                return;
+            }
+        }
+
+
+
+
+        if(_head != "")
+        {
+            path = $"Sprites/Characters/{folderName}/{_head}";
+            head.sprite = Resources.Load<Sprite>(path);
+        }
+        else if(head == null)
+            head.sprite = null;
+        
+
+        if (_body != "")
+        {
+            path = $"Sprites/Characters/{folderName}/{_body}";
+            body.sprite = Resources.Load<Sprite>(path);
+        }
+        else if(_body == null)
+            body.sprite = null;
+        
+            
+    }
+
+    public void ItemUploadButtonRegister()
+    {
+        //dialogManager.SetDialogs()
+    }
+
+    public void SnapScrollArrowActive(bool isActive)
+    {
+        for(int i =0;i< scrollSnapArrows.Length;i++)
+            scrollSnapArrows[i].SetActive(isActive);
     }
 
     public bool IsChoicePanelOpened()

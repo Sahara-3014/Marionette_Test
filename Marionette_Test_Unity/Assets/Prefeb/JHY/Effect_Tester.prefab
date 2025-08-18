@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1949195088349489824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1873647992053371444}
+  - component: {fileID: 320674316644511059}
+  m_Layer: 0
+  m_Name: Effect_Tester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1873647992053371444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949195088349489824}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &320674316644511059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949195088349489824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69a9750c7292f049a286caf03196632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testableDirectionSets:
+  - {fileID: 11400000, guid: 1cafa395a355a16499c8c3a041671e57, type: 2}
+  - {fileID: 11400000, guid: 90b6388541ecb514daa92b6cf1a99804, type: 2}
+  - {fileID: 11400000, guid: 8a95e51af77b6db42a9426b7419ef161, type: 2}
+  - {fileID: 11400000, guid: 1b6875e8afe683f44a76ea1251f794da, type: 2}
+  - {fileID: 11400000, guid: 08646a6b0e759654da1d0532b625819d, type: 2}
+  - {fileID: 11400000, guid: 173f967dced8ac64aa6ef3000940490f, type: 2}
+  - {fileID: 11400000, guid: 32f7247a3032d404ebf22e869d9fac8a, type: 2}
+  - {fileID: 11400000, guid: 21d4be923f1023843abc35dac0ff5371, type: 2}
+  - {fileID: 11400000, guid: 0e98fe55f2a6b9d4a82afe1314404cc4, type: 2}
+  - {fileID: 11400000, guid: f09b879b0055bc04bb8ad3059c612979, type: 2}
+  - {fileID: 11400000, guid: 4e08dfb38482bad48b8c579cdbb7405f, type: 2}
+  - {fileID: 11400000, guid: de998fa30b996fa45a54ad596176c881, type: 2}
+  - {fileID: 11400000, guid: 59195ca5f2f9af947989e7d8950040e6, type: 2}
+  - {fileID: 11400000, guid: 9cb13121cff1cf04d8231bbacddcc550, type: 2}
+  - {fileID: 11400000, guid: 5912c50d29731a74e9a203ff8ed5534a, type: 2}
+  - {fileID: 11400000, guid: 009fbc36f0d843644b8bc2961b937df3, type: 2}
+  - {fileID: 11400000, guid: 44642e0c3ccace440b5f325867c4a227, type: 2}
+  - {fileID: 11400000, guid: 572f5d613a560ef409d256f011389abb, type: 2}
+  - {fileID: 11400000, guid: 84f15f9a9897f3a4bb7877186c29550f, type: 2}
+  - {fileID: 11400000, guid: 71559241c0e890e48a1f837c154139a1, type: 2}
+  - {fileID: 11400000, guid: 09d23be085ec23e4f929bc82f01297a0, type: 2}
+  - {fileID: 11400000, guid: b2643aef74b420947826c9a2532935f3, type: 2}
+  testableSequenceSOs:
+  - {fileID: 11400000, guid: 208562c00094aea40a47328bde3b223a, type: 2}
+  - {fileID: 11400000, guid: 73d1562268778704797a1a22894eeca6, type: 2}
+  selectedSetIndex: 18
+  selectedSequenceIndex: 0
+  stopParticlesImmediately: 0
