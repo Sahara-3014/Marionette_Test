@@ -867,8 +867,8 @@ MonoBehaviour:
   startingPanel: 0
   useSwipeGestures: 1
   minimumSwipeSpeed: 0
-  previousButton: {fileID: 4500503389719977798}
-  nextButton: {fileID: 5985905244315642891}
+  previousButton: {fileID: 0}
+  nextButton: {fileID: 0}
   pagination: {fileID: 0}
   useToggleNavigation: 1
   snapTarget: 2
@@ -1102,14 +1102,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogManager: {fileID: 2861041469556733107}
   BG: {fileID: 0}
-  timerLabel: {fileID: 484168944689577835}
-  inventoryManager: {fileID: 0}
   target: {fileID: 0}
-  answer: {fileID: 5134527889498497076}
+  answer: {fileID: 0}
+  inventoryManager: {fileID: 0}
   targetAbilityGauges:
   - {fileID: 546295814354021571}
   - {fileID: 6979907572285828621}
   scrollSnap: {fileID: 506154852221086004}
+  scrollSnapArrows: []
   choicePanel: {fileID: 3334252073350642402}
   choiceBtns:
   - {fileID: 1905677007926266267}
@@ -2002,7 +2002,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -60, y: -40}
+  m_AnchoredPosition: {x: -139.1, y: -141.3}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1910506462305125474

@@ -15,7 +15,7 @@ public class GoogleSheetLoader : MonoBehaviour
 
     public string apiKey = "AIzaSyCYF6AGzi8Fe0HhVew-t0LOngxs0IOZIuc";
     public string spreadsheetId = "1N2Z-yXGz8rUvUBwLfkeB9GYIOWhMrfs6lWok9lcNIjk";
-    public List<string> fixedSheetSequence = new List<string> { "INTRO", "START", "CHAPTER1" };
+    public List<string> fixedSheetSequence = new List<string> { "INTRO", "START", "CHAPTER1", "BEFORE_CH1_DEBATE1.2" };
     public int firstIDOfCurrentSheet;
     private int currentFixedIndex = 0;
     public bool usingBranching = false;
