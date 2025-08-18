@@ -165,7 +165,7 @@ public class OLD_InteractiveDebate_UIManager : MonoBehaviour
         max -= targetAbilityGauges[(int)attributeType].localPosition.x * 2f;
         try 
         { 
-            float value = database.SaveData_GetCharData_GetGauge(dialogManager.debateData.TARGET_NAME, attributeType).value;
+            float value = database.SaveData_GetCharData_GetGauge(dialogManager.data.TARGET_NAME, attributeType).value;
 
             targetAbilityGauges[(int)attributeType].DOKill();
             Vector2 delta = targetAbilityGauges[(int)attributeType].sizeDelta;
