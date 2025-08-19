@@ -175,9 +175,6 @@ public class Investigate_DialogueData
         node == null ? (row.Length > index && row[index] != null) ? row[index].Trim() : ""
         : (node.Count > index && node[index] != null) ? node[index].Value.Trim() : "";
 
-    protected AudioClip LoadAudioClipByName(string clipName) =>
-         Resources.Load<AudioClip>($"Audio/{clipName}");
-
     protected SoundAsset LoadAudioAssetByName(string clipName) =>
          Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
 

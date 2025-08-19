@@ -322,12 +322,6 @@ public class DialogueData
 
     }
 
-
-    protected AudioClip LoadAudioClipByName(string clipName)
-    {
-        return Resources.Load<AudioClip>($"Audio/{clipName}");
-    }
-
     protected SoundAsset LoadAudioAssetByName(string clipName)
     {
         return Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");

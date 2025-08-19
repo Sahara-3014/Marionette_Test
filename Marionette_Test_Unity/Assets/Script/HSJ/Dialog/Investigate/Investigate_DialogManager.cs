@@ -34,8 +34,6 @@ public class Investigate_DialogManager : MonoBehaviour
     UnityAction onNextProductionAcion = null;
     /// <summary> null이면 Play메서드 실행 </summary>
     Coroutine[] nextProductionCoroutine = null;
-    float keyDowning = 0f;
-    [SerializeField] float nextDialogAutoDelay = 0.1f;
     
     public Investigate_DialogueData data { get; protected set; }
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()

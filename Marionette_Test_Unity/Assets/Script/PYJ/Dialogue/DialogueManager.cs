@@ -211,7 +211,7 @@ public class DialogueManager : MonoBehaviour
             var bgmSE = new DialogSE(SEType.BGM, null);
 
             // clip 로드하면서 stopSE 여부도 같이 설정됨
-            bgmSE.clip = DialogSoundManager.Instance.LoadAudioClipByName(currentData.bgmName, bgmSE);
+            bgmSE.clip = DialogSoundManager.Instance.LoadAudioAssetByName(currentData.bgmName, bgmSE);
 
             if (bgmSE.stopSE)
             {
@@ -1021,7 +1021,7 @@ public class DialogueManager : MonoBehaviour
                 DialogSE se = new DialogSE(SEType.SE, null);
 
                 // clip 로드 (로드 과정에서 stopSE 설정 가능)
-                se.clip = DialogSoundManager.Instance.LoadAudioClipByName(choiceSoundEffectName, se);
+                se.clip = DialogSoundManager.Instance.LoadAudioAssetByName(choiceSoundEffectName, se);
 
                 if (se.stopSE)
                 {
@@ -1104,7 +1104,7 @@ public class DialogueManager : MonoBehaviour
         DialogSE bgm = new DialogSE(SEType.BGM, null, loopCount, volume);
 
         // clip 로드 (로드 과정에서 stopSE 설정 가능)
-        bgm.clip = DialogSoundManager.Instance.LoadAudioClipByName(bgmName, bgm);
+        bgm.clip = DialogSoundManager.Instance.LoadAudioAssetByName(bgmName, bgm);
 
         if (bgm.stopSE)
         {

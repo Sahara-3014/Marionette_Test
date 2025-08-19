@@ -195,10 +195,6 @@ public class InteractiveDebate_DialogueData
             return _default;
         }
     }
-        
-
-    protected AudioClip LoadAudioClipByName(string clipName) =>
-         Resources.Load<AudioClip>($"Audio/{clipName}");
 
     protected SoundAsset LoadAudioAssetByName(string clipName) =>
          Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
