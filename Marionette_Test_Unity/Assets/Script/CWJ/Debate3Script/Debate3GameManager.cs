@@ -7,7 +7,6 @@ using System.Collections;
 using System.Net.NetworkInformation;
 public class Debate3GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Debate3ChoiceButton[] choiceButton;
     public GameObject choicebuttons;
     public Image choicebutton0, choicebutton1, choicebutton2;
@@ -51,7 +50,6 @@ public class Debate3GameManager : MonoBehaviour
     void Update()
     {
         TimerCircle.fillAmount = currenttime / timeLimit;
-        Debug.Log("TimerCircle.fillAmount: " + currenttime / timeLimit);
         if (!TimerUIanimator.GetCurrentAnimatorStateInfo(0).IsName("TimerUI_Intro"))
         {
             TimerUIanimator.enabled = false;
@@ -79,10 +77,21 @@ public class Debate3GameManager : MonoBehaviour
                     if (choiceButton[i].thischoiceButtonSelected == true)
                     {
                         ChoicedAnswer = i;
-                        
-                        //if (NextRound == true)
-                            StartCoroutine(ChoiceDialogue());
+                        Debug.Log("switch (ChoicedAnswer)");
+                        /*switch (ChoicedAnswer)
+                        {
+                            case 0:
+                                ChoiceButtonsAnimator.Play("ChoiceButton_Choiced0");
+                                break;
+                            case 1:
+                                ChoiceButtonsAnimator.Play("ChoiceButton_Choiced1");
+                                break;
+                            case 2:
+                                ChoiceButtonsAnimator.Play("ChoiceButton_Choiced2");
+                                break;
+                        }*/
 
+                            StartCoroutine(ChoiceDialogue());
                         
                     }
                 }
@@ -161,7 +170,7 @@ public class Debate3GameManager : MonoBehaviour
     public void ShowAllChoiceButtons()
     {
         ChoiceButtonsAnimator.Play("ChoiceButton_Appear");
-
+        
         if (c1 == true)
             choicebutton0.gameObject.SetActive(true);
 
@@ -174,9 +183,13 @@ public class Debate3GameManager : MonoBehaviour
     }
     public void HideAllChoiceButtons()
     {
-        choicebutton0.gameObject.SetActive(false);
-        choicebutton1.gameObject.SetActive(false);
+        Debug.Log("HideAllChoiceButtons()");
+
+                choicebutton0.gameObject.SetActive(false);
+                choicebutton1.gameObject.SetActive(false);
         choicebutton2.gameObject.SetActive(false);
+       
+        
     }
 
     public IEnumerator RoundStartDialogue()
