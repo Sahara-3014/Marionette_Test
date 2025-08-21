@@ -181,7 +181,23 @@ public class DialogSoundManager : MonoBehaviour
         Debug.Log("[StopBGM] BGM 다시 시작");
     }
 
-    public AudioClip LoadAudioClipByName(string clipName, DialogSE targetSE)
+    //public AudioClip LoadAudioClipByName(string clipName, DialogSE targetSE)
+    //{
+    //    if (string.IsNullOrEmpty(clipName) || clipName == "-1")
+    //    {
+    //        Debug.Log($"[LoadAudioClipByName] '{clipName}' → 효과음 끔 명령");
+    //        if (targetSE != null)
+    //            targetSE.stopSE = true; // -1 명령임 표시
+    //        return null;
+    //    }
+
+    //    AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
+    //    if (clip == null)
+    //        Debug.LogWarning($"AudioClip '{clipName}'를 Resources/Audio 폴더에서 찾을 수 없습니다.");
+    //    return clip;
+    //}
+
+    public SoundAsset LoadAudioAssetByName(string clipName, DialogSE targetSE = null)
     {
         if (string.IsNullOrEmpty(clipName) || clipName == "-1")
         {
@@ -191,10 +207,23 @@ public class DialogSoundManager : MonoBehaviour
             return null;
         }
 
-        AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
+
+        string path = $"Audio/SoundAsset/";
+        //var assets = Resources.LoadAll<SoundAsset>(path);
+        //foreach(var asset in assets)
+        //{
+        //    Debug.Log($"{asset.name}/{clipName} : {asset.name == clipName}");
+        //}
+
+        SoundAsset clip = //Resources.Load<SoundAsset>(path+clipName);
+            AddressableAssetManager.Instance.GetSoundAsset(clipName);
         if (clip == null)
-            Debug.LogWarning($"AudioClip '{clipName}'를 Resources/Audio 폴더에서 찾을 수 없습니다.");
-        return clip;
+        {
+            Debug.LogWarning($"AudioClip '{clipName}'를 '{path}' 폴더에서 찾을 수 없습니다.");
+            return null;
+        }
+        else
+            return clip;
     }
 
     private IEnumerator PlaySELoopSafe(AudioSource source, int loopCount)

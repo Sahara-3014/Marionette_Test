@@ -34,8 +34,6 @@ public class Investigate_DialogManager : MonoBehaviour
     UnityAction onNextProductionAcion = null;
     /// <summary> null이면 Play메서드 실행 </summary>
     Coroutine[] nextProductionCoroutine = null;
-    float keyDowning = 0f;
-    [SerializeField] float nextDialogAutoDelay = 0.1f;
     
     public Investigate_DialogueData data { get; protected set; }
     private Dictionary<string, string> characterNameMap = new Dictionary<string, string>()
@@ -483,7 +481,8 @@ public class Investigate_DialogManager : MonoBehaviour
         }
 
         string path = $"Sprites/Characters/{folderName}/{spriteName}";
-        Sprite sprite = Resources.Load<Sprite>(path);
+        Sprite sprite = //Resources.Load<Sprite>(path);
+            AddressableAssetManager.Instance.GetSprite(spriteName);
         if (sprite == null)
         {
             Debug.LogWarning($"[LoadSpriteForSpeaker] 스프라이트를 찾지 못함: {path}");

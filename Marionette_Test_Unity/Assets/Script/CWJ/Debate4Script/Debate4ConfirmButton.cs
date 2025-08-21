@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json.Bson;
-using Unity.VisualScripting;
+
 public class Debate4ConfirmButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     Image image;

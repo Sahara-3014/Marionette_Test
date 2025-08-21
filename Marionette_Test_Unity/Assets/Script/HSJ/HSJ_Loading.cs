@@ -21,6 +21,7 @@ public class HSJ_Loading : MonoBehaviour
     public float centerLabelAnimTime = 0.5f;
     GoogleSheetLoader sheetLoader;
     HSJ_LoopSpriteAnimation loopAnim;
+    AddressableAssetManager assetManager;
     [SerializeField] GameObject startEffect;
 
     bool loadCompleted = false;
@@ -74,6 +75,8 @@ public class HSJ_Loading : MonoBehaviour
         sheetLoader.LoadInteractiveDebate();
         // 논쟁3
         sheetLoader.LoadConfrontationDebate();
+        assetManager = AddressableAssetManager.Instance;
+        //assetManager.LoadAll();
     }
 
     private void Update()
@@ -83,7 +86,9 @@ public class HSJ_Loading : MonoBehaviour
             float value = 0;
             foreach(var item in sheetLoader.progress)
                 value += item.Value;
-            value /= sheetLoader.progress.Count;
+            foreach(var item in assetManager.progress)
+                value += item.Value;
+            value /= (sheetLoader.progress.Count+assetManager.progress.Count);
 
             GaugeSet(value);
 
@@ -111,7 +116,9 @@ public class HSJ_Loading : MonoBehaviour
         await Task.Delay(time);
 
         EffectManager effect = EffectManager.Instance;
-        effect.PlayDirectionSet(effect.directionSetList[5]);
+        effect.PlayDirectionSet(effect.directionSetList[12]);
+        //effect.PlayDirectionSet(effect.directionSetList[5]);
+        //time = TimeSpan.FromSeconds(10f);
         await Task.Delay(time);
 
         string sceneName = "HSJ_Lobby";

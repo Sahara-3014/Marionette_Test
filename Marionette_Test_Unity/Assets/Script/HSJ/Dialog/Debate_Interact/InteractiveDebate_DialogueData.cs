@@ -148,7 +148,8 @@ public class InteractiveDebate_DialogueData
             this.BGEffect = (GetNum(_index)); _index += 1;
 
 
-            this.CG = Resources.Load<Sprite>($"Cutscenes/{GetText(_index)}"); _index += 1;
+            this.CG = //Resources.Load<Sprite>($"Cutscenes/{GetText(_index)}"); _index += 1;
+                AddressableAssetManager.Instance.GetSprite(GetText(_index));    _index += 1;
             this.BG = GetText(_index); _index += 1;
             this.SE1 = LoadAudioAssetByName(GetText(_index)); _index += 1;
             this.SE1_EFFECT = (GetNum(_index)); _index += 1;
@@ -195,13 +196,10 @@ public class InteractiveDebate_DialogueData
             return _default;
         }
     }
-        
-
-    protected AudioClip LoadAudioClipByName(string clipName) =>
-         Resources.Load<AudioClip>($"Audio/{clipName}");
 
     protected SoundAsset LoadAudioAssetByName(string clipName) =>
-         Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+         //Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+         AddressableAssetManager.Instance.GetSoundAsset(clipName);
 
     public override string ToString()
     {
