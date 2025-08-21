@@ -204,7 +204,8 @@ public class ConfrontationDebate_DialogueData
         node == null ? (row.Length > index && row[index] != null) ? row[index].Trim() : ""
         : (node.Count > index && node[index] != null) ? node[index].Value.Trim() : "";
     protected SoundAsset LoadAudioAssetByName(string clipName) =>
-         Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+         //Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+         AddressableAssetManager.Instance.GetSoundAsset(clipName);
 
     public override string ToString()
     {

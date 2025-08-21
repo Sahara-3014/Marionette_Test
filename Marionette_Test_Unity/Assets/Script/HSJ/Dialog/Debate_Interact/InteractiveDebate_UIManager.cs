@@ -274,7 +274,7 @@ public class InteractiveDebate_UIManager : MonoBehaviour
         if (characterNameMap.ContainsKey(_name))
             folderName = characterNameMap[_name];
 
-        string path = "";
+        //string path = "";
 
 
         // 이름이 비었는데 할당하려고 하는경우
@@ -303,8 +303,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
 
         if(_head != "")
         {
-            path = $"Sprites/Characters/{folderName}/{_head}";
-            head.sprite = Resources.Load<Sprite>(path);
+            //path = $"Sprites/Characters/{folderName}/{_head}";
+            head.sprite = //Resources.Load<Sprite>(path);
+                AddressableAssetManager.Instance.GetSprite(_head);
         }
         else if(head == null)
             head.sprite = null;
@@ -312,8 +313,9 @@ public class InteractiveDebate_UIManager : MonoBehaviour
 
         if (_body != "")
         {
-            path = $"Sprites/Characters/{folderName}/{_body}";
-            body.sprite = Resources.Load<Sprite>(path);
+            //path = $"Sprites/Characters/{folderName}/{_body}";
+            body.sprite = //Resources.Load<Sprite>(path);
+                AddressableAssetManager.Instance.GetSprite(_body);
         }
         else if(_body == null)
             body.sprite = null;

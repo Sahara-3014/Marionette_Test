@@ -481,7 +481,8 @@ public class Investigate_DialogManager : MonoBehaviour
         }
 
         string path = $"Sprites/Characters/{folderName}/{spriteName}";
-        Sprite sprite = Resources.Load<Sprite>(path);
+        Sprite sprite = //Resources.Load<Sprite>(path);
+            AddressableAssetManager.Instance.GetSprite(spriteName);
         if (sprite == null)
         {
             Debug.LogWarning($"[LoadSpriteForSpeaker] 스프라이트를 찾지 못함: {path}");

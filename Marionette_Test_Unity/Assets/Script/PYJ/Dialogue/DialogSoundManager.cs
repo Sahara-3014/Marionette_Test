@@ -197,7 +197,7 @@ public class DialogSoundManager : MonoBehaviour
     //    return clip;
     //}
 
-    public AudioClip LoadAudioAssetByName(string clipName, DialogSE targetSE)
+    public SoundAsset LoadAudioAssetByName(string clipName, DialogSE targetSE = null)
     {
         if (string.IsNullOrEmpty(clipName) || clipName == "-1")
         {
@@ -207,10 +207,23 @@ public class DialogSoundManager : MonoBehaviour
             return null;
         }
 
-        SoundAsset clip = Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+
+        string path = $"Audio/SoundAsset/";
+        //var assets = Resources.LoadAll<SoundAsset>(path);
+        //foreach(var asset in assets)
+        //{
+        //    Debug.Log($"{asset.name}/{clipName} : {asset.name == clipName}");
+        //}
+
+        SoundAsset clip = //Resources.Load<SoundAsset>(path+clipName);
+            AddressableAssetManager.Instance.GetSoundAsset(clipName);
         if (clip == null)
-            Debug.LogWarning($"AudioClip '{clipName}'를 Resources/Audio 폴더에서 찾을 수 없습니다.");
-        return clip.dialogSE.clip;
+        {
+            Debug.LogWarning($"AudioClip '{clipName}'를 '{path}' 폴더에서 찾을 수 없습니다.");
+            return null;
+        }
+        else
+            return clip;
     }
 
     private IEnumerator PlaySELoopSafe(AudioSource source, int loopCount)

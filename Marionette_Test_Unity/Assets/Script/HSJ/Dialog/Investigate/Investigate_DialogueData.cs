@@ -159,7 +159,8 @@ public class Investigate_DialogueData
             this.SE2 = LoadAudioAssetByName(GetText(_index));
             _index += 1;
 
-            this.CG = GetText(_index) != "" ? Resources.Load<Sprite>($"CG/{GetText(_index)}") : null;
+            this.CG = GetText(_index) != "" ? //Resources.Load<Sprite>($"CG/{GetText(_index)}") : null;
+                AddressableAssetManager.Instance.GetSprite(GetText(_index)) : null;
             _index += 1;
 
         }
@@ -176,7 +177,8 @@ public class Investigate_DialogueData
         : (node.Count > index && node[index] != null) ? node[index].Value.Trim() : "";
 
     protected SoundAsset LoadAudioAssetByName(string clipName) =>
-         Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+         //Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+         AddressableAssetManager.Instance.GetSoundAsset(clipName);
 
     public override string ToString()
     {

@@ -324,7 +324,8 @@ public class DialogueData
 
     protected SoundAsset LoadAudioAssetByName(string clipName)
     {
-        return Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+        //return Resources.Load<SoundAsset>($"Audio/SoundAsset/{clipName}");
+        return AddressableAssetManager.Instance.GetSoundAsset(clipName);
     }
 
 
