@@ -384,6 +384,7 @@ MonoBehaviour:
   sprites:
   - {fileID: 100100200, guid: a7c35a4602426a94085d6175e4d39602, type: 3}
   - {fileID: 100100200, guid: 9258e9fa33b3e694f9534ab4987a4d06, type: 3}
+  - {fileID: 100100200, guid: 3e0df1b19e2940843b3b7f8a338f3a60, type: 3}
   - {fileID: 100100200, guid: 1df96a9ed740eb14f9227b93cb21f2c1, type: 3}
   - {fileID: 100100200, guid: 9ec492cbbdb80b54ab17085d4c22955c, type: 3}
   sounds:
