@@ -1,6 +1,10 @@
+using DG.Tweening;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HSJ_Loading : MonoBehaviour
 {
@@ -17,6 +21,10 @@ public class HSJ_Loading : MonoBehaviour
     public float centerLabelAnimTime = 0.5f;
     GoogleSheetLoader sheetLoader;
     HSJ_LoopSpriteAnimation loopAnim;
+    AddressableAssetManager assetManager;
+    [SerializeField] GameObject startEffect;
+
+    bool loadCompleted = false;
 
     private void Awake()
     {
@@ -53,13 +61,22 @@ public class HSJ_Loading : MonoBehaviour
 
         CenterLabelAnim();
 
-        
-        //sheetLoader.OnSheetLoaded = null;
-        for(int i=0;i<sheetLoader.fixedSheetSequence.Count;i++)
+        loadCompleted = false;
+
+        // intro start chapter1
+        for (int i=0;i<sheetLoader.fixedSheetSequence.Count;i++)
         {
             sheetLoader.LoadDialoguesFromSheet(sheetLoader.fixedSheetSequence[i]);
         }
+        // 탐색
+        sheetLoader.LoadInvestigate(); 
+        sheetLoader.LoadInvestigate2();
+        // 논쟁1.2
         sheetLoader.LoadInteractiveDebate();
+        // 논쟁3
+        sheetLoader.LoadConfrontationDebate();
+        assetManager = AddressableAssetManager.Instance;
+        //assetManager.LoadAll();
     }
 
     private void Update()
@@ -69,15 +86,50 @@ public class HSJ_Loading : MonoBehaviour
             float value = 0;
             foreach(var item in sheetLoader.progress)
                 value += item.Value;
-            value /= sheetLoader.progress.Count;
+            foreach(var item in assetManager.progress)
+                value += item.Value;
+            value /= (sheetLoader.progress.Count+assetManager.progress.Count);
 
             GaugeSet(value);
 
-            if(value >= 1f)
+            if(value >= 1f && !loadCompleted)
             {
-                SaveDatabase.Instance.ChangeScene("HSJ_Lobby");
+                CompleteAction();
             }
         }
+    }
+
+    async public void CompleteAction()
+    {
+        loadCompleted = true;
+
+        Canvas c = FindFirstObjectByType<Canvas>();
+        Image[] imgs = c.GetComponentsInChildren<Image>();
+        foreach (Image item in imgs)
+            item.DOFade(0, .5f);
+        TextMeshProUGUI[] tmp = c.GetComponentsInChildren<TextMeshProUGUI>();
+        foreach (TextMeshProUGUI item in tmp)
+            item.DOFade(0, .5f);
+
+        startEffect.gameObject.SetActive(true);
+        var time = TimeSpan.FromSeconds(3f);
+        await Task.Delay(time);
+
+        EffectManager effect = EffectManager.Instance;
+        effect.PlayDirectionSet(effect.directionSetList[12]);
+        //effect.PlayDirectionSet(effect.directionSetList[5]);
+        //time = TimeSpan.FromSeconds(10f);
+        await Task.Delay(time);
+
+        string sceneName = "HSJ_Lobby";
+
+        SaveDatabase.Instance.AddSceneChangeEvent(sceneName, () =>
+        {
+            var _e = EffectManager.Instance.directionSetList[6];
+            EffectManager.Instance.PlayDirectionSet(_e);
+        });
+
+        SaveDatabase.Instance.ChangeScene(sceneName);
     }
 
     private void OnDisable()
@@ -133,7 +185,7 @@ public class HSJ_Loading : MonoBehaviour
         if (!isGaugeVisible)
             return;
 
-        desriptionLabel.text = descriptions[Random.Range(0, descriptions.Count)];
+        desriptionLabel.text = descriptions[UnityEngine.Random.Range(0, descriptions.Count)];
         Invoke(nameof(LoopDescription), descriptionTime);
     }
 }

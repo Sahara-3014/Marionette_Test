@@ -15,7 +15,7 @@ public class GoogleSheetLoader : MonoBehaviour
 
     public string apiKey = "AIzaSyCYF6AGzi8Fe0HhVew-t0LOngxs0IOZIuc";
     public string spreadsheetId = "1N2Z-yXGz8rUvUBwLfkeB9GYIOWhMrfs6lWok9lcNIjk";
-    public List<string> fixedSheetSequence = new List<string> { "INTRO", "START", "CHAPTER1" };
+    public List<string> fixedSheetSequence = new List<string> { "INTRO", "START", "CHAPTER1", "BEFORE_CH1_DEBATE1.2" };
     public int firstIDOfCurrentSheet;
     private int currentFixedIndex = 0;
     public bool usingBranching = false;
@@ -162,16 +162,6 @@ public class GoogleSheetLoader : MonoBehaviour
         progress.Remove($"LoadGoogleSheet[{sheetName}]"); // 로딩 완료 후 진행률 제거
     }
 
-
-    public AudioClip LoadAudioClipByName(string clipName)
-    {
-        if (string.IsNullOrEmpty(clipName)) return null;
-        AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
-        if (clip == null)
-            Debug.LogWarning($"AudioClip '{clipName}'를 Resources/Audio 폴더에서 찾을 수 없습니다.");
-        return clip;
-    }
-
     async public void LoadInteractiveDebate()
     {
         string range = "CH1_DEBATE1.2!A3:AI100";
@@ -232,8 +222,6 @@ public class GoogleSheetLoader : MonoBehaviour
                     continue; // 빈 줄 건너뛰기
                 InteractiveDebate_DialogueData _data = new(columns);
                 list.Add(_data);
-                if (_data.NEXT_ID == -100)
-                    break;
             }
         }
         else
@@ -242,14 +230,12 @@ public class GoogleSheetLoader : MonoBehaviour
             var jsonData = JSON.Parse(www.downloadHandler.text);
             var values = jsonData["values"];
 
-            for (int i = 2; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 var row = values[i];
                 InteractiveDebate_DialogueData d = new InteractiveDebate_DialogueData(row);
 
                 list.Add(d);
-                if (d.NEXT_ID == -100)
-                    break; // NEXT_ID가 -100인 경우 대화 종료
             }
         }
 
@@ -278,5 +264,315 @@ public class GoogleSheetLoader : MonoBehaviour
         progress.Remove("LoadInteractiveDebate"); // 로딩 완료 후 진행률 제거
     }
 
+    async public void LoadInvestigate()
+    {
+        string range = "CH1_Investigate!A3:S175";
+        // Google Sheets URL 설정
+        string url = //$"https://docs.google.com/spreadsheets/d/{spreadsheetId}/export?format=csv&id={spreadsheetId}";
+            $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
+
+        if (url.Contains("csv"))
+        {
+            // 파라미터 설정
+            url += "&gid=935233836"; // 시트 ID (gid) 설정
+            url += "&range=A3:AI100"; // 데이터 범위 설정
+        }
+
+        // Google Sheets 데이터 불러오기
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        var operation = www.SendWebRequest();
+        if (progress != null && progress.ContainsKey("LoadInvestigate"))
+        {
+            progress["LoadInvestigate"] = operation.progress;
+        }
+        else
+        {
+            if (progress == null)
+                progress = new();
+            progress.Add("LoadInvestigate", operation.progress);
+        }
+        while (!operation.isDone)
+        {
+            progress["LoadInvestigate"] = operation.progress;
+            await System.Threading.Tasks.Task.Yield(); // 비동기 대기
+        }
+
+        // 요청 결과 확인
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("데이터 불러오기 실패: " + www.error);
+            return;
+        }
+        progress["LoadInvestigate"] = 1f;
+        Debug.Log("데이터 성공: " + www.result + "\n" + www.downloadHandler.text);
+
+        List<Investigate_DialogueData> list = new();
+        // CSV 데이터 처리
+        if (url.Contains("csv"))
+        {
+            var csvData = www.downloadHandler.text;
+
+            // CSV 데이터를 줄 단위로 분리하고 Investigate_DialogueData 객체로 변환
+            string[] lines = csvData.Split('\n');
+
+            // 두번째 줄까지 헤더로 간주하고 건너뜀
+            for (int i = 0; i < lines.Length; i++)
+            {
+                //Debug.LogFormat($"{i} : {lines[i]}");
+                string[] columns = lines[i].Split(',');
+                if (columns[0].Trim() == string.Empty || columns[0].Trim() == "")
+                    continue; // 빈 줄 건너뛰기
+                Investigate_DialogueData _data = new(columns);
+                list.Add(_data);
+            }
+        }
+        else
+        // Json 데이터 처리
+        {
+            var jsonData = JSON.Parse(www.downloadHandler.text);
+            var values = jsonData["values"];
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                var row = values[i];
+                Investigate_DialogueData d = new Investigate_DialogueData(row);
+
+                list.Add(d);
+            }
+        }
+
+        // ID별로 그룹화하고 index 순서대로 정렬
+        Dictionary<int, List<Investigate_DialogueData>> dic = new();
+        foreach (var item in list)
+        {
+            if (!dic.ContainsKey(item.ID))
+            {
+                dic.Add(item.ID, new() { item });
+            }
+            else
+            {
+                dic[item.ID].Add(item);
+                dic[item.ID].OrderBy(x => x.INDEX);
+            }
+        }
+
+        // SaveDatabase 에 저장할 데이터 구조로 변환
+        Dictionary<int, Investigate_DialogueData[]> data = new();
+        foreach (var kvp in dic)
+            data.Add(kvp.Key, kvp.Value.ToArray());
+
+        // 데이터 저장
+        SaveDatabase.Instance.Set_InvestigateDialogs(data);
+        progress.Remove("LoadInvestigate"); // 로딩 완료 후 진행률 제거
+    }
+
+    async public void LoadInvestigate2()
+    {
+        while(IsInvoking(nameof(LoadInvestigate)))
+        {
+            await System.Threading.Tasks.Task.Yield();
+        }
+
+        string range = "CH1_Investigate_2!A3:S175";
+        // Google Sheets URL 설정
+        string url = //$"https://docs.google.com/spreadsheets/d/{spreadsheetId}/export?format=csv&id={spreadsheetId}";
+            $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
+
+        if (url.Contains("csv"))
+        {
+            // 파라미터 설정
+            url += "&gid=935233836"; // 시트 ID (gid) 설정
+            url += "&range=A3:AI100"; // 데이터 범위 설정
+        }
+
+        // Google Sheets 데이터 불러오기
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        var operation = www.SendWebRequest();
+        if (progress != null && progress.ContainsKey("LoadInvestigate2"))
+        {
+            progress["LoadInvestigate2"] = operation.progress;
+        }
+        else
+        {
+            if (progress == null)
+                progress = new();
+            progress.Add("LoadInvestigate2", operation.progress);
+        }
+        while (!operation.isDone)
+        {
+            progress["LoadInvestigate2"] = operation.progress;
+            await System.Threading.Tasks.Task.Yield(); // 비동기 대기
+        }
+
+        // 요청 결과 확인
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("데이터 불러오기 실패: " + www.error);
+            return;
+        }
+        progress["LoadInvestigate2"] = 1f;
+        Debug.Log("데이터 성공: " + www.result + "\n" + www.downloadHandler.text);
+
+        List<Investigate_DialogueData> list = new();
+        // CSV 데이터 처리
+        if (url.Contains("csv"))
+        {
+            var csvData = www.downloadHandler.text;
+
+            // CSV 데이터를 줄 단위로 분리하고 Investigate_DialogueData 객체로 변환
+            string[] lines = csvData.Split('\n');
+
+            // 두번째 줄까지 헤더로 간주하고 건너뜀
+            for (int i = 0; i < lines.Length; i++)
+            {
+                //Debug.LogFormat($"{i} : {lines[i]}");
+                string[] columns = lines[i].Split(',');
+                if (columns[0].Trim() == string.Empty || columns[0].Trim() == "")
+                    continue; // 빈 줄 건너뛰기
+                Investigate_DialogueData _data = new(columns);
+                list.Add(_data);
+            }
+        }
+        else
+        // Json 데이터 처리
+        {
+            var jsonData = JSON.Parse(www.downloadHandler.text);
+            var values = jsonData["values"];
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                var row = values[i];
+                Investigate_DialogueData d = new Investigate_DialogueData(row);
+
+                list.Add(d);
+            }
+        }
+
+        // ID별로 그룹화하고 index 순서대로 정렬
+        Dictionary<int, List<Investigate_DialogueData>> dic = new();
+        foreach (var item in list)
+        {
+            if (!dic.ContainsKey(item.ID))
+            {
+                dic.Add(item.ID, new() { item });
+            }
+            else
+            {
+                dic[item.ID].Add(item);
+                dic[item.ID].OrderBy(x => x.INDEX);
+            }
+        }
+
+        // SaveDatabase 에 저장할 데이터 구조로 변환
+        Dictionary<int, Investigate_DialogueData[]> data = new();
+        foreach (var kvp in dic)
+            data.Add(kvp.Key, kvp.Value.ToArray());
+
+        // 데이터 저장
+        SaveDatabase.Instance.Set_InvestigateDialogs(data);
+        progress.Remove("LoadInvestigate2"); // 로딩 완료 후 진행률 제거
+    }
+
+    async public void LoadConfrontationDebate()
+    {
+        string range = "CH1_DEBATE3!A3:AI100";
+        // Google Sheets URL 설정
+        string url = //$"https://docs.google.com/spreadsheets/d/{spreadsheetId}/export?format=csv&id={spreadsheetId}";
+            $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}?key={apiKey}";
+
+        if (url.Contains("csv"))
+        {
+            // 파라미터 설정
+            url += "&gid=935233836"; // 시트 ID (gid) 설정
+            url += "&range=A3:AI100"; // 데이터 범위 설정
+        }
+
+        // Google Sheets 데이터 불러오기
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        var operation = www.SendWebRequest();
+        if (progress != null && progress.ContainsKey("LoadConfrontationDebate"))
+        {
+            progress["LoadConfrontationDebate"] = operation.progress;
+        }
+        else
+        {
+            if (progress == null)
+                progress = new();
+            progress.Add("LoadConfrontationDebate", operation.progress);
+        }
+        while (!operation.isDone)
+        {
+            progress["LoadConfrontationDebate"] = operation.progress;
+            await System.Threading.Tasks.Task.Yield(); // 비동기 대기
+        }
+
+        // 요청 결과 확인
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("데이터 불러오기 실패: " + www.error);
+            return;
+        }
+        progress["LoadConfrontationDebate"] = 1f;
+        Debug.Log("데이터 성공: " + www.result + "\n" + www.downloadHandler.text);
+
+        List<ConfrontationDebate_DialogueData> list = new();
+        // CSV 데이터 처리
+        if (url.Contains("csv"))
+        {
+            var csvData = www.downloadHandler.text;
+
+            // CSV 데이터를 줄 단위로 분리하고 ConfrontationDebate_DialogueData 객체로 변환
+            string[] lines = csvData.Split('\n');
+
+            // 두번째 줄까지 헤더로 간주하고 건너뜀
+            for (int i = 0; i < lines.Length; i++)
+            {
+                //Debug.LogFormat($"{i} : {lines[i]}");
+                string[] columns = lines[i].Split(',');
+                if (columns[0].Trim() == string.Empty || columns[0].Trim() == "")
+                    continue; // 빈 줄 건너뛰기
+                ConfrontationDebate_DialogueData _data = new(columns);
+                list.Add(_data);
+            }
+        }
+        else
+        // Json 데이터 처리
+        {
+            var jsonData = JSON.Parse(www.downloadHandler.text);
+            var values = jsonData["values"];
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                var row = values[i];
+                ConfrontationDebate_DialogueData d = new ConfrontationDebate_DialogueData(row);
+
+                list.Add(d);
+            }
+        }
+
+        // ID별로 그룹화하고 index 순서대로 정렬
+        Dictionary<int, List<ConfrontationDebate_DialogueData>> dic = new();
+        foreach (var item in list)
+        {
+            if (!dic.ContainsKey(item.ID))
+            {
+                dic.Add(item.ID, new() { item });
+            }
+            else
+            {
+                dic[item.ID].Add(item);
+                dic[item.ID].OrderBy(x => x.INDEX);
+            }
+        }
+
+        // SaveDatabase 에 저장할 데이터 구조로 변환
+        Dictionary<int, ConfrontationDebate_DialogueData[]> data = new();
+        foreach (var kvp in dic)
+            data.Add(kvp.Key, kvp.Value.ToArray());
+
+        // 데이터 저장
+        SaveDatabase.Instance.Set_ConfrontationDebateDialogs(data);
+        progress.Remove("LoadConfrontationDebate"); // 로딩 완료 후 진행률 제거
+    }
 
 }

@@ -26,7 +26,7 @@ public class Debate4TileButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             //connect.SetActive(true);
             Color color = image.color;
-            color.a = 5f;
+            color.a = 0.5f;
             image.color = color;
       
         }
@@ -34,7 +34,7 @@ public class Debate4TileButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
 
             Color color = image.color;
-            color.a = 0.2f;
+             color.a = 0.2f;
             image.color = color;
 
         }

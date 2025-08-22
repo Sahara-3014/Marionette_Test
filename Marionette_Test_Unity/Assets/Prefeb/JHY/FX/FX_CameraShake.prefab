@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 0}
-  duration: 99
+  duration: 1.5
   magnitude: 1
   frequency: 20
   horizontalFactor: 1
@@ -64,3 +64,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxDuration: 3
+  isSelfDestroy: 1

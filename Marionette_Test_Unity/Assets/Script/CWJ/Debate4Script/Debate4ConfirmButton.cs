@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json.Bson;
-using Unity.VisualScripting;
+
 public class Debate4ConfirmButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     Image image;
@@ -26,7 +26,7 @@ public class Debate4ConfirmButton : MonoBehaviour, IPointerEnterHandler, IPointe
         {
             //connect.SetActive(true);
             Color color = image.color;
-            color.a = 5f;
+            //color.a = 5f;
             image.color = color;
 
         }
@@ -34,7 +34,7 @@ public class Debate4ConfirmButton : MonoBehaviour, IPointerEnterHandler, IPointe
         {
 
             Color color = image.color;
-            color.a = 0.2f;
+            //color.a = 0.2f;
             image.color = color;
 
         }
@@ -42,7 +42,7 @@ public class Debate4ConfirmButton : MonoBehaviour, IPointerEnterHandler, IPointe
         {
             //connect.SetActive(false);
             Color color = image.color;
-            color.a = 0.2f;
+            //color.a = 0.2f;
             image.color = color;
 
         }

@@ -57,7 +57,7 @@ public class DialogueManager : MonoBehaviour
 { "하서하", "SEOHA" },
 { "유무구", "MUGU" },
 { "정해온", "HAEWON" },
-{ "도민결", "MINGYEOL" },
+{ "도민결", "MINKYEOL" },
 { "배수경", "SUKYUNG" },
 { "권하루", "HARU" },
 { "박세진", "SEJIN" },
@@ -208,10 +208,10 @@ public class DialogueManager : MonoBehaviour
         if (!string.IsNullOrEmpty(currentData.bgmName))
         {
             // 먼저 DialogSE 객체 생성
-            var bgmSE = new DialogSE(SEType.BGM, null);
+            var bgmSE = DialogSoundManager.Instance.LoadAudioAssetByName(currentData.bgmName).dialogSE;
 
             // clip 로드하면서 stopSE 여부도 같이 설정됨
-            bgmSE.clip = DialogSoundManager.Instance.LoadAudioClipByName(currentData.bgmName, bgmSE);
+            //bgmSE.clip = ;
 
             if (bgmSE.stopSE)
             {
@@ -290,14 +290,18 @@ public class DialogueManager : MonoBehaviour
             if (container != null)
             {
                 container.position = basePos;
-                // 머리와 몸의 localPosition은 인스펙터에서 조절한 값 유지됨
+
+                // 머리와 몸 localPosition을 초기값으로 고정
+                headRenderer.transform.localPosition = Vector3.zero;
+                bodyRenderer.transform.localPosition = Vector3.zero;
             }
-            else
+
+            else//
             {
                 Debug.LogWarning("머리 스프라이트에 부모 컨테이너가 없습니다. 위치가 이상할 수 있습니다.");
                 // 부모 없으면 기존 방식 유지 (긴급 대비)
-                headRenderer.transform.position = basePos + headRenderer.transform.localPosition;
-                bodyRenderer.transform.position = basePos + bodyRenderer.transform.localPosition;
+                headRenderer.transform.position = basePos;
+                bodyRenderer.transform.position = basePos;
             }
         }
 
@@ -317,7 +321,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         string path = $"Sprites/Characters/{folderName}/{spriteName}";
-        Sprite sprite = Resources.Load<Sprite>(path);
+        Sprite sprite = //Resources.Load<Sprite>(path);
+            AddressableAssetManager.Instance.GetSprite(spriteName);
         if (sprite == null)
         {
             Debug.LogWarning($"[LoadSpriteForSpeaker] 스프라이트를 찾지 못함: {path}");
@@ -461,6 +466,16 @@ public class DialogueManager : MonoBehaviour
         //{
         //    StartCoroutine(effectManager.RunScreenEffect(currentDialogue.screenEffect, sprite_BG));
         //}
+
+
+        if (currentDialogue.commands == "BGM_OFF")
+            soundManager.StopBGM();
+        if (soundManager.seSource1.isPlaying)
+            soundManager.seSource1.Stop();
+        if (soundManager.seSource2.isPlaying)
+            soundManager.seSource2.Stop();
+
+
 
         // 사운드
         if (currentDialogue.bgm != null)
@@ -832,6 +847,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (currentID >= 1000 && currentID < 2000) return "START";
         if (currentID >= 2000 && currentID < 3000) return "CHAPTER1";
+        if (currentID >= 3000 && currentID < 4000) return "BEFORE_CH1_DEBATE1.2";
         return null; // 더 이상 시트 없음
     }
 
@@ -853,9 +869,6 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-
-
-
     private void ShowCutscene(string cutsceneName)
     {
         if (cutsceneImageObject == null)
@@ -864,15 +877,16 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        var sr = cutsceneImageObject.GetComponent<SpriteRenderer>();
-        if (sr == null)
+        var img = cutsceneImageObject.GetComponent<Image>();
+        if (img == null)
         {
-            Debug.LogError("cutsceneImageObject에 SpriteRenderer 컴포넌트가 없습니다!");
+            Debug.LogError("cutsceneImageObject에 Image 컴포넌트가 없습니다!");
             return;
         }
 
         Debug.Log("ShowCutscene 호출됨: " + cutsceneName);
-        Sprite cutsceneSprite = Resources.Load<Sprite>($"Cutscenes/{cutsceneName}");
+        Sprite cutsceneSprite = //Resources.Load<Sprite>($"Cutscenes/{cutsceneName}");
+            AddressableAssetManager.Instance.GetSprite(cutsceneName);
         if (cutsceneSprite == null)
         {
             Debug.LogError($"컷씬 이미지 '{cutsceneName}'가 Resources/Cutscenes 폴더에 없습니다!");
@@ -885,7 +899,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         cutsceneImageObject.SetActive(true);
-        sr.sprite = cutsceneSprite;
+        img.sprite = cutsceneSprite;
     }
 
 
@@ -898,12 +912,17 @@ public class DialogueManager : MonoBehaviour
     }
 
 
+    public AudioSource audioSource;
+    public AudioClip choiceSound;
 
     //
     // 선택지 선택 시 호출되는 함수
     //
     public void OnChoiceSelected(int nextID, int nextIndex)
     {
+        // 효과음 재생
+        audioSource.PlayOneShot(choiceSound);
+
         choicePanel.SetActive(false);
 
         if (nextID > 0)
@@ -929,14 +948,18 @@ public class DialogueManager : MonoBehaviour
             }
             nextDialogueID = currentID;
             Debug.Log($"nextID가 0 이하, currentID 유지, currentIndex 증가: {currentIndex}");
+
         }
 
         NextDialogue();
+
     }
+
     void Start()
     {
         sheetLoader = GoogleSheetLoader.Instance;
-        sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
+        if(SaveDatabase.Instance.GetNowSceneName().Contains("PYJ_Dialogue"))
+            sheetLoader.OnSheetLoaded += OnSheetLoadedHandler;
 
         sheetLoader.usingBranching = true; // ✅ 분기 모드로 바로 설정
         sheetLoader.LoadNextSheet("INTRO");
@@ -955,7 +978,7 @@ public class DialogueManager : MonoBehaviour
 
     void OnDestroy()
     {
-        if (sheetLoader != null)
+        if (sheetLoader != null && SaveDatabase.Instance.GetNowSceneName().Contains("PYJ_Dialogue"))
             sheetLoader.OnSheetLoaded -= OnSheetLoadedHandler;
     }
 
@@ -997,10 +1020,11 @@ public class DialogueManager : MonoBehaviour
                 Debug.Log($"선택지 클릭: nextID={capturedNextID}, nextIndex={capturedNextIndex}, soundEffect={choiceSoundEffectName}");
 
                 // 먼저 DialogSE 생성 (clip은 null로)
-                DialogSE se = new DialogSE(SEType.SE, null);
+                DialogSE se = //new DialogSE(SEType.SE, null);
+                DialogSoundManager.Instance.LoadAudioAssetByName(choiceSoundEffectName).dialogSE;
 
                 // clip 로드 (로드 과정에서 stopSE 설정 가능)
-                se.clip = DialogSoundManager.Instance.LoadAudioClipByName(choiceSoundEffectName, se);
+                //se.clip = DialogSoundManager.Instance.LoadAudioAssetByName(choiceSoundEffectName, se);
 
                 if (se.stopSE)
                 {
@@ -1080,10 +1104,11 @@ public class DialogueManager : MonoBehaviour
     public void PlayBGMByName(string bgmName, float volume = 1f, int loopCount = 0)
     {
         // 먼저 DialogSE 생성 (clip은 일단 null)
-        DialogSE bgm = new DialogSE(SEType.BGM, null, loopCount, volume);
+        DialogSE bgm = //new DialogSE(SEType.BGM, null, loopCount, volume);
+            DialogSoundManager.Instance.LoadAudioAssetByName(bgmName).dialogSE;
 
         // clip 로드 (로드 과정에서 stopSE 설정 가능)
-        bgm.clip = DialogSoundManager.Instance.LoadAudioClipByName(bgmName, bgm);
+        //bgm.clip = DialogSoundManager.Instance.LoadAudioAssetByName(bgmName, bgm);
 
         if (bgm.stopSE)
         {

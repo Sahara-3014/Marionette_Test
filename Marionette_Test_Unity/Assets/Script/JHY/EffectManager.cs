@@ -24,7 +24,10 @@ public enum EffectType
     CameraMoving,
     CameraMoving2,
     Flash,
-    CameraShakeHorizontal
+    CameraShakeHorizontal,
+    Intro,
+    Excute,
+    CameraCutscene
 }
 
 public enum PostProcessingEffectType
@@ -108,6 +111,11 @@ public class EffectManager : MonoBehaviour
                 sequencePlayer = go.AddComponent<EffectSequencePlayer>();
             }
         }
+    }
+
+    private void OnValidate()
+    {
+        InitializeEffects();
     }
 
     #endregion
