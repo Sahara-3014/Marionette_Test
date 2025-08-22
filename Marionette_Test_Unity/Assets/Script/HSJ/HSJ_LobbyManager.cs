@@ -184,11 +184,20 @@ public class HSJ_LobbyManager : MonoBehaviour
 
     public AudioMixer GetAudioMixer()
     {
-        if(audioMixerGroup == null)
-            audioMixerGroup = Resources.Load<AudioMixerGroup>("MasterAudioMixer");
-        if (audioMixer == null)
-            audioMixer = audioMixerGroup.audioMixer;
-        return audioMixer;
+        if (audioMixerGroup == null)
+        {
+            audioMixerGroup = //Resources.Load<AudioMixerGroup>("MasterAudioMixer");
+                AddressableAssetManager.Instance.audioMixerGroup;
+            //audioMixerGroup = (AudioMixerGroup)asset.Result;
+            if (audioMixer == null)
+                audioMixer = audioMixerGroup.audioMixer;
+
+            return audioMixer;
+        }
+        else
+        {
+            return audioMixerGroup.audioMixer;
+        }
     }
 
     public void ExitGame()

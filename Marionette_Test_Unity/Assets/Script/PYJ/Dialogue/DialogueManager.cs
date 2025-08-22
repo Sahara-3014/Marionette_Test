@@ -208,10 +208,10 @@ public class DialogueManager : MonoBehaviour
         if (!string.IsNullOrEmpty(currentData.bgmName))
         {
             // 먼저 DialogSE 객체 생성
-            var bgmSE = new DialogSE(SEType.BGM, null);
+            var bgmSE = DialogSoundManager.Instance.LoadAudioAssetByName(currentData.bgmName).dialogSE;
 
             // clip 로드하면서 stopSE 여부도 같이 설정됨
-            bgmSE.clip = DialogSoundManager.Instance.LoadAudioClipByName(currentData.bgmName, bgmSE);
+            //bgmSE.clip = ;
 
             if (bgmSE.stopSE)
             {
@@ -321,7 +321,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         string path = $"Sprites/Characters/{folderName}/{spriteName}";
-        Sprite sprite = Resources.Load<Sprite>(path);
+        Sprite sprite = //Resources.Load<Sprite>(path);
+            AddressableAssetManager.Instance.GetSprite(spriteName);
         if (sprite == null)
         {
             Debug.LogWarning($"[LoadSpriteForSpeaker] 스프라이트를 찾지 못함: {path}");
@@ -884,7 +885,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         Debug.Log("ShowCutscene 호출됨: " + cutsceneName);
-        Sprite cutsceneSprite = Resources.Load<Sprite>($"Cutscenes/{cutsceneName}");
+        Sprite cutsceneSprite = //Resources.Load<Sprite>($"Cutscenes/{cutsceneName}");
+            AddressableAssetManager.Instance.GetSprite(cutsceneName);
         if (cutsceneSprite == null)
         {
             Debug.LogError($"컷씬 이미지 '{cutsceneName}'가 Resources/Cutscenes 폴더에 없습니다!");
@@ -1018,10 +1020,11 @@ public class DialogueManager : MonoBehaviour
                 Debug.Log($"선택지 클릭: nextID={capturedNextID}, nextIndex={capturedNextIndex}, soundEffect={choiceSoundEffectName}");
 
                 // 먼저 DialogSE 생성 (clip은 null로)
-                DialogSE se = new DialogSE(SEType.SE, null);
+                DialogSE se = //new DialogSE(SEType.SE, null);
+                DialogSoundManager.Instance.LoadAudioAssetByName(choiceSoundEffectName).dialogSE;
 
                 // clip 로드 (로드 과정에서 stopSE 설정 가능)
-                se.clip = DialogSoundManager.Instance.LoadAudioClipByName(choiceSoundEffectName, se);
+                //se.clip = DialogSoundManager.Instance.LoadAudioAssetByName(choiceSoundEffectName, se);
 
                 if (se.stopSE)
                 {
@@ -1101,10 +1104,11 @@ public class DialogueManager : MonoBehaviour
     public void PlayBGMByName(string bgmName, float volume = 1f, int loopCount = 0)
     {
         // 먼저 DialogSE 생성 (clip은 일단 null)
-        DialogSE bgm = new DialogSE(SEType.BGM, null, loopCount, volume);
+        DialogSE bgm = //new DialogSE(SEType.BGM, null, loopCount, volume);
+            DialogSoundManager.Instance.LoadAudioAssetByName(bgmName).dialogSE;
 
         // clip 로드 (로드 과정에서 stopSE 설정 가능)
-        bgm.clip = DialogSoundManager.Instance.LoadAudioClipByName(bgmName, bgm);
+        //bgm.clip = DialogSoundManager.Instance.LoadAudioAssetByName(bgmName, bgm);
 
         if (bgm.stopSE)
         {

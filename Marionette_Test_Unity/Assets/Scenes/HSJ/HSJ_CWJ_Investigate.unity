@@ -4043,7 +4043,7 @@ SpriteRenderer:
   m_Size: {x: 115.51, y: 27.016256}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &617450069
@@ -4914,6 +4914,8 @@ MonoBehaviour:
   id: 1
   quantity: 1
   interactionRange: 0
+  isAcquisition: 1
+  dialog_id: 0
 --- !u!50 &757639346
 Rigidbody2D:
   serializedVersion: 5
@@ -7178,8 +7180,8 @@ MonoBehaviour:
   m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 1
-  m_PointerBehavior: 0
-  m_CursorLockBehavior: 0
+  m_PointerBehavior: 2
+  m_CursorLockBehavior: 1
   m_ScrollDeltaPerTick: 6
 --- !u!114 &1131248639
 MonoBehaviour:
@@ -7194,7 +7196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!4 &1131248640
 Transform:
@@ -8395,6 +8397,8 @@ MonoBehaviour:
   id: 0
   quantity: 1
   interactionRange: 0
+  isAcquisition: 1
+  dialog_id: 0
 --- !u!61 &1341940641
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11767,6 +11771,8 @@ MonoBehaviour:
   id: 0
   quantity: 1
   interactionRange: 0
+  isAcquisition: 1
+  dialog_id: 0
 --- !u!61 &1921021886
 BoxCollider2D:
   m_ObjectHideFlags: 0

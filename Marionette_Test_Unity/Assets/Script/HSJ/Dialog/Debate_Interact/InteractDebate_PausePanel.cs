@@ -129,7 +129,14 @@ public class InteractDebate_PausePanel : MonoBehaviour
     public AudioMixer GetAudioMixer()
     {
         if (audioMixerGroup == null)
-            audioMixerGroup = Resources.Load<AudioMixerGroup>("MasterAudioMixer");
-        return audioMixerGroup.audioMixer;
+        {
+            audioMixerGroup = AddressableAssetManager.Instance.audioMixerGroup;
+            //audioMixerGroup = (AudioMixerGroup)asset.Result;
+            return audioMixerGroup.audioMixer;
+        }
+        else
+        {
+            return audioMixerGroup.audioMixer;
+        }
     }
 }
